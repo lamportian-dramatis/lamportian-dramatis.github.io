@@ -50,12 +50,12 @@ That is [`gallery/gorgeous.typ`](https://github.com/mvaled/lamportian-dramatis/b
 
 - **[Guide]({% link guide.md %})** — how the columns are solved, how to read the marks, and how a diagram becomes a cross-referenced figure.
 - **[Reference]({% link reference.md %})** — every function and every argument.
+- **[Changelog]({% link changelog.md %})** — what each release changed, and what is waiting unreleased.
 
 ## Elsewhere
 
 - [Package on Typst Universe](https://typst.app/universe/package/lamportian-dramatis/)
 - [Source on GitHub](https://github.com/mvaled/lamportian-dramatis)
-- [Changelog](https://github.com/mvaled/lamportian-dramatis/blob/main/CHANGELOG.md)
 
 ---
 
