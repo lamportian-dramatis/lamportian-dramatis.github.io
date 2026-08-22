@@ -174,6 +174,15 @@ pre {
     font-size: 0.8em;
 }
 
+/* Inside a block, the ground and the padding belong to the `pre`; the `code` carrying them too is
+   what would draw a second frame within the first. */
+pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+}
+
 /* A code block wraps its `pre` in a `div.highlight`, and the two backgrounds would otherwise stack
    up into a double frame. */
 div.highlight {
