@@ -4,8 +4,6 @@ title: Reference
 
 # Reference
 
-[← Front page]({% link index.md %}) · [Guide]({% link guide.md %})
-
 ## `lamport-diagram`
 
 ```typ

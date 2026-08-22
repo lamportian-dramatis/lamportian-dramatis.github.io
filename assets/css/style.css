@@ -1,0 +1,316 @@
+/* The look of mvaled.github.io, ported from its Pelican theme to plain CSS.  The Tailwind utility
+   classes that theme sprinkles over its templates are not here: these pages are markdown, so the
+   layout they needed is folded into the rules below. */
+
+@import url("code.css");
+@import url('https://fonts.googleapis.com/css2?family=Libertinus+Math&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
+:root {
+    --font-family-header: 'Merriweather', sans-serif;
+    --font-family-body: 'Merriweather', sans-serif;
+    --font-family-body-header: 'Libertinus Math', serif;
+    --font-family-code: 'Roboto Mono', monospace;
+    --font-family-logo: 'Libertinus Math', serif;
+    --line-height: 1.6;
+
+    font-size: 18px; /* The basis of all rem */
+    font-weight: 300;
+
+    --font-size-base: 1rem;
+    --font-size-meta: 0.9rem;
+    --font-size-h1: 2.5rem;
+    --font-size-h2: 2rem;
+    --font-size-h3: 1.5rem;
+    --font-size-h4: 1.25rem;
+    --font-size-h5: 1rem;
+    --font-size-h6: 1rem;
+
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+}
+
+@layer user-color-scheme {
+    /* Respect html data-color-scheme attribute */
+    html[data-color-scheme="light"] {
+        --color-bg: #f9f9f9;
+        --color-text: #2e2e2e;
+        --color-meta: #555555;
+        --color-border: #dddddd;
+        --color-link: #666;
+        --color-link-disabled: #888;
+        --color-link-hover: #000;
+        --color-code-bg: #e8e8e8;
+        --color-code-text: #000000;
+        --color-sidebar-bg: #e8e8e8;
+        --color-sidebar-text: #000000;
+        --color-blockquote-bg: #e8e8e8;
+        --color-blockquote-text: #000000;
+    }
+
+    html[data-color-scheme="dark"] {
+        --color-bg: #1e1e1e;
+        --color-text: #e0e0e0;
+        --color-meta: #aaaaaa;
+        --color-border: #333333;
+        --color-link: #aaa;
+        --color-link-disabled: #666;
+        --color-link-hover: #fff;
+        --color-code-bg: #2f2f2f;
+        --color-code-text: #ffffff;
+        --color-sidebar-bg: #2f2f2f;
+        --color-sidebar-text: #ffffff;
+        --color-blockquote-bg: #2f2f2f;
+        --color-blockquote-text: #ffffff;
+    }
+}
+
+@media (min-width: 600px) {
+    :root {
+        --font-size-base: 1.125rem;
+        --font-size-h1: 2.75rem;
+        --font-size-h2: 2.25rem;
+        --font-size-h3: 1.75rem;
+        --font-size-h4: 1.5rem;
+        --font-size-h5: 1.25rem;
+        --font-size-h6: 1rem;
+    }
+}
+
+@media (min-width: 900px) {
+    :root {
+        --font-size-base: 1.25rem;
+        --font-size-h1: 3rem;
+        --font-size-h2: 2.5rem;
+        --font-size-h3: 2rem;
+        --font-size-h4: 1.75rem;
+        --font-size-h5: 1.5rem;
+        --font-size-h6: 1.35rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    :root {
+        --font-size-base: 1.375rem;
+        --font-size-h1: 3.25rem;
+        --font-size-h2: 2.75rem;
+        --font-size-h3: 2.25rem;
+        --font-size-h4: 2rem;
+        --font-size-h5: 1.75rem;
+        --font-size-h6: 1.35rem;
+    }
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family-body);
+    line-height: var(--line-height);
+    font-size: var(--font-size-base);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+
+main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+@media (min-width: 768px) {
+    main { padding: 2rem; }
+}
+
+a {
+    color: var(--color-link);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--color-link-hover);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-skip-ink: all;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-body-header);
+    font-weight: 500;
+    page-break-after: avoid;
+    break-after: avoid;
+}
+
+h1 { font-size: var(--font-size-h1); }
+h2 { font-size: var(--font-size-h2); }
+h3 { font-size: var(--font-size-h3); }
+h4 { font-size: var(--font-size-h4); }
+h5 { font-size: var(--font-size-h5); }
+h6 { font-size: var(--font-size-h6); }
+
+/* A reference page is a long run of `## `function`` headings, and a rule under each one is what
+   lets the eye find the boundary between two entries while scrolling. */
+main h2 {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.2em;
+    margin-top: 2.5rem;
+}
+
+main p { text-align: justify; }
+
+pre, code {
+    font-family: var(--font-family-code);
+    background-color: var(--color-code-bg);
+    color: var(--color-code-text);
+    padding: 0.2rem 0.4rem;
+    border-radius: var(--radius-md);
+}
+
+pre {
+    padding: 1rem;
+    overflow-x: auto;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    font-size: 0.8em;
+}
+
+/* A code block wraps its `pre` in a `div.highlight`, and the two backgrounds would otherwise stack
+   up into a double frame. */
+div.highlight {
+    background-color: var(--color-code-bg);
+    border-radius: var(--radius-md);
+}
+div.highlight pre { margin: 0; background-color: transparent; }
+
+/* Inline code inside a heading is a name, not a snippet, so it keeps the heading's own ground. */
+h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
+    background-color: inherit;
+    color: inherit;
+    padding: 0;
+    font-size: 0.9em;
+}
+
+blockquote {
+    border-radius: var(--radius-lg);
+    font-size: 0.85em;
+    color: var(--color-blockquote-text);
+    background-color: var(--color-blockquote-bg);
+    padding: 0.2em 0.9em;
+    margin-left: 10%;
+    margin-right: 0;
+}
+
+blockquote p { margin: 0.5em 0; }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.85em;
+    display: block;
+    overflow-x: auto;
+}
+
+th, td {
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.4em 0.6em;
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    font-family: var(--font-family-header);
+    color: var(--color-meta);
+    font-weight: 500;
+}
+
+img {
+    max-width: 100%;
+    border-radius: var(--radius-lg);
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: 3rem 0 1.5rem 0;
+}
+
+/* Header, its logo and the scheme selector ------------------------------------------------- */
+
+header.logo {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+@media (min-width: 768px) {
+    header.logo { padding: 0.5rem 2rem; margin-bottom: 0.5rem; }
+}
+
+header.logo h1 {
+    margin: 0;
+    text-transform: uppercase;
+    font-family: var(--font-family-logo);
+    font-weight: 400;
+    font-size: var(--font-size-h4);
+}
+
+header.logo .grow { flex-grow: 1; }
+
+header.logo nav ul {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--font-size-meta);
+}
+
+#color-scheme-selector {
+    margin-left: 1rem;
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+    flex-wrap: nowrap;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: 9999px;
+}
+#color-scheme-selector svg {
+    padding: 0.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-link);
+}
+#color-scheme-selector button {
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+#color-scheme-selector button:hover {
+    background-color: var(--color-border);
+}
+
+html[data-user-color-scheme='auto'] #color-scheme-selector button[name='auto'],
+html[data-user-color-scheme='light'] #color-scheme-selector button[name='light'],
+html[data-user-color-scheme='dark'] #color-scheme-selector button[name='dark'] {
+    background-color: var(--color-border);
+}
+
+footer {
+    text-align: center;
+    margin: 4rem 0 2rem 0;
+    color: var(--color-meta);
+    font-size: var(--font-size-meta);
+}

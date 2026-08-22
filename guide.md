@@ -4,8 +4,6 @@ title: Guide
 
 # Guide
 
-[← Front page]({% link index.md %}) · [Reference]({% link reference.md %})
-
 ## Columns are (mostly) solved, not authored
 
 You list each replica's local events in order and name the messages.  The layout then puts every event in the earliest column that keeps it after its predecessor on the same replica *and* after the send of every message it receives.

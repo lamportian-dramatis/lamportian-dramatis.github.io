@@ -2,8 +2,6 @@
 title: lamportian-dramatis
 ---
 
-# lamportian-dramatis
-
 Lamport diagrams for replicated systems, as a [Typst](https://typst.app/) package: one horizontal timeline per replica, local events as dots on that timeline, and arrows for the messages that carry events from one replica to another.  The horizontal axis is logical time, in the sense of the clocks of [Time, Clocks, and the Ordering of Events in a Distributed System](https://lamport.azurewebsites.net/pubs/time-clocks.pdf).
 
 > **Pre-1.0.**  This is young and still changing a lot.  Nothing here is a stable API until 1.0.0, so expect breaking changes between 0.x releases — argument names, defaults and the shape of what the helpers return are all still open.  A Typst import names an exact version, so nothing breaks under you: upgrading is always a deliberate edit.

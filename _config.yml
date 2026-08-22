@@ -2,8 +2,13 @@
 # which carries this repository as a submodule under docs/.  Edit there, commit here.
 title: lamportian-dramatis
 description: Lamport diagrams for replicated systems, as a Typst package.
-theme: minima
 
-# Written in the package repository, published from this one, so the canonical links point at the
-# repository that holds the code.
+# No gem theme: the look is the one from mvaled.github.io, ported into _layouts/ and assets/ so the
+# two sites match.  A theme would only have to be fought.
 repository: mvaled/lamportian-dramatis
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
