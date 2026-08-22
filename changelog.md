@@ -17,12 +17,15 @@ The vertical release: a diagram is no longer bound to run left to right.
 - `orientation` on `lamport-diagram`, which says which way logical time runs: `rightwards`, `leftwards`, `downwards` or `upwards`, with `horizontal` and `vertical` as shorter names for the first and third.  The horizontal pair lays the timelines out as rows and stacks the replicas downwards; the vertical pair lays them out as columns and stacks the replicas rightwards.  These are plain strings, so `orientation: "vertical"` works without importing anything.
 - `left` and `right`, re-exported alongside `above` and `below`, so one import line covers every side a diagram may ask for.  They are the built-in alignments of those names, so either spelling works.  A vertical diagram puts a label on the `right` by default; a horizontal one keeps 0.1.0's `above`.
 - `gallery/vertical.typ`, the gorgeous example drawn downwards.
+- `overlays` on `lamport-diagram`, for drawing your own CeTZ into a diagram at a layer of your choosing, addressing the diagram's own points by name.  A diagram is drawn in passes, `layers` names them, and a drawing given for one is appended to that pass — which is what puts a band above the translucent bands that fade a crossing arrow, and so out of their stripe.  It comes with `event(id: ..)` for naming an event, and a re-export of CeTZ's `draw` module so a caller needs no second dependency to reach `rect` and `circle`.
+- `gallery/overlays.typ`, the future cone of one event washed in behind the lanes, and a ring round the event itself.
 
 ### Changed
 
 - Which sides a label may sit on now follows from the orientation: `above`/`below` for the horizontal pair, `left`/`right` for the vertical one.  A side the orientation has no room for is *not* an error — it is dropped back to that orientation's default and otherwise ignored, so flipping a finished diagram from horizontal to vertical stays one edit rather than a compile error on every lane that named a side.  It passes in silence for want of anywhere to complain: Typst gives user code no way to raise a compiler warning, and printing one into the document would put it in front of the reader rather than the author.
 - A ratio `displacement` is now taken against the label's extent *along its timeline* — its width when the timelines are rows, its height when they are columns.  On a horizontal diagram this is what it always was.
 - The drawing works in two abstract axes, one along the timelines and one across them, which a single mapping turns into page coordinates per orientation.  Horizontal output is unchanged by this.
+- The lanes are drawn in three passes — every timeline, then every mark, then every label — rather than each lane completely before the next.  This is what makes `timelines`, `marks` and `labels` real layers, and it fixes a case where a lower lane's timeline painted over an upper lane's label.
 
 ### Fixed
 

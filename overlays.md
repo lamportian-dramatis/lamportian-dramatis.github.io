@@ -22,16 +22,20 @@ lamport-diagram(
 `overlays` takes `none`, a bare CeTZ body, a function of one argument — the *locator* — returning a CeTZ body, or a dictionary from layer name to either of those.  A body or a function on its own goes in the `foreground`, that being what you want when you have not thought about depth.
 
 ```typ
-overlays: none                                // nothing
+// nothing
+overlays: none
 
-overlays: { grid((0, 0), (8, -3)) }           // a bare body, for when you need no points
+// a bare body, for when you need no points -- drawn in foreground
+overlays: { grid((0, 0), (8, -3)) }
 
-overlays: d => {                              // a function, for when you want the diagram's points
+// a function, for when you want the diagram's points -- drawn in foreground
+overlays: d => {
   let (mark, ..) = d
   circle(mark("A", "bad"), radius: 0.3, stroke: red)
 }
 
-overlays: (                                   // a dictionary, for when depth matters
+// a dictionary, for when layering matters
+overlays: (
   backdrops: d => { ... },
   marks: d => { ... },
 )
@@ -39,13 +43,28 @@ overlays: (                                   // a dictionary, for when depth ma
 
 Everything is spliced into the diagram's own `cetz.canvas`, so a coordinate is a canvas centimetre and every CeTZ coordinate form — `rel:`, `to:`, anchors on elements you name yourself — works as it does anywhere else.  It all runs inside the same `context` the diagram uses, so `measure` is available.
 
+Your body is written in your own file, though, so the drawing commands have to be in scope there.  The package re-exports the CeTZ module it draws with, which saves pinning a second dependency and keeps the two versions in step:
+
+```typ
+#import "@preview/lamportian-dramatis:0.1.0": draw
+
+overlays: (
+  marks: d => {
+    import draw: *          // inside the body, so `circle` and `rect` go no further
+    ...
+  },
+)
+```
+
+`#import draw: *` at the top of the file works as well, if you would rather have them everywhere.
+
 The locator is a dictionary; unpack the entries a layer needs and call them.
 
 ## Layers
 
 A diagram is drawn in a fixed sequence of passes: the arrows first, then the backdrops that erase them wherever a lane crosses, then the timelines, then the marks, then the labels.  Each pass is a **layer**, and each key of `overlays` names one.
 
-A drawing given for a layer is **appended to that layer's pass** — after everything the diagram itself draws there, and before anything in any later pass.  So `arrows: ...` draws with the arrows: over them, under everything that follows.  That is the whole rule.
+An overlay given for a layer is **appended to that layer's pass** — after everything the diagram itself draws there, and before anything in any later pass.  So `arrows: ...` draws with the contents of the layer "arrows": over them, under everything that follows.  That is the whole rule.
 
 `background` and `foreground` are not passes of the diagram.  They are bookends that exist only for overlays, one before the first pass and one after the last, and whatever you put there is all they hold.
 
@@ -134,7 +153,7 @@ Four kinds of value pass through the locator, and it is worth keeping them apart
 
 - A **time** is a position along logical time, measured in columns.  It is a real number and may be any of them: `2.5` falls halfway between two columns, `-0.09` falls before the diagram's first one.
 - A **column** is one of the whole times the solver hands out, `0` up to `ncols - 1`.  Every column is a time; most times are not columns.  This is the discrete thing the layout reasons about, and the only kind that can answer "did these two land at the same moment".
-- A **lane** is a position across the replicas, measured in lanes, and likewise a real number: `0` is the first replica, `1` the second, `0.5` between them.  A replica id is accepted wherever a lane is.
+- A **lane** is a position across the replicas, measured in lanes, and likewise a real number: `0` is the first replica, `1` the second, `0.5` between them, and `-0.4` a little to the outside of the first.  It is a position and not an index, so `-1` is one lane clear of the first rather than the last one; for that, ask `replicas` how many there are.  A replica id is accepted wherever a lane is.
 - A **coordinate** is a CeTZ point, `(x, y)` in canvas centimetres.  It is what every CeTZ function wants, and the only kind here that knows which way the diagram runs.
 
 A time and a lane together make a coordinate, and `point` is the one entry that does that conversion.  Everything else either hands you a coordinate outright or stays in times and lanes, where it survives a change of orientation.
@@ -155,10 +174,11 @@ A time and a lane together make a coordinate, and `point` is the one entry that 
 ```typ
 overlays: (
   backdrops: d => {
-    let (column, point, ..) = d
+    let (column, point, replicas, ..) = d
+    let last = replicas.len() - 1
     rect(
-      point(column("C", "c-reads"), 0),
-      point(column("A", "a-catches-up"), -1),
+      point(column("C", "c-reads"), -0.4),
+      point(column("A", "a-catches-up"), last + 0.4),
       fill: yellow.transparentize(85%),
       stroke: none,
     )
@@ -207,7 +227,13 @@ That line lies along the lane, so the layer decides whether it shows at all: at 
 
 ## Worked example
 
+![The future cone of one event, washed behind the lanes, with a ring round the event itself](gallery/overlays.png)
+
+That is [`gallery/overlays.typ`](https://github.com/mvaled/lamportian-dramatis/blob/main/gallery/overlays.typ): the future cone of `A.2`, drawn at `backdrops` so the lanes cross it without fading a stripe through it, and a ring at `marks` so `A.2`'s own label stays legible over it.
+
 ```typ
+#import "@preview/lamportian-dramatis:0.1.0": lamport-diagram, replica, event, send, recv, sync, above, below, draw
+
 #lamport-diagram(
   replicas: (replica("S", above, color: luma(0)), replica("A", below), replica("C", below)),
   events: (
@@ -216,19 +242,36 @@ That line lies along the lane, so the layer decides whether it shows at all: at 
     "A": ([`A.1`], sync("boot"), event(id: "a2")[`A.2`], sync("a-pushes"), sync("a-catches-up")),
   ),
   overlays: (
-    // The window in which the two clients disagree.  Behind the lanes, but in front of the
-    // backdrops, so the lanes do not wash a stripe through it.
+    // The future cone of `A.2`: the part of the diagram that event can still reach.  It opens one
+    // lane per column from where the event happened, and once it has taken in every replica there is
+    // nothing left to open into, so it runs on as a band.  Over the backdrops, so the lanes do not
+    // fade a stripe through it, and still under every timeline.
     backdrops: d => {
-      let (column, point, ..) = d
+      import draw: *
+      let (column, point, replicas, span, ..) = d
+      let (_, ends) = span
+      let t = column("A", "a2")
+      let lane = replicas.position(r => r == "A")
+      let edge = replicas.len() - 1 - lane + 0.4
+      let wash = red.transparentize(93%)
+      line(
+        point(t, lane),
+        point(t + edge, lane - edge),
+        point(t + edge, lane + edge),
+        close: true,
+        fill: wash,
+        stroke: none,
+      )
       rect(
-        point(column("C", "c1"), 0),
-        point(column("A", "a-catches-up"), -1),
-        fill: red.transparentize(93%),
+        point(calc.min(t + edge, ends), lane - edge),
+        point(ends, lane + edge),
+        fill: wash,
         stroke: none,
       )
     },
     // Over the dot, under its label.
     marks: d => {
+      import draw: *
       let (mark, dot, ..) = d
       circle(mark("A", "a2"), radius: dot * 3, stroke: red + 0.7pt)
     },

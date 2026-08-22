@@ -51,7 +51,7 @@ That is [`gallery/gorgeous.typ`](https://github.com/mvaled/lamportian-dramatis/b
 - **[Guide]({% link guide.md %})** — how the columns are solved, how to read the marks, and how a diagram becomes a cross-referenced figure.
 - **[Reference]({% link reference.md %})** — every function and every argument.
 - **[Changelog]({% link changelog.md %})** — what each release changed, and what is waiting unreleased.
-- **[Overlays]({% link overlays.md %})** — a proposed API for drawing your own CeTZ into a diagram, at a depth of your choosing.  Not implemented; written down to be argued with.
+- **[Overlays]({% link overlays.md %})** — drawing your own CeTZ into a diagram, addressing its own points, at a depth of your choosing.
 
 ## Elsewhere
 
