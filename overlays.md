@@ -101,18 +101,27 @@ Ids are strings and indices are integers, so the two never need telling apart by
 
 ## What the locator holds
 
-| | |
-| --- | --- |
-| `mark(replica, id-or-index)` | The **coordinate** of that point's mark, including the sub-column `displacement` that leans its arrow.  Where to draw. |
-| `column(replica, id-or-index)` | The **column** the solver put that point in, as an integer.  A moment in logical time, carrying no lane and no displacement. |
-| `point(col, lane)` | The coordinate of a column on a lane.  Both are fractional: `point(2.5, 0.5)` is half a column on, halfway between lanes 0 and 1.  `lane` may also be a replica id. |
-| `lane(replica)` | The two ends of that replica's drawn timeline, as `(start, end)` — where the line actually begins and ends, which is a nudge before the first column and a fraction of `col-gap` past the last mark. |
-| `replicas` | The replica ids, in order. |
-| `ncols` | How many columns the diagram was solved into. |
-| `orientation` | Which way this diagram runs, as its canonical name. |
-| `col-gap`, `row-gap`, `dot` | The diagram's own measurements, in canvas centimetres. |
+Four kinds of value pass through the locator, and it is worth keeping them apart.
 
-`mark` and `column` differ by type, and that is the whole distinction.  You need the integer whenever what you are drawing spans lanes, because `mark` bakes in the lane of the replica you asked about:
+- A **time** is a position along logical time, measured in columns.  It is a real number and may be any of them: `2.5` falls halfway between two columns, `-0.09` falls before the diagram's first one.
+- A **column** is one of the whole times the solver hands out, `0` up to `ncols - 1`.  Every column is a time; most times are not columns.  This is the discrete thing the layout reasons about, and the only kind that can answer "did these two land at the same moment".
+- A **lane** is a position across the replicas, measured in lanes, and likewise a real number: `0` is the first replica, `1` the second, `0.5` between them.  A replica id is accepted wherever a lane is.
+- A **coordinate** is a CeTZ point, `(x, y)` in canvas centimetres.  It is what every CeTZ function wants, and the only kind here that knows which way the diagram runs.
+
+A time and a lane together make a coordinate, and `point` is the one entry that does that conversion.  Everything else either hands you a coordinate outright or stays in times and lanes, where it survives a change of orientation.
+
+| Entry | Gives | |
+| --- | --- | --- |
+| `mark(replica, id-or-index)` | a coordinate | Where that point's mark is drawn, including the sub-column `displacement` that leans its arrow. |
+| `column(replica, id-or-index)` | a column | Which column the solver put that point in.  Carries no lane and no displacement. |
+| `point(time, lane)` | a coordinate | The page position of a time on a lane. |
+| `span` | two times | The time each lane's line starts at, and the time it ends at.  The first is slightly negative, because a lane leads in a little before column `0`; the second is past `ncols - 1`, because the line runs on beyond the last mark to carry its arrowhead.  Neither is a column, which is what the distinction above is for.  Every lane is drawn over the same stretch, so there is one pair for the whole diagram and no replica to ask about. |
+| `replicas` | strings | The replica ids, in order.  The id at index `n` is the replica on lane `n`. |
+| `ncols` | a count | How many columns the diagram was solved into, so the last of them is `ncols - 1`. |
+| `orientation` | a string | Which way this diagram runs, as its canonical name. |
+| `col-gap`, `row-gap`, `dot` | lengths | The diagram's own measurements, in canvas centimetres — one column of time, one lane, and the radius of an event's dot. |
+
+`mark` and `column` ask the same question and answer in different kinds, and that is the whole distinction.  You want the column whenever what you are drawing crosses lanes, because a coordinate has a lane baked into it — the lane of the replica you named.  A column is a time, so it goes straight into `point`:
 
 ```typ
 overlays: (
@@ -136,7 +145,7 @@ The measurements are there so a drawing can speak the diagram's own language.  A
 
 ## Staying orientation-independent
 
-`point(col, lane)` is stated in the diagram's own axes — columns of logical time, and lanes across them — so a drawing written in terms of it survives a flip from `horizontal` to `vertical`.  One written against raw `(x, y)` arithmetic does not:
+`point(time, lane)` is stated in the diagram's own axes — logical time along the lanes, and lanes across it — so a drawing written in terms of it survives a flip from `horizontal` to `vertical`.  One written against raw `(x, y)` arithmetic does not:
 
 ```typ
 let (point, ..) = d
@@ -146,19 +155,19 @@ line((4, 0), (4, -3))                // does not
 
 Fractional lanes are what make this work for nudges too.  "Just off the lane, towards the next one" is `point(c, 0.15)` whichever way the diagram runs, where a page-space `(0, -0.3)` would point the wrong way the moment it turned.
 
-`lane` hands back two plain coordinates rather than trying to be clever about sides, for the same reason a caller usually wants to nudge them:
+`span` stays in times for the same reason, and it is what lets a drawing run the full length of a lane without knowing where on the page that lane falls:
 
 ```typ
 overlays: (
   timelines: d => {
-    let (lane, ..) = d
-    let (s, e) = lane("B")
-    line(s, e, stroke: (paint: red, dash: "dashed"))
+    let (span, point, ..) = d
+    let (s, e) = span
+    line(point(s, "B"), point(e, "B"), stroke: (paint: red, dash: "dashed"))
   },
 )
 ```
 
-That line lies along the lane, so the layer is what decides whether it shows: at `backdrops` the lane's own stroke would cover it, at `timelines` it is drawn over that stroke instead.  To sit *beside* the lane rather than on it, give it a fractional lane of its own — `point(0, 1.12)` to `point(ncols - 1, 1.12)`.
+That line lies along the lane, so the layer decides whether it shows at all: at `backdrops` the lane's own stroke would cover it, at `timelines` it is drawn over that stroke instead.  To sit *beside* the lane rather than on it, feed the same span to a fractional lane — `point(s, 1.12)` to `point(e, 1.12)` — which is the pairing coordinates would not have allowed.
 
 ## Errors
 
