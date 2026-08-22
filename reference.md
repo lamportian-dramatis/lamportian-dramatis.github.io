@@ -168,6 +168,10 @@ These are `top` and `bottom` under names that read better for a diagram of one h
 
 The lane colours, cycled over `replicas` in order.  Override per replica with `replica("A", red)`.
 
+## `overlays`
+
+*Proposed, not implemented.*  An escape hatch for drawing arbitrary CeTZ into a diagram, in the diagram's own coordinates, addressing the diagram's own points, and at a chosen depth — a band behind a stretch of time, a ring around the event that went wrong, a note that breaks around the lanes the way its own arrow does.  The design is on its own page, [Overlays]({% link overlays.md %}), and is still open to argument.
+
 ## Dependencies
 
 Drawing is done with [CeTZ](https://typst.app/universe/package/cetz/) 0.5.2.  The minimum Typst compiler is 0.14.0.
