@@ -1,0 +1,9 @@
+# The source of this site lives in the package repository, at github.com/mvaled/lamportian-dramatis,
+# which carries this repository as a submodule under docs/.  Edit there, commit here.
+title: lamportian-dramatis
+description: Lamport diagrams for replicated systems, as a Typst package.
+theme: minima
+
+# Written in the package repository, published from this one, so the canonical links point at the
+# repository that holds the code.
+repository: mvaled/lamportian-dramatis
