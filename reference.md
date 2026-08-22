@@ -15,8 +15,8 @@ lamport-diagram(
   events: (:),
   orientation: horizontal,
   overlays: none,
-  col-gap: 2.0,
-  row-gap: 1.5,
+  col-gap: none,
+  row-gap: none,
   text-size: 0.62em,
   dot: 0.095,
   message-stroke: 0.9pt + luma(110),
@@ -31,8 +31,15 @@ lamport-diagram(
 
 The rest are the drawing's measurements.  Lengths without a unit are **canvas centimetres**: the canvas is laid out at `length: 1cm`, so `2.0` is two centimetres before the document scales anything.
 
-- `col-gap` — the distance between two columns of logical time, and so how far apart the solver's columns land.  A `gap` span given as a ratio is taken against it, as is the `displacement` that nudges a `send`, `recv` or `sync` off its column — so widening the diagram widens those to match.  An `event`'s `displacement` is the exception: it is a ratio of the label's own extent, the label being what it moves.
-- `row-gap` — the distance between two lanes.
+The two gaps default to `none`, which means *the value that suits this orientation* rather than no gap at all.  What a gap has to make room for is text, and text runs across the page whichever way the diagram does — so the wider default belongs to whichever axis is lying horizontally, and turning a diagram on its side turns the two over with it.
+
+| Orientation | `col-gap` | `row-gap` |
+| --- | --- | --- |
+| `horizontal`, `rightwards`, `leftwards` | `2.0` | `1.5` |
+| `vertical`, `downwards`, `upwards` | `1.5` | `2.4` |
+
+- `col-gap` — the distance between two columns of logical time, and so how far apart the solver's columns land.  Along the page on a horizontal diagram, down it on a vertical one.  A `gap` span given as a ratio is taken against it, as is the `displacement` that nudges a `send`, `recv` or `sync` off its column — so widening the diagram widens those to match.  An `event`'s `displacement` is the exception: it is a ratio of the label's own extent, the label being what it moves.
+- `row-gap` — the distance between two lanes.  Down the page on a horizontal diagram, across it on a vertical one — which is why its default is the larger of the two there: a label sitting beside a lane runs towards the next one.
 - `text-size` — the text size the diagram is drawn at, and what every `em` inside it resolves against.  A `size: 0.8em` on an event is therefore eight tenths of *this* diagram's em, not of the surrounding document's, so a diagram keeps its proportions wherever it is placed.
 - `dot` — the radius of the mark on a local event.  A `recv` and a `sync` are drawn at the same radius, a `send` at seven tenths of it, and each mark's backdrop reaches a little past it.
 - `message-stroke` — the stroke every message and `sync` arrow is drawn with.  Its paint also colours the arrowheads and any label carried by an arrow, so one value dresses the whole of the messaging.
