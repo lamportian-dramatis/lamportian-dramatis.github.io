@@ -56,7 +56,3 @@ That is [`gallery/gorgeous.typ`](https://github.com/mvaled/lamportian-dramatis/b
 
 - [Package on Typst Universe](https://typst.app/universe/package/lamportian-dramatis/)
 - [Source on GitHub](https://github.com/mvaled/lamportian-dramatis)
-
----
-
-These pages document **0.1.0**, the published release.  A few entries are marked *unreleased*: those are on `main` and land in the next version.

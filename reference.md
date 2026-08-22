@@ -4,7 +4,7 @@ title: Reference
 
 # Reference
 
-Everything here is in **0.1.0**, the published release, except entries marked *unreleased* — those are on `main` and land in the next version.  A Typst import names an exact version, so a diagram only ever sees the API it asked for.
+These pages describe the package as it stands on `main`.  A Typst import names an exact version, so what a document sees is whatever it asked for — the [changelog]({% link changelog.md %}) is what says which release each of these landed in, and what is still waiting.
 
 ## `lamport-diagram`
 
@@ -13,7 +13,7 @@ lamport-diagram(
   caption: none,
   replicas: (),
   events: (:),
-  orientation: horizontal,   // unreleased
+  orientation: horizontal,
   col-gap: 2.0,
   row-gap: 1.5,
   text-size: 0.62em,
@@ -29,8 +29,6 @@ lamport-diagram(
 With a `caption` the result is a `figure`; without one it is the bare drawing, to place inside a `figure` of your own.  `col-gap` and `row-gap` are canvas centimetres, and are the knobs for a diagram that reads too cramped or too sparse.
 
 ## `orientation`
-
-> **Unreleased.**  Not in 0.1.0 — this is on `main` and lands in the next release.  See the [changelog]({% link changelog.md %}).
 
 ```typ
 horizontal   // = rightwards
@@ -63,7 +61,7 @@ A replica lane, and the defaults the local events on it fall back on.  `name` is
 
 - `label` — what the diagram prints for the lane.  Defaults to `name`.
 - `color` — the lane's colour.  Defaults to the next entry of `default-palette`, cycled over `replicas` in order.
-- `position` — `above` or `below`, the side of the timeline this lane's event labels sit on.  *Unreleased:* on a vertical diagram these are `left` and `right` instead; see [`orientation`](#orientation).
+- `position` — `above` or `below`, the side of the timeline this lane's event labels sit on — `left` or `right` on a vertical diagram; see [`orientation`](#orientation).
 - `size` — the text size of this lane's event labels.
 - `displacement` — how far this lane's event labels slide off their own dot.
 - `first-displacement` — the same, for the lane's opening event, the one that would otherwise crowd the replica name.
@@ -80,9 +78,9 @@ event(..args)
 
 A local event on a replica's timeline.  Its body is the label — content or a plain string.
 
-- `position` — `above` or `below` the timeline.  *Unreleased:* `left` or `right` on a vertical diagram; see [`orientation`](#orientation).
+- `position` — `above` or `below` the timeline, or `left` or `right` on a vertical diagram; see [`orientation`](#orientation).
 - `size` — the label's text size.
-- `displacement` — slides the label along the timeline, out of being centred on its own dot.  A ratio is taken against the label's own width, so `+50%` leaves the label's left edge over the dot and `-50%` its right edge, while a length is an exact offset and `0` (or `0%`) centres it.  *Unreleased:* on a vertical diagram the ratio is taken against the label's height, that being what runs along the timeline there.
+- `displacement` — slides the label along the timeline, out of being centred on its own dot.  A ratio is taken against the label's own width, so `+50%` leaves the label's left edge over the dot and `-50%` its right edge, while a length is an exact offset and `0` (or `0%`) centres it.  On a vertical diagram the ratio is taken against the label's height instead, that being what runs along the timeline there.
 - `width` — wraps the label to a fixed width instead of letting it run along the timeline on one line, which is what keeps a long label from crowding its neighbours.  **Named only**: a bare length is read as a `displacement`, that being the far commoner one to reach for.  The box is centred on the mark like any other label, and its contents are left to you — wrap the body in `align(center, ..)` if centred lines read better than the ragged right edge.
 - `halo` — how far the label's backdrop reaches past the label's own box, which is what breaks an arrow crossing the lane so it does not crowd the glyphs.  `auto` (the default) matches the reach of the disc under a mark, so a label and a dot break an arrow by the same amount; a length sets an exact reach, and `none` drops the backdrop, letting whatever is behind show through.
 
@@ -164,7 +162,7 @@ Usable bare or called, so `gap`, `gap()` and `gap("medium")` are the same thing.
 
 These are `top` and `bottom` under names that read better for a diagram of one horizontal line per replica, and they *are* those same values, so either spelling works wherever a side is asked for.
 
-*Unreleased:* `left` and `right` are re-exported alongside them, so one import line covers every side a diagram may ask for whichever way it runs.  They are the built-in alignments of those names.
+`left` and `right` are re-exported alongside them, so one import line covers every side a diagram may ask for whichever way it runs.  They are the built-in alignments of those names.
 
 ## `default-palette`
 
