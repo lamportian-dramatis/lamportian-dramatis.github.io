@@ -50,8 +50,8 @@ That is [`gallery/gorgeous.typ`](https://github.com/mvaled/lamportian-dramatis/b
 
 ## Read on
 
-- **[Guide]({%% link guide.md %%})** — how the columns are solved, how to read the marks, and how a diagram becomes a cross-referenced figure.
-- **[Reference]({%% link reference.md %%})** — every function and every argument.
+- **[Guide]({% link guide.md %})** — how the columns are solved, how to read the marks, and how a diagram becomes a cross-referenced figure.
+- **[Reference]({% link reference.md %})** — every function and every argument.
 
 ## Elsewhere
 
