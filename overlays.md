@@ -43,28 +43,41 @@ The locator is a dictionary; unpack the entries a layer needs and call them.
 
 ## Layers
 
-Each key names the stratum your drawing goes **on top of**.  `background` is the bookend below all of them, `foreground` the one above.
+A diagram is drawn in a fixed sequence of passes: the arrows first, then the backdrops that erase them wherever a lane crosses, then the timelines, then the marks, then the labels.  Each pass is a **layer**, and each key of `overlays` names one.
 
-| Layer | Above | Below | For |
-| --- | --- | --- | --- |
-| `background` | — | everything | a wash behind the whole diagram |
-| `arrows` | the message and `sync` arrows, and their labels | the lane backdrops | annotating an arrow, with the lanes still passing in front |
-| `backdrops` | the backdrops that erase an arrow crossing a lane | the timelines | a band behind the lanes and *not* washed by them |
-| `timelines` | the lane lines and the replica names | the marks | something along a lane that its own dots sit on top of |
-| `marks` | the dots | the event labels | a ring round a dot that its label stays readable over |
-| `foreground` | everything | — | annotation meant to be read over the drawing |
+A drawing given for a layer is **appended to that layer's pass** — after everything the diagram itself draws there, and before anything in any later pass.  So `arrows: ...` draws with the arrows: over them, under everything that follows.  That is the whole rule.
+
+`background` and `foreground` are not passes of the diagram.  They are bookends that exist only for overlays, one before the first pass and one after the last, and whatever you put there is all they hold.
+
+Bottom to top:
+
+| Layer | Content | Usage in `overlays` |
+| --- | --- | --- |
+| `background` | -- | a wash behind the whole diagram, striped by the backdrops like everything under them |
+| `arrows` | the message and `sync` arrows, and their labels | annotating one arrow, with the lanes still passing over your drawing the way they pass over its arrow |
+| `backdrops` | the near-white paint that hides an arrow wherever a lane crosses it | a band that comes out even rather than striped, still under every lane |
+| `timelines` | the lane lines and the replica names | something along a lane that the lane's own dots sit on top of |
+| `marks` | the dots | a ring round a dot that the dot's own label stays readable over |
+| `foreground` | -- | annotation meant to be read over the whole drawing |
 
 The order is the table's, never the dictionary's: a dictionary that happens to list `foreground` first still draws it last.  A key that is not one of the six fails compilation, and says which six.
 
+There is no `labels` key, though labels are a pass of the diagram like the rest.  Appending to it would put a drawing after the last thing the diagram draws, which is where `foreground` already is; one place does not need two names.
+
 ### `arrows` and `backdrops` are not the same place
 
-They sound like one place — "just above the arrows", "just under the lanes" — and the difference between them is most of why the layering is worth having.
+They sound like one place — "just above the arrows", "just under the lanes" — and the difference between them is most of why the layers are worth having.
 
-A lane occupies a strip, not a line, and that whole strip erases what runs behind it, so an arrow crossing a lane it has no endpoint on reads as passing *under* that lane.  The eraser is a near-white backdrop five points wide, laid along every lane before any lane is drawn.
+The erasing that makes an arrow pass *behind* a lane is done with paint, not with transparency.  Before any lane is drawn, the diagram strokes a near-white line five points wide along every lane, and lays a disc of the same near-white under every mark.  That is the `backdrops` pass.  On a white page the paint shows nowhere it has nothing to cover; where an arrow crosses a lane it covers the arrow, and the arrow reads as running underneath.
 
-A drawing at `arrows` is erased by it, exactly as the arrows are.  A drawing at `backdrops` is not.  Put a heavy fill at `arrows` and it comes out with a pale stripe washed through it at each lane; put the same fill at `backdrops` and it comes out whole, still behind the timelines.
+So nothing is washed by *the lanes*.  Things are washed by that paint, and whether yours is washed depends only on which side of it you drew:
 
-Which one is right depends on what you meant.  A note belonging to one arrow reads better at `arrows`, breaking around the lanes the way its arrow does.  A band standing for a stretch of time belongs at `backdrops`: it is not something the lanes should be in front of, it is the ground they stand on.
+- At `background` or `arrows` you draw first and the paint goes down over you.  A fill comes out with a pale five-point stripe along every lane, exactly as the arrows do.
+- At `backdrops` the paint is already down and you draw over it.  A fill covers page and paint alike, so it comes out even — and still sits under the timelines, the marks and the labels, all of which come later.
+
+Which you want depends on what the drawing means.  A note belonging to one arrow reads better at `arrows`, breaking around the lanes the way its own arrow does.  A band standing for a stretch of time belongs at `backdrops`: it is not something the lanes should be in front of, it is the ground they stand on.
+
+(The paint is white whatever the page is.  Give the page a `fill` other than white and the lanes will show as white stripes over anything behind them — including a `background` drawing — because the erasure was never transparency in the first place.)
 
 ## Addressing a point
 
@@ -209,7 +222,7 @@ That line lies along the lane, so the layer decides whether it shows at all: at 
 
 ## Open questions
 
-- **`backdrops` as a name.**  It is the word the code uses, which makes it an implementation detail showing through the API.  `under-lanes` says the position instead of the mechanism, at the cost of no longer naming the stratum it sits above, as every other key does.
+- **`backdrops` as a name.**  It is the word the code uses, which makes it an implementation detail showing through the API.  `under-lanes` says the position instead of the mechanism, at the cost of no longer naming the layer it sits above, as every other key does.
 - **Is `timelines` pulling its weight?**  `backdrops` and `marks` bracket it closely, and the dashed line above is the only use I can name.  If nothing else wants it, five layers are easier to hold in the head than six.
 - **Arrays per layer.**  Should `(foreground: (a, b))` be two independent drawings, or is one value per layer enough, leaving the caller to concatenate?
 - **Labels.**  Should the locator reach a point's *label* as well as its mark, so a drawing can box one or point at it?  The diagram measures every label already, so the size is there for the taking; the question is whether it earns another entry.
