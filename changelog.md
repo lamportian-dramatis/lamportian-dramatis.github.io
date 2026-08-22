@@ -20,7 +20,7 @@ The vertical release: a diagram is no longer bound to run left to right.
 
 ### Changed
 
-- Which sides a label may sit on now follows from the orientation: `above`/`below` for the horizontal pair, `left`/`right` for the vertical one.  A side the orientation has no room for is *not* an error — it is dropped back to that orientation's default and warned about, so flipping a finished diagram from horizontal to vertical stays one edit rather than a compile error on every lane that named a side.  Typst gives user code no way to reach the compiler's own warnings, so the warning is printed above the diagram, outside the drawing, where it shifts nothing.
+- Which sides a label may sit on now follows from the orientation: `above`/`below` for the horizontal pair, `left`/`right` for the vertical one.  A side the orientation has no room for is *not* an error — it is dropped back to that orientation's default and otherwise ignored, so flipping a finished diagram from horizontal to vertical stays one edit rather than a compile error on every lane that named a side.  It passes in silence for want of anywhere to complain: Typst gives user code no way to raise a compiler warning, and printing one into the document would put it in front of the reader rather than the author.
 - A ratio `displacement` is now taken against the label's extent *along its timeline* — its width when the timelines are rows, its height when they are columns.  On a horizontal diagram this is what it always was.
 - The drawing works in two abstract axes, one along the timelines and one across them, which a single mapping turns into page coordinates per orientation.  Horizontal output is unchanged by this.
 

@@ -45,7 +45,7 @@ The orientation decides which sides a label may sit on, and which one it sits on
 | `horizontal`, `rightwards`, `leftwards` | `above`, `below` | `above` |
 | `vertical`, `downwards`, `upwards` | `left`, `right` | `right` |
 
-A side the orientation has no room for — `above` on a vertical diagram, `left` on a horizontal one — is *not* an error: it is dropped back to that default, and a warning naming the replica and the item is printed above the diagram.  So flipping a finished diagram from horizontal to vertical is one edit, and the sides that no longer make sense say so instead of stopping the compile.  (Typst gives user code no way to reach the compiler's own warnings, hence a printed one.)
+A side the orientation has no room for — `above` on a vertical diagram, `left` on a horizontal one — is *not* an error: it is dropped back to that default and otherwise ignored, so flipping a finished diagram from horizontal to vertical stays one edit rather than a compile error on every lane that named a side.  It passes in silence, which is not the ideal: the ideal is a compiler warning, and Typst gives user code no way to raise one.  Printing the complaint into the document instead would put it in front of the reader rather than the author, which is worse than saying nothing.
 
 ![The worked example from the front page, drawn vertically](gallery/vertical.png)
 
