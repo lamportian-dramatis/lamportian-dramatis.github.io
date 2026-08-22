@@ -278,17 +278,3 @@ That is [`gallery/overlays.typ`](https://github.com/mvaled/lamportian-dramatis/b
   ),
 )
 ```
-
-## Open questions
-
-- **`backdrops` as a name.**  It is the word the code uses, which makes it an implementation detail showing through the API.  `under-lanes` says the position instead of the mechanism, at the cost of no longer naming the layer it sits above, as every other key does.
-- **Arrays per layer.**  Should `(foreground: (a, b))` be two independent drawings, or is one value per layer enough, leaving the caller to concatenate?
-- **Labels.**  Should the locator reach a point's *label* as well as its mark, so a drawing can box one or point at it?  The diagram measures every label already, so the size is there for the taking; the question is whether it earns another entry.
-- **`band`.**  Is a `band(from, to)` convenience — the rectangle in the example, across every lane — worth having, or is `point` twice clear enough?
-- **Naming `mark`.**  It is the library's own word for the dot, but it reads oddly next to CeTZ's own `mark:` argument on `line`.  `at` is unavailable, since a dictionary already answers to it; `pos` and `locate` are the other candidates.
-
-## What this costs to build
-
-Today each lane draws its line, its name, its marks *and* its labels before the next lane starts.  For `timelines` and `marks` to be real seams, that loop has to split into three passes over all lanes.
-
-Worth knowing, because it changes existing output — slightly, and for the better.  At present a lower lane's timeline can paint over an upper lane's label where the two overlap, the lower lane being drawn later; after the split every label is above every line.

@@ -14,6 +14,7 @@ lamport-diagram(
   replicas: (),
   events: (:),
   orientation: horizontal,
+  overlays: none,
   col-gap: 2.0,
   row-gap: 1.5,
   text-size: 0.62em,
@@ -22,11 +23,21 @@ lamport-diagram(
 )
 ```
 
-`replicas` fixes the row order, top to bottom.  Each entry is an id string, a [`replica`](#replica) — which also carries that lane's event defaults — or a bare dictionary of the same fields.
+- `caption` — with one, the result is a `figure`; without one it is the bare drawing, to place inside a `figure` of your own.  Attach a `<label>` *after* the call and the reference resolves to the figure, numbering alongside the document's others.
+- `replicas` — the lane order: top to bottom on a horizontal diagram, left to right on a vertical one.  Each entry is an id string, a [`replica`](#replica) — which also carries that lane's event defaults — or a bare dictionary of the same fields.
+- `events` — each replica id mapped to that replica's local history, in order.  An entry is bare content or a bare string for a local event, or one of [`event`](#event), [`send`](#send-and-recv), [`recv`](#send-and-recv), [`sync`](#sync), [`idle`](#idle) and [`gap`](#gap).  Every replica must have an entry, and every entry must name a declared replica.
+- `orientation` — which way logical time runs.  See [`orientation`](#orientation).
+- `overlays` — your own CeTZ, drawn into the diagram at a layer of your choosing.  See [Overlays]({% link overlays.md %}).
 
-`events` maps each replica id to that replica's local history in order.  An entry is bare content or a bare string for a local event, or one of [`event`](#event), [`send`](#send-and-recv), [`recv`](#send-and-recv), [`sync`](#sync), [`idle`](#idle) and [`gap`](#gap).  Every replica must have an entry, and every entry must name a declared replica.
+The rest are the drawing's measurements.  Lengths without a unit are **canvas centimetres**: the canvas is laid out at `length: 1cm`, so `2.0` is two centimetres before the document scales anything.
 
-With a `caption` the result is a `figure`; without one it is the bare drawing, to place inside a `figure` of your own.  `col-gap` and `row-gap` are canvas centimetres, and are the knobs for a diagram that reads too cramped or too sparse.
+- `col-gap` — the distance between two columns of logical time, and so how far apart the solver's columns land.  A `gap` span given as a ratio is taken against it, as is the `displacement` that nudges a `send`, `recv` or `sync` off its column — so widening the diagram widens those to match.  An `event`'s `displacement` is the exception: it is a ratio of the label's own extent, the label being what it moves.
+- `row-gap` — the distance between two lanes.
+- `text-size` — the text size the diagram is drawn at, and what every `em` inside it resolves against.  A `size: 0.8em` on an event is therefore eight tenths of *this* diagram's em, not of the surrounding document's, so a diagram keeps its proportions wherever it is placed.
+- `dot` — the radius of the mark on a local event.  A `recv` and a `sync` are drawn at the same radius, a `send` at seven tenths of it, and each mark's backdrop reaches a little past it.
+- `message-stroke` — the stroke every message and `sync` arrow is drawn with.  Its paint also colours the arrowheads and any label carried by an arrow, so one value dresses the whole of the messaging.
+
+`col-gap` and `row-gap` are the two to reach for when a diagram reads too cramped or too sparse; `dot` and `text-size` are for when it is going somewhere much larger or much smaller than a page.
 
 ## `orientation`
 
