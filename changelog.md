@@ -8,30 +8,31 @@ title: Changelog
 
 All notable changes to this package are recorded here.  The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html) — with the caveat that this is pre-1.0, so a `0.x` bump may break anything.  A Typst import names an exact version, so nothing breaks under you: upgrading is always a deliberate edit.
 
-## Unreleased
+## 0.2.0 — 2026-08-23
 
-The vertical release: a diagram is no longer bound to run left to right.
+A diagram is no longer bound to run left to right, and it can be drawn into.
+
+Nothing an 0.1.0 document says means anything different: `gallery/gorgeous.typ` renders byte for byte
+what 0.1.0 renders for it.  The two arguments whose defaults changed are spelled differently and
+resolve to the same numbers on a horizontal diagram.
 
 ### Added
 
-- `orientation` on `lamport-diagram`, which says which way logical time runs: `rightwards`, `leftwards`, `downwards` or `upwards`, with `horizontal` and `vertical` as shorter names for the first and third.  The horizontal pair lays the timelines out as rows and stacks the replicas downwards; the vertical pair lays them out as columns and stacks the replicas rightwards.  These are plain strings, so `orientation: "vertical"` works without importing anything.
-- `left` and `right`, re-exported alongside `above` and `below`, so one import line covers every side a diagram may ask for.  They are the built-in alignments of those names, so either spelling works.  A vertical diagram puts a label on the `right` by default; a horizontal one keeps 0.1.0's `above`.
-- `gallery/vertical.typ`, the gorgeous example drawn downwards.
-- `overlays` on `lamport-diagram`, for drawing your own CeTZ into a diagram at a layer of your choosing, addressing the diagram's own points by name.  A diagram is drawn in passes, `layers` names them, and a drawing given for one is appended to that pass — which is what puts a band above the translucent bands that fade a crossing arrow, and so out of their stripe.  It comes with `event(id: ..)` for naming an event, `color-of(replica)` so a drawing can match a lane rather than restate its colour, `mark-args(replica, id-or-index)` for restating a mark with the radius, fill and stroke the diagram gave it, and a re-export of CeTZ's `draw` module so a caller needs no second dependency to reach `rect` and `circle`.
-- `gallery/overlays.typ`, the future cone of one event washed in behind the lanes, and a ring round the event itself.
+- `orientation` on `lamport-diagram`, which says which way logical time runs: `rightwards`, `leftwards`, `downwards` or `upwards`, with `horizontal` and `vertical` as shorter names for the first and third.  The horizontal pair lays the timelines out as rows and stacks the replicas downwards; the vertical pair lays them out as columns and stacks the replicas rightwards.  They are plain strings, so `orientation: "vertical"` needs no import.
+- `left` and `right` alongside `above` and `below`, one import line covering every side a diagram may ask for.  Which two are legal follows from the orientation, and a side it has no room for is dropped back to that orientation's default rather than failing, so turning a finished diagram is one edit and not a compile error on every lane that named a side.  It is dropped in silence: Typst gives user code no way to raise a compiler warning, and printing one into the document would put it in front of the reader rather than the author.
+- `overlays` on `lamport-diagram`, for drawing your own CeTZ into a diagram, addressing the diagram's own points by name, at a layer of your choosing.  A diagram is drawn in passes; `layers` names them, bottom to top, and a drawing given for one is appended to that pass.  The layer that earns the design is `backdrops`: a wash put under the arrows comes out striped by the translucent band each lane lays down, and the same wash put over those bands comes out whole and still behind the timelines.
+- With it, `event(id: ..)` for naming an event so a drawing can address it, `color-of(replica)` and `mark-args(replica, id-or-index)` so a drawing can match a lane or restate one of its marks without restating the library's own choices, and `draw`, re-exporting the CeTZ module the diagram draws with so a caller needs no second dependency to reach `rect` and `circle`.
+- `gallery/vertical.typ`, `gallery/overlays.typ` and `gallery/vertical-overlays.typ`.
+- A documentation site at [lamportian-dramatis.github.io](https://lamportian-dramatis.github.io/), which the README now defers to for the reference.
 
 ### Changed
 
-- Which sides a label may sit on now follows from the orientation: `above`/`below` for the horizontal pair, `left`/`right` for the vertical one.  A side the orientation has no room for is *not* an error — it is dropped back to that orientation's default and otherwise ignored, so flipping a finished diagram from horizontal to vertical stays one edit rather than a compile error on every lane that named a side.  It passes in silence for want of anywhere to complain: Typst gives user code no way to raise a compiler warning, and printing one into the document would put it in front of the reader rather than the author.
-- A ratio `displacement` is now taken against the label's extent *along its timeline* — its width when the timelines are rows, its height when they are columns.  On a horizontal diagram this is what it always was.
-- The drawing works in two abstract axes, one along the timelines and one across them, which a single mapping turns into page coordinates per orientation.  Horizontal output is unchanged by this.
-- A lane's opening label is no longer nudged off its dot on a vertical diagram.  The nudge exists so that first label does not read as belonging to the replica name beside it, which is a horizontal lane's problem: a vertical lane keeps its name before the lane in time and its labels beside it, and a fifth of a line's height would have been too small to see in any case.  It is the orientation's default now, `20%` or `0%`, and `replica(first-displacement: ..)` overrides it as before.
-- `col-gap` and `row-gap` default to `none`, which takes the spacing that suits the orientation rather than one pair of numbers for all four.  The old defaults were the horizontal ones, and they were wrong turned on their side: what a gap makes room for is text, text runs across the page however the diagram runs, so the wider default belongs to whichever axis is horizontal.  Give either a number and it is used as before.
-- The lanes are drawn in three passes — every timeline, then every mark, then every label — rather than each lane completely before the next.  This is what makes `timelines`, `marks` and `labels` real layers, and it fixes a case where a lower lane's timeline painted over an upper lane's label.
+- `col-gap` and `row-gap` take `none` by default, meaning the spacing that suits the orientation rather than one pair of numbers for all four.  A horizontal diagram gets the `2.0` and `1.5` it always had; a vertical one gets them the other way about and wider, because what a gap makes room for is text, and text runs across the page however the diagram runs.  Give either a number and it is used as before.
+- A ratio `displacement` is taken against the label's extent *along its timeline* — its width where the timelines are rows, its height where they are columns.  On a horizontal diagram that is what it always was.
 
 ### Fixed
 
-- `gap` and `idle` carried a label side they never use, which would have drawn a spurious warning on every vertical diagram.  Neither draws a label, so neither states a side any more.
+- A lower lane's timeline could paint over an upper lane's label where the two overlapped, the lower lane having been drawn later.  The lanes are drawn in three passes now — every timeline, then every mark, then every label — so every label is above every line.  This is also what makes `timelines`, `marks` and `labels` layers an overlay can reach.
 
 ## 0.1.0 — 2026-08-06
 

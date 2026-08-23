@@ -46,7 +46,7 @@ Everything is spliced into the diagram's own `cetz.canvas`, so a coordinate is a
 Your body is written in your own file, though, so the drawing commands have to be in scope there.  The package re-exports the CeTZ module it draws with, which saves pinning a second dependency and keeps the two versions in step:
 
 ```typ
-#import "@preview/lamportian-dramatis:0.1.0": draw
+#import "@preview/lamportian-dramatis:0.2.0": draw
 
 overlays: (
   marks: d => {
@@ -89,7 +89,7 @@ The order is the table's, never the dictionary's: a dictionary that happens to l
 Their names and their order are not an internal detail to be read off this page.  `layers` is the ordered array of them, bottom to top, and the package exports it:
 
 ```typ
-#import "@preview/lamportian-dramatis:0.1.0": layers
+#import "@preview/lamportian-dramatis:0.2.0": layers
 
 #layers
 // ("background", "arrows", "backdrops", "timelines", "marks", "labels", "foreground")
@@ -251,7 +251,7 @@ That line lies along the lane, so the layer decides whether it shows at all: at 
 That is [`gallery/overlays.typ`](https://github.com/mvaled/lamportian-dramatis/blob/main/gallery/overlays.typ): the future cone of `A.2`, drawn at `backdrops` so the lanes cross it without fading a stripe through it, and a ring at `marks` so `A.2`'s own label stays legible over it.
 
 ```typ
-#import "@preview/lamportian-dramatis:0.1.0": lamport-diagram, replica, event, send, recv, sync, above, below, draw
+#import "@preview/lamportian-dramatis:0.2.0": lamport-diagram, replica, event, send, recv, sync, above, below, draw
 
 #lamport-diagram(
   replicas: (replica("S", above, color: luma(0)), replica("A", below), replica("C", below)),
