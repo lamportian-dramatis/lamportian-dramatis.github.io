@@ -161,8 +161,10 @@ A time and a lane together make a coordinate, and `point` is the one entry that 
 | Entry | Gives | |
 | --- | --- | --- |
 | `mark(replica, id-or-index)` | a coordinate | Where that point's mark is drawn, including the sub-column `displacement` that leans its arrow. |
+| `mark-args(replica, id-or-index)` | arguments | Everything the diagram used to draw that mark — its coordinate, radius, fill and stroke — ready to spread into `circle`.  `none` for a `gap` or an `idle`, which draw no mark. |
 | `column(replica, id-or-index)` | a column | Which column the solver put that point in.  Carries no lane and no displacement. |
 | `point(time, lane)` | a coordinate | The page position of a time on a lane. |
+| `color-of(replica)` | a colour | The colour that replica's timeline and marks are drawn in, so a drawing can match a lane rather than restate its colour.  A lane between two replicas has none, so this takes a replica and not a lane. |
 | `span` | two times | The time each lane's line starts at, and the time it ends at.  The first is slightly negative, because a lane leads in a little before column `0`; the second is past `ncols - 1`, because the line runs on beyond the last mark to carry its arrowhead.  Neither is a column, which is what the distinction above is for.  Every lane is drawn over the same stretch, so there is one pair for the whole diagram and no replica to ask about. |
 | `replicas` | strings | The replica ids, in order.  The id at index `n` is the replica on lane `n`. |
 | `ncols` | a count | How many columns the diagram was solved into, so the last of them is `ncols - 1`. |
@@ -187,6 +189,23 @@ overlays: (
 ```
 
 `mark("C", "c-reads")` cannot start that rectangle: it sits on C's lane, not on the first one.  So the two compose — `column` gets the moment, `point` puts it on whichever lane you meant.
+
+`mark-args` is for restating a mark rather than placing something near it.  Spread it and override what you want changed; a later argument wins, so the rest stays whatever the diagram chose:
+
+```typ
+overlays: (
+  marks: d => {
+    import draw: *
+    let (mark-args, ..) = d
+    // Tint three marks, keeping the radius and the ring the diagram gave them.
+    for point in (("S", 3), ("S", 4), ("A", "a-catches-up")) {
+      circle(..mark-args(..point), fill: red.transparentize(55%))
+    }
+  },
+)
+```
+
+The diagram draws its own marks from exactly this, which is the point of it: a hollow ring for a point where the replica touches the network, a solid dot for a purely local step, a send drawn smaller than the receive it feeds.  None of that has to be restated, and a drawing that spreads `mark-args` follows the library if any of it ever changes.  `color-of` is the smaller tool for when you want a lane's colour and nothing else.
 
 `column` is also what to reach for when you want to *reason* rather than draw.  `column("A", "x") == column("B", "y")` is "the solver found nothing ordering these two", which is a real question to ask of a Lamport diagram.
 

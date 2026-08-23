@@ -21,7 +21,7 @@ Two things follow.  A diagram stays correct while you insert events — nothing 
 
 A receive is drawn by default a centimetre further along in time than its send, so every message arrow follows the direction of time without the diagram needing padding put in by hand.  `recv(..., displacement: none)` puts it in the send's own column instead, for an arrow that runs straight across the lanes.
 
-Labels are centred on their own mark and sit on the orientation's default side — `above` a horizontal timeline, `right` of a vertical one — except a lane's opening label, nudged forward in time so it does not read as belonging to the replica name just before it.  `event` overrides both for one event, `replica` for a whole lane.
+Labels are centred on their own mark and sit on the orientation's default side — `above` a horizontal timeline, `right` of a vertical one — except a lane's opening label on a horizontal diagram, nudged forward in time so it does not read as belonging to the replica name at its left.  A vertical lane takes no such nudge: its name sits before the lane *in time* while its labels sit beside it, so the two were never at risk of reading as one.  `event` overrides both for one event, `replica` for a whole lane.
 
 Arrows are drawn first and everything else on top, so an arrow that crosses a lane it has no endpoint on passes *under* that lane rather than striking through it.  A lane erases across the whole strip it occupies, marks included: each mark clears the same annulus that an arrow landing on it would stop short of, so a passing arrow breaks around a dot instead of running into its edge.  Labels knock out the arrow behind them for the same reason.
 

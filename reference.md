@@ -82,7 +82,7 @@ A replica lane, and the defaults the local events on it fall back on.  `name` is
 - `position` — `above` or `below`, the side of the timeline this lane's event labels sit on — `left` or `right` on a vertical diagram; see [`orientation`](#orientation).
 - `size` — the text size of this lane's event labels.
 - `displacement` — how far this lane's event labels slide off their own dot.
-- `first-displacement` — the same, for the lane's opening event, the one that would otherwise crowd the replica name.
+- `first-displacement` — the same, for the lane's opening event, the one that would otherwise crowd the replica name.  Left alone it is the orientation's own: `20%` on a horizontal diagram, where the name sits immediately left of that first label, and `0%` on a vertical one, where the name is before the lane in time and the labels are beside it, so there is nothing to move out of.
 
 `label`, `color` and `position` may also be given positionally, in any order: they are told apart by type, so `replica("A", below, red)` and `replica("B", red, below)` are the same lane.  The rest must be named.
 
