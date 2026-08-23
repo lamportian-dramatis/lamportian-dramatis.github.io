@@ -101,6 +101,7 @@ A local event on a replica's timeline.  Its body is the label — content or a p
 - `displacement` — slides the label along the timeline, out of being centred on its own dot.  A ratio is taken against the label's own width, so `+50%` leaves the label's left edge over the dot and `-50%` its right edge, while a length is an exact offset and `0` (or `0%`) centres it.  On a vertical diagram the ratio is taken against the label's height instead, that being what runs along the timeline there.
 - `width` — wraps the label to a fixed width instead of letting it run along the timeline on one line, which is what keeps a long label from crowding its neighbours.  **Named only**: a bare length is read as a `displacement`, that being the far commoner one to reach for.  The box is centred on the mark like any other label, and its contents are left to you — wrap the body in `align(center, ..)` if centred lines read better than the ragged right edge.
 - `halo` — how far the label's backdrop reaches past the label's own box, which is what breaks an arrow crossing the lane so it does not crowd the glyphs.  `auto` (the default) matches the reach of the disc under a mark, so a label and a dot break an arrow by the same amount; a length sets an exact reach, and `none` drops the backdrop, letting whatever is behind show through.
+- `fill` — what that backdrop is painted with.  `auto` (the default) is white, which is what breaks whatever runs behind the label; a paint is used as given, so a label sitting in a wash an [overlay]({% link overlays.md %}) laid down can be given that same wash and read as part of it rather than as a hole punched in it; and `none` leaves the backdrop unpainted, which is `halo: none` with the label's box kept.  A translucent paint hides no more than it says, so an arrow behind a washed label still shows through — and a translucent fill over a wash of its own colour compounds with it into a slightly darker patch.
 
 The dot itself never moves: it is the event's place in time, which the layout solves for.
 
@@ -122,6 +123,8 @@ Both take `displacement`, which nudges the point off the column it is solved int
 - on a `recv` it is `1cm` — how far right of its `send` the point lands whenever nothing on its own replica pushes it further, and enough to lean the arrow forward.  `recv(..., displacement: none)` leaves it on its column, drawing a vertical arrow when the receiving replica has nothing else competing for that column.
 - on a `send` it is `none` — a send sits on its own column unless you say otherwise, since it is the receive that leans a message forward.  Reach for it to tilt an arrow away from whatever a vertical line would otherwise run through, or to separate two sends the solver put in one column.
 
+Both also take `halo` and `fill`, the label's backdrop, which mean exactly what they mean on an [`event`](#event).
+
 `send` also takes:
 
 - `label` — labels the arrow itself rather than the point, and keeps its own styling.
@@ -139,7 +142,7 @@ One end of a two-way exchange.  In a single round trip each side gives the other
 
 Exactly two `sync` points must carry the same name, and they must sit on two different replicas.  The pair is drawn as one arrow with a head at each end, and the two ends share a column: neither side can finish the exchange before the other one starts it.  A name cannot be both a `sync` and a `send`/`recv` message.
 
-An optional label for the point goes positionally — `sync("push")[rolled back]` — or as `body`, with `size` setting its text size and `at` forcing the side the label sits on.  `label` instead labels the arrow itself; either end may carry it, and the first one given wins.  `displacement` nudges this end off the shared column, which tilts the arrow away from whatever the vertical line would otherwise run through; it is a drawing offset and says nothing about the order.
+An optional label for the point goes positionally — `sync("push")[rolled back]` — or as `body`, with `size` setting its text size, `at` forcing the side the label sits on, and `halo` and `fill` setting its backdrop as they do on an [`event`](#event).  `label` instead labels the arrow itself; either end may carry it, and the first one given wins.  `displacement` nudges this end off the shared column, which tilts the arrow away from whatever the vertical line would otherwise run through; it is a drawing offset and says nothing about the order.
 
 ```typ
 #lamport-diagram(

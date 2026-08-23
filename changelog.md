@@ -8,6 +8,13 @@ title: Changelog
 
 All notable changes to this package are recorded here.  The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html) — with the caveat that this is pre-1.0, so a `0.x` bump may break anything.  A Typst import names an exact version, so nothing breaks under you: upgrading is always a deliberate edit.
 
+## Unreleased
+
+### Added
+
+- `fill` on `event`, `send`, `recv` and `sync`, which paints the backdrop under a point's label.  `auto` keeps the white that has always broken whatever runs behind the label; a paint is used as given, so a label standing in a wash an overlay laid down can be given that same wash and read as part of it instead of as a hole punched in it; `none` leaves the backdrop unpainted, which is `halo: none` with the label's box kept.
+- `halo` on `send`, `recv` and `sync`.  It was already on `event`, and the drawing has always read it from every point — only the three constructors refused to pass it on, so a message label could not be let off its white rectangle.
+
 ## 0.2.0 — 2026-08-23
 
 A diagram is no longer bound to run left to right, and it can be drawn into.
