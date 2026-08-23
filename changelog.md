@@ -12,9 +12,9 @@ All notable changes to this package are recorded here.  The format follows [Keep
 
 A diagram is no longer bound to run left to right, and it can be drawn into.
 
-Nothing an 0.1.0 document says means anything different: `gallery/gorgeous.typ` renders byte for byte
+Nothing an 0.1.0 document says means anything different: a horizontal diagram renders byte for byte
 what 0.1.0 renders for it.  The two arguments whose defaults changed are spelled differently and
-resolve to the same numbers on a horizontal diagram.
+resolve to the same numbers there.
 
 ### Added
 
