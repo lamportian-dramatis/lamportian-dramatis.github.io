@@ -4,13 +4,11 @@ title: Guide
 
 # Guide
 
-## Columns are (mostly) solved, not authored
-
-You list each replica's local events in order and name the messages.  The layout then puts every event in the earliest column that keeps it after its predecessor on the same replica *and* after the send of every message it receives.
-
-Two things follow.  A diagram stays correct while you insert events — nothing needs re-padding, because no position along the time axis was ever written by hand.  And a receive that would land before its own send is a causal cycle, which fails compilation instead of quietly drawing a backwards arrow.
-
 ## Reading a diagram
+
+Every part a diagram draws, called out on a diagram that draws its own callouts:
+
+![A diagram with each of its parts named: a sync between two replicas, a local event, a send and the receive it feeds, an elided stretch of time, and a timeline of its own](gallery/legend.png)
 
 | Mark | Meaning |
 | --- | --- |
@@ -18,12 +16,19 @@ Two things follow.  A diagram stays correct while you insert events — nothing 
 | Hollow dot | The replica touches the network here; the attached arrow says in which direction, and a two-headed one says both. |
 | Small hollow dot | A send, drawn smaller than the receive it feeds, so the two ends of a message stay tellable apart without tracing the arrow.  The two ends of a `sync` are the same size, because neither of them is the sender. |
 | Dotted timeline | Elided time — events the diagram does not show. |
+| Timeline arrowhead | Every lane ends in one: it says which way time runs, and that the lane goes on past what is drawn. |
 
 A receive is drawn by default a centimetre further along in time than its send, so every message arrow follows the direction of time without the diagram needing padding put in by hand.  `recv(..., displacement: none)` puts it in the send's own column instead, for an arrow that runs straight across the lanes.
 
 Labels are centred on their own mark and sit on the orientation's default side — `above` a horizontal timeline, `right` of a vertical one — except a lane's opening label on a horizontal diagram, nudged forward in time so it does not read as belonging to the replica name at its left.  A vertical lane takes no such nudge: its name sits before the lane *in time* while its labels sit beside it, so the two were never at risk of reading as one.  `event` overrides both for one event, `replica` for a whole lane.
 
 Arrows are drawn first and everything else on top, so an arrow that crosses a lane it has no endpoint on passes *under* that lane rather than striking through it.  A lane erases across the whole strip it occupies, marks included: each mark clears the same annulus that an arrow landing on it would stop short of, so a passing arrow breaks around a dot instead of running into its edge.  Labels knock out the arrow behind them for the same reason.
+
+## Columns are (mostly) solved, not authored
+
+You list each replica's local events in order and name the messages.  The layout then puts every event in the earliest column that keeps it after its predecessor on the same replica *and* after the send of every message it receives.
+
+Two things follow.  A diagram stays correct while you insert events — nothing needs re-padding, because no position along the time axis was ever written by hand.  And a receive that would land before its own send is a causal cycle, which fails compilation instead of quietly drawing a backwards arrow.
 
 ## Figures and cross-references
 

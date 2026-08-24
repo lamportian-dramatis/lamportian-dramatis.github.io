@@ -13,6 +13,8 @@ All notable changes to this package are recorded here.  The format follows [Keep
 ### Added
 
 - `fill` on `event`, `send`, `recv` and `sync`, which paints the backdrop under a point's label.  `auto` keeps the white that has always broken whatever runs behind the label; a paint is used as given, so a label standing in a wash an overlay laid down can be given that same wash and read as part of it instead of as a hole punched in it; `none` leaves the backdrop unpainted, which is `halo: none` with the label's box kept.
+- Rectangles round a diagram's own parts, for an overlay to draw against: `lane-rect(lane)` for a whole timeline, `gap-rect(replica, index)` for the stretch one `gap` elides, `names-rect()` — or `names-rect(replica)` — for the strip the replica names are set in, and `arrow-rect(name)` for a message or a sync together with the two marks it runs between.  Each answers with the two corners `rect` takes, so it spreads straight into one, and each takes a `pad` that grows it: one number for every side, or a pair said in the diagram's own axes — how far along the timelines, how far across them — so that a padded box turns with the diagram like everything else an overlay is given.
+- `arrow-mid(name)`, the middle of that arrow's shaft, which is where the diagram sets an arrow's own label before stepping it off the shaft — so a note hung there hangs where a label would have.
 - `halo` on `send`, `recv` and `sync`.  It was already on `event`, and the drawing has always read it from every point — only the three constructors refused to pass it on, so a message label could not be let off its white rectangle.
 
 ## 0.2.0 — 2026-08-23

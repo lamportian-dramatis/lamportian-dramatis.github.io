@@ -56,7 +56,7 @@ overlays: (
 )
 ```
 
-`#import draw: *` at the top of the file works as well, if you would rather have them everywhere.
+`#import draw: *` at the top of the file works as well, if you would rather have them everywhere.  The locator carries that same module under `draw`, so a body can take it from there and import nothing at all — `let (draw, mark, ..) = d`, and then `draw.circle(..)`.
 
 The locator is a dictionary; unpack the entries a layer needs and call them.
 
@@ -136,7 +136,7 @@ Two points on one lane may not share an id, and that is an error rather than a s
 
 ### By index
 
-Anywhere an id is taken an integer is taken too, addressing the lane positionally, **1-based**, counting *every* item in the lane's array including `gap` and `idle`:
+Anywhere an id is taken an integer is taken too, addressing the lane positionally, **1-based**, counting *every* item in the lane's array including `gap` and `idle`.  It numbers the array and nothing else — the columns the solver hands out count from `0`, so the first item on a lane is index `1` and column `0`:
 
 ```typ
 mark("A", 1)      // the lane's opening item
@@ -149,29 +149,48 @@ Ids are strings and indices are integers, so the two never need telling apart by
 
 ## What the locator holds
 
-Four kinds of value pass through the locator, and it is worth keeping them apart.
+Five kinds of value pass through the locator, and it is worth keeping them apart.
 
 - A **time** is a position along logical time, measured in columns.  It is a real number and may be any of them: `2.5` falls halfway between two columns, `-0.09` falls before the diagram's first one.
-- A **column** is one of the whole times the solver hands out, `0` up to `ncols - 1`.  Every column is a time; most times are not columns.  This is the discrete thing the layout reasons about, and the only kind that can answer "did these two land at the same moment".
+- A **column** is one of the whole times the solver hands out, `0` up to `ncols - 1`.  Every column is a time; most times are not columns.  This is the discrete thing the layout reasons about, and the only kind that can answer "did these two land at the same moment".  Columns count from `0`, so a lane's opening point sits in column `0` unless a message it receives pushes it later.  That is not the numbering an index uses: `column("A", 1)` says "the first item written on A", by an index counting from `1`, and answers `0`, the column the solver put it in.  An index says where in the lane's array a point stands; a column says when it happens.
 - A **lane** is a position across the replicas, measured in lanes, and likewise a real number: `0` is the first replica, `1` the second, `0.5` between them, and `-0.4` a little to the outside of the first.  It is a position and not an index, so `-1` is one lane clear of the first rather than the last one; for that, ask `replicas` how many there are.  A replica id is accepted wherever a lane is.
 - A **coordinate** is a CeTZ point, `(x, y)` in canvas centimetres.  It is what every CeTZ function wants, and the only kind here that knows which way the diagram runs.
+- A **rectangle** is a pair of coordinates — two opposite corners — handed back as `arguments`, so it spreads straight into `rect`.  It is measured off what the diagram actually drew, and it takes a `pad` that grows it.
 
-A time and a lane together make a coordinate, and `point` is the one entry that does that conversion.  Everything else either hands you a coordinate outright or stays in times and lanes, where it survives a change of orientation.
+A time and a lane together make a coordinate, and `point` is the one entry that does that conversion.  Everything else either hands you a coordinate outright or stays in times and lanes, where it survives a change of orientation.  A rectangle hands out coordinates and survives it too, because what fixes one is the part of the diagram it is asked for and the pad it is grown by, and neither of those is a position on the page.
 
-| Entry | Gives | |
-| --- | --- | --- |
-| `mark(replica, id-or-index)` | a coordinate | Where that point's mark is drawn, including the sub-column `displacement` that leans its arrow. |
-| `mark-args(replica, id-or-index)` | arguments | Everything the diagram used to draw that mark — its coordinate, radius, fill and stroke — ready to spread into `circle`.  `none` for a `gap` or an `idle`, which draw no mark. |
-| `column(replica, id-or-index)` | a column | Which column the solver put that point in.  Carries no lane and no displacement. |
-| `point(time, lane)` | a coordinate | The page position of a time on a lane. |
-| `color-of(replica)` | a colour | The colour that replica's timeline and marks are drawn in, so a drawing can match a lane rather than restate its colour.  A lane between two replicas has none, so this takes a replica and not a lane. |
-| `span` | two times | The time each lane's line starts at, and the time it ends at.  The first is slightly negative, because a lane leads in a little before column `0`; the second is past `ncols - 1`, because the line runs on beyond the last mark to carry its arrowhead.  Neither is a column, which is what the distinction above is for.  Every lane is drawn over the same stretch, so there is one pair for the whole diagram and no replica to ask about. |
-| `replicas` | strings | The replica ids, in order.  The id at index `n` is the replica on lane `n`. |
-| `ncols` | a count | How many columns the diagram was solved into, so the last of them is `ncols - 1`. |
-| `orientation` | a string | Which way this diagram runs, as its canonical name. |
-| `col-gap`, `row-gap`, `dot` | lengths | The diagram's own measurements, in canvas centimetres — one column of time, one lane, and the radius of an event's dot. |
+### `mark(replica, id-or-index)`
 
-`mark` and `column` ask the same question and answer in different kinds, and that is the whole distinction.  You want the column whenever what you are drawing crosses lanes, because a coordinate has a lane baked into it — the lane of the replica you named.  A column is a time, so it goes straight into `point`:
+Return the CeTZ coordinate `(x, y)` of the mark the diagram drew for that point — a local `event`, or either end of a `send`, `recv` or `sync`.  It includes the sub-column `displacement` that leans an arrow off a straight run across the lanes, so it is where the dot really landed rather than where its column nominally is.
+
+A coordinate has a lane baked into it: the lane of the replica you named.  That is the whole difference from `column`, and it is what makes `column` the one to reach for when a drawing crosses lanes.
+
+### `mark-args(replica, id-or-index)`
+
+Return everything the diagram used to draw that mark — its coordinate, radius, fill and stroke — as `arguments` ready to spread into `circle`.  A `gap` or an `idle` draws no mark, so for those it returns `none`.
+
+It is for restating a mark rather than placing something near it.  Spread it and override what you want changed; a later argument wins, so the rest stays whatever the diagram chose:
+
+```typ
+overlays: (
+  marks: d => {
+    import draw: *
+    let (mark-args, ..) = d
+    // Tint three marks, keeping the radius and the ring the diagram gave them.
+    for point in (("S", 3), ("S", 4), ("A", "a-catches-up")) {
+      circle(..mark-args(..point), fill: red.transparentize(55%))
+    }
+  },
+)
+```
+
+The diagram draws its own marks from exactly this, which is the point of it: a hollow ring for a point where the replica touches the network, a solid dot for a purely local step, a send drawn smaller than the receive it feeds.  None of that has to be restated, and a drawing that spreads `mark-args` follows the library if any of it ever changes.
+
+### `column(replica, id-or-index)`
+
+Return the column the solver put that point in: a whole number, `0` up to `ncols - 1`.  It carries no lane and no displacement — it is the moment, and nothing about where on the page that moment was drawn.
+
+`mark` and `column` ask the same question and answer in different kinds, and that is the whole distinction.  You want the column whenever what you are drawing crosses lanes, because a coordinate is already on a lane.  A column is a time, so it goes straight into `point`:
 
 ```typ
 overlays: (
@@ -190,26 +209,88 @@ overlays: (
 
 `mark("C", "c-reads")` cannot start that rectangle: it sits on C's lane, not on the first one.  So the two compose — `column` gets the moment, `point` puts it on whichever lane you meant.
 
-`mark-args` is for restating a mark rather than placing something near it.  Spread it and override what you want changed; a later argument wins, so the rest stays whatever the diagram chose:
+`column` is also what to reach for when you want to *reason* rather than draw.  `column("A", "x") == column("B", "y")` is "the solver found nothing ordering these two", which is a real question to ask of a Lamport diagram.
+
+### `point(time, lane)`
+
+Return the coordinate of a time on a lane.  Both arguments are the kinds above: `time` is a number of columns, whole or not, and `lane` is a number of lanes, or the id of the replica on one.
+
+It is the entry that turns a time and a lane into a position on the page, which is what makes it the one to write a drawing in terms of — see [staying orientation-independent](#staying-orientation-independent) below.
+
+### The rectangles
+
+The five that follow answer with two opposite corners, so each spreads straight into `rect` — or into anything else that takes two, `content` included.  Naming that `rect` leaves CeTZ holding the anchors, which is what lets a note be hung off the box instead of off a position worked out by hand:
 
 ```typ
 overlays: (
-  marks: d => {
+  foreground: d => {
     import draw: *
-    let (mark-args, ..) = d
-    // Tint three marks, keeping the radius and the ring the diagram gave them.
-    for point in (("S", 3), ("S", 4), ("A", "a-catches-up")) {
-      circle(..mark-args(..point), fill: red.transparentize(55%))
-    }
+    let (gap-rect, ..) = d
+    rect(..gap-rect("R1", 3, pad: (0, 0.14)), stroke: (paint: gray, dash: "densely-dotted"), name: "elided")
+    content("elided.north", anchor: "south", text(fill: gray, [elided time]))
   },
 )
 ```
 
-The diagram draws its own marks from exactly this, which is the point of it: a hollow ring for a point where the replica touches the network, a solid dot for a purely local step, a send drawn smaller than the receive it feeds.  None of that has to be restated, and a drawing that spreads `mark-args` follows the library if any of it ever changes.  `color-of` is the smaller tool for when you want a lane's colour and nothing else.
+`pad` grows a rectangle on every side, in canvas centimetres.  One number pads all four the same; a pair pads in the diagram's own axes — how far along the timelines, how far across them — which is what keeps a padded box the same box when the diagram is turned on its side:
 
-`column` is also what to reach for when you want to *reason* rather than draw.  `column("A", "x") == column("B", "y")` is "the solver found nothing ordering these two", which is a real question to ask of a Lamport diagram.
+```typ
+gap-rect("R1", 3)                  // exactly the dotted span, and nothing more
+gap-rect("R1", 3, pad: 0.1)        // a millimetre of air on every side
+gap-rect("R1", 3, pad: (0, 0.14))  // tight in time, standing clear of the lane
+```
 
-The measurements are there so a drawing can speak the diagram's own language.  A brace half a column clear of the last mark stays half a column clear when you retune `col-gap`; one written as `+1.0` does not.
+Unpadded, a rectangle is exactly the part it names, and that is what makes it worth asking for: the diagram sets its names into the very box `names-rect` hands out, interrupts a lane over the very stretch `gap-rect` answers with, and runs its arrows between the very points `arrow-mid` takes the middle of.  None of it is re-derived, so none of it can drift.
+
+### `lane-rect(lane, pad: 0)`
+
+Return the rectangle round the whole strip a lane occupies: from where its line leads in to past the arrowhead, and as thick across as the band the lane erases behind itself.  It holds every mark on that lane and no label off it, and it stops short of the replica name, which has `names-rect` of its own.
+
+### `gap-rect(replica, index, pad: 0)`
+
+Return the rectangle round exactly the dotted span of one `gap`, as thick across as its lane.  A `gap` carries no id, so name it by its index on the lane — a negative one counting back from the end.  Naming a point that is not a `gap` fails compilation, saying which kind it found there.
+
+### `names-rect(pad: 0)`
+
+Return the rectangle round the strip the replica names are set in: the column the diagram keeps clear before the lanes begin.  Given a replica — `names-rect("A")` — it is that one name's own box instead.
+
+### `arrow-rect(name, pad: 0)`
+
+Return the rectangle round a message or a `sync`, by the name that pairs its two ends: the shaft together with both the marks it runs between, so a box drawn round an exchange reads as round the exchange rather than round the gap in the middle of it.
+
+### `arrow-mid(name)`
+
+Return the coordinate of the middle of that arrow's shaft — where the diagram sets an arrow's own label, before stepping it off the shaft.  A note hung here hangs where a label would have.
+
+### `color-of(replica)`
+
+Return the colour that replica's timeline and marks are drawn in, so a drawing can match a lane rather than restate its colour.  A lane between two replicas has none, so this takes a replica and not a lane.  Next to `mark-args` it is the smaller tool: for when you want a lane's colour and nothing else.
+
+### `span`
+
+Two times: the one each lane's line starts at, and the one it ends at.  The first is slightly negative, because a lane leads in a little before column `0`; the second is past `ncols - 1`, because the line runs on beyond the last mark to carry its arrowhead.  Neither is a column, which is what the distinction above is for.  Every lane is drawn over the same stretch, so there is one pair for the whole diagram and no replica to ask about.
+
+### `replicas`
+
+The replica ids, in order.  The id at index `n` is the replica on lane `n`, which is how a drawing turns an id into a lane when it needs to arrive at one by arithmetic.
+
+### `ncols`
+
+How many columns the diagram was solved into, so the last of them is `ncols - 1`.
+
+### `orientation`
+
+Which way this diagram runs, as its canonical name: `rightwards`, `leftwards`, `downwards` or `upwards`.  The two shorthands resolve to the direction they stand for, so a drawing that tests this never has to test for `horizontal` or `vertical` as well.
+
+### `draw`
+
+The CeTZ module the diagram draws with — the same one the package re-exports, for a body that would rather unpack it than import it: `let (draw, mark, ..) = d`, and then `draw.circle(..)`.
+
+### `col-gap`, `row-gap`, `dot`
+
+The diagram's own measurements, in canvas centimetres: one column of time, one lane, and the radius of an event's dot.
+
+They are here so a drawing can speak the diagram's own language.  A brace half a column clear of the last mark stays half a column clear when you retune `col-gap`; one written as `+1.0` does not.
 
 ## Staying orientation-independent
 
@@ -241,6 +322,8 @@ That line lies along the lane, so the layer decides whether it shows at all: at 
 
 - An unknown replica id, an unknown point id, or an index past the end of a lane fails compilation, naming what was asked for and what that lane actually holds.
 - Two points on one lane sharing an id fails compilation.
+- `gap-rect` given a point that is not a `gap` fails compilation, naming the kind it found there.  An arrow name that is neither a message nor a `sync` fails the same way.
+- A `pad` that is neither a number nor a pair of them fails compilation.
 - A layer name that is not in `layers` fails compilation, and says which names are.
 - An `overlays` that is none of `none`, a dictionary, a function of one argument, or a CeTZ body fails compilation.
 
@@ -297,3 +380,7 @@ That is [`gallery/overlays.typ`](https://github.com/mvaled/lamportian-dramatis/b
   ),
 )
 ```
+
+## The legend on the guide
+
+The legend at the top of the [guide]({% link guide.md %}) is the other worked example: [`gallery/legend.typ`](https://github.com/mvaled/lamportian-dramatis/blob/main/gallery/legend.typ) names each part of a diagram with a rectangle from the table above, or with a ring built out of `mark` and `dot`, and hangs a note off it.  The callouts are drawn at `foreground`, so they read over the whole diagram; the rings at `marks`, so each dot's own label stays legible over the ring round it.
