@@ -6,8 +6,6 @@ title: Guide
 
 ## Reading a diagram
 
-Every part a diagram draws, called out on a diagram that draws its own callouts:
-
 ![A diagram with each of its parts named: a sync between two replicas, a local event, a send and the receive it feeds, an elided stretch of time, and a timeline of its own](gallery/legend.png)
 
 | Mark | Meaning |
