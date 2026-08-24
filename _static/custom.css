@@ -1,0 +1,48 @@
+/* Everything the theme sizes, it sizes in `rem`, so the whole design scales from here: text, the
+   headings above it, the code inside it and the rails either side.  130% of a browser's 16px default
+   is a little over 20px of body text, which is the size this documentation is meant to be read at. */
+html {
+    font-size: 130%;
+}
+
+/* What the theme does not say, and this project has an opinion about. */
+
+/* Fraunces is a variable face: `opsz` is what keeps a heading from reading as a blown-up body letter,
+   and `SOFT`/`WONK` are the axes that make it a display type rather than a text one.  Headings ask
+   for the large optical size and leave the wonky alternates off. */
+h1, h2, h3, h4, h5, h6 {
+    font-variation-settings: "opsz" 84, "SOFT" 0, "WONK" 0;
+    letter-spacing: -0.01em;
+    /* Fraunces carries weight of its own -- the theme's 700 sets it shouting.  The `wght` axis is
+       left to `font-weight` rather than named above, so this is the value that reaches the face. */
+    font-weight: 500;
+}
+
+/* Long-form reading, and the settings that help a reader who finds it hard work: text set flush left
+   rather than justified, since justification opens rivers of white space between words; a line tall
+   enough to find the next one by; and a measure the eye can return across. */
+article p,
+article li {
+    text-align: left;
+    line-height: 1.7;
+}
+
+/* A picture alone in its paragraph is a figure and not a word, so it sits centred.  Every diagram is
+   drawn on white, which in dark mode would read as a hole torn in the page unless the white is framed
+   as belonging to the picture. */
+article img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background: #fff;
+    border-radius: 6px;
+    padding: 0.5rem;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
+}
+
+/* Inconsolata runs light beside a serif at the same size; a little more weight in code holds the two
+   together on the page. */
+code, kbd, samp, pre {
+    font-weight: 500;
+}
+
