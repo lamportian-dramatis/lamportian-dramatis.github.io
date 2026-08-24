@@ -269,7 +269,7 @@ the sender, so neither is drawn as one; the inner dot is what tells a sync’s e
 receive without following the arrow out to count its heads.</p></td>
 </tr>
 <tr class="row-even"><td><p>Dotted timeline</p></td>
-<td><p>Elided time — events the diagram does not show.</p></td>
+<td><p>Elided time – events the diagram does not show.</p></td>
 </tr>
 <tr class="row-odd"><td><p>Timeline arrowhead</p></td>
 <td><p>Every lane ends in one: it says which way time runs, and that the lane goes on past what is
@@ -278,11 +278,11 @@ drawn.</p></td>
 </tbody>
 </table>
 </div>
-<p>A receive is drawn by default a centimetre further along in time than its send, so every message
+<p>A receive is drawn by default a centimeter further along in time than its send, so every message
 arrow follows the direction of time without the diagram needing padding put in by hand.  <code class="docutils literal notranslate"><span class="pre">recv(...,</span> <span class="pre">displacement:</span> <span class="pre">none)</span></code> puts it in the send’s own column instead, for an arrow that runs
 straight across the lanes.</p>
-<p>Labels are centred on their own mark and sit on the orientation’s default side — <code class="docutils literal notranslate"><span class="pre">above</span></code> a
-horizontal timeline, <code class="docutils literal notranslate"><span class="pre">right</span></code> of a vertical one — except a lane’s opening label on a horizontal
+<p>Labels are centred on their own mark and sit on the orientation’s default side – <code class="docutils literal notranslate"><span class="pre">above</span></code> a
+horizontal timeline, <code class="docutils literal notranslate"><span class="pre">right</span></code> of a vertical one – except a lane’s opening label on a horizontal
 diagram, nudged forward in time so it does not read as belonging to the replica name at its left.  A
 vertical lane takes no such nudge: its name sits before the lane <em>in time</em> while its labels sit
 beside it, so the two were never at risk of reading as one.  <code class="docutils literal notranslate"><span class="pre">event</span></code> overrides both for one
@@ -298,7 +298,7 @@ Labels knock out the arrow behind them for the same reason.</p>
 <p>You list each replica’s local events in order and name the messages.  The layout then puts every
 event in the earliest column that keeps it after its predecessor on the same replica <em>and</em> after the
 send of every message it receives.</p>
-<p>Two things follow.  A diagram stays correct while you insert events — nothing needs re-padding,
+<p>Two things follow.  A diagram stays correct while you insert events – nothing needs re-padding,
 because no position along the time axis was ever written by hand.  And a receive that would land
 before its own send is a causal cycle, which fails compilation instead of quietly drawing a
 backwards arrow.</p>
