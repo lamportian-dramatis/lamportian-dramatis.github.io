@@ -151,17 +151,21 @@ Ids are strings and indices are integers, so the two never need telling apart by
 
 Five kinds of value pass through the locator, and it is worth keeping them apart.
 
-- A **time** is a position along logical time, measured in columns.  It is a real number and may be any of them: `2.5` falls halfway between two columns, `-0.09` falls before the diagram's first one.
+- A **time** is a position along logical time.  It is a real number placed along the axis the timelines run on.  `0` is the *first column*: the solver starts every point there and only ever pushes one later, so nothing is solved before `0` — though a lane whose opening point waits on a message does start further along than that.  Placing a drawing in times is what lets a drawing be placed at, before or after any moment the diagram holds — `-0.5` falls before the first column, and `1.5` midway between the second column and the third (if any).
+
 - A **column** is one of the whole times the solver hands out, `0` up to `ncols - 1`.  Every column is a time; most times are not columns.  This is the discrete thing the layout reasons about, and the only kind that can answer "did these two land at the same moment".  Columns count from `0`, so a lane's opening point sits in column `0` unless a message it receives pushes it later.  That is not the numbering an index uses: `column("A", 1)` says "the first item written on A", by an index counting from `1`, and answers `0`, the column the solver put it in.  An index says where in the lane's array a point stands; a column says when it happens.
-- A **lane** is a position across the replicas, measured in lanes, and likewise a real number: `0` is the first replica, `1` the second, `0.5` between them, and `-0.4` a little to the outside of the first.  It is a position and not an index, so `-1` is one lane clear of the first rather than the last one; for that, ask `replicas` how many there are.  A replica id is accepted wherever a lane is.
+
+- A **lane** is a position on the replica axis, a real number: `0` is the first replica, `1` the second, `0.5` between them, and `-0.4` a little to the outside of the first.  It is a position and not an index, so `-1` is one lane clear of the first rather than the last one; for that, ask `replicas` how many there are.  A replica id is accepted wherever a lane is.
+
 - A **coordinate** is a CeTZ point, `(x, y)` in canvas centimetres.  It is what every CeTZ function wants, and the only kind here that knows which way the diagram runs.
+
 - A **rectangle** is a pair of coordinates — two opposite corners — handed back as `arguments`, so it spreads straight into `rect`.  It is measured off what the diagram actually drew, and it takes a `pad` that grows it.
 
 A time and a lane together make a coordinate, and `point` is the one entry that does that conversion.  Everything else either hands you a coordinate outright or stays in times and lanes, where it survives a change of orientation.  A rectangle hands out coordinates and survives it too, because what fixes one is the part of the diagram it is asked for and the pad it is grown by, and neither of those is a position on the page.
 
 ### `mark(replica, id-or-index)`
 
-Return the CeTZ coordinate `(x, y)` of the mark the diagram drew for that point — a local `event`, or either end of a `send`, `recv` or `sync`.  It includes the sub-column `displacement` that leans an arrow off a straight run across the lanes, so it is where the dot really landed rather than where its column nominally is.
+Return the CeTZ coordinate of the mark the diagram drew for that point — a local `event`, or either end of a `send`, `recv` or `sync`.  It includes the sub-column `displacement` that leans an arrow off a straight run across the lanes, so it is where the dot really landed rather than where its column nominally is.
 
 A coordinate has a lane baked into it: the lane of the replica you named.  That is the whole difference from `column`, and it is what makes `column` the one to reach for when a drawing crosses lanes.
 
