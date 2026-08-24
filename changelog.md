@@ -14,8 +14,14 @@ All notable changes to this package are recorded here.  The format follows [Keep
 
 - `fill` on `event`, `send`, `recv` and `sync`, which paints the backdrop under a point's label.  `auto` keeps the white that has always broken whatever runs behind the label; a paint is used as given, so a label standing in a wash an overlay laid down can be given that same wash and read as part of it instead of as a hole punched in it; `none` leaves the backdrop unpainted, which is `halo: none` with the label's box kept.
 - Rectangles round a diagram's own parts, for an overlay to draw against: `lane-rect(lane)` for a whole timeline, `gap-rect(replica, index)` for the stretch one `gap` elides, `names-rect()` — or `names-rect(replica)` — for the strip the replica names are set in, and `arrow-rect(name)` for a message or a sync together with the two marks it runs between.  Each answers with the two corners `rect` takes, so it spreads straight into one, and each takes a `pad` that grows it: one number for every side, or a pair said in the diagram's own axes — how far along the timelines, how far across them — so that a padded box turns with the diagram like everything else an overlay is given.
+- `time(replica, id-or-index)`, the time a point's mark was drawn at, in columns — its column plus whatever `displacement` leant it off that column.  The locator could answer with the column the solver settled on and with the coordinate the mark landed on, but not with the time between the two, so a drawing that wanted to line something up with a displaced mark *across* the lanes had no way to say so.
+- `pip-args(replica, id-or-index)`, the dot inside a point's ring, as arguments ready to spread into `circle` — `none` for every kind but a `sync`, that being the only one that carries one.  The diagram draws that dot from it, the way it already draws the ring from `mark-args`, so an overlay restating an end of an exchange has both halves of it to hand.
 - `arrow-mid(name)`, the middle of that arrow's shaft, which is where the diagram sets an arrow's own label before stepping it off the shaft — so a note hung there hangs where a label would have.
 - `halo` on `send`, `recv` and `sync`.  It was already on `event`, and the drawing has always read it from every point — only the three constructors refused to pass it on, so a message label could not be let off its white rectangle.
+
+### Changed
+
+- Either end of a `sync` is drawn with a dot inside its ring.  Previously, a `recv` and a `sync` had the same mark.
 
 ## 0.2.0 — 2026-08-23
 

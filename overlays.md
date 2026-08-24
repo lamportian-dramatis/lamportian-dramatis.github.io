@@ -149,9 +149,15 @@ Ids are strings and indices are integers, so the two never need telling apart by
 
 ## What the locator holds
 
+### Values
+
+![Two replicas crossed by dotted guides: one at column 1, which is time 1 as well; a pair at the message, one on the column the solver settled on and one on the time the receiving end was drawn at, with the displacement between the two measured; and one running along lane 0.5, between the replicas](gallery/types.png)
+
+That is [`gallery/types.typ`](https://github.com/mvaled/lamportian-dramatis/blob/main/gallery/types.typ), and every guide in it is drawn from the entries below.
+
 Five kinds of value pass through the locator, and it is worth keeping them apart.
 
-- A **time** is a position along logical time.  It is a real number placed along the axis the timelines run on.  `0` is the *first column*: the solver starts every point there and only ever pushes one later, so nothing is solved before `0` — though a lane whose opening point waits on a message does start further along than that.  Placing a drawing in times is what lets a drawing be placed at, before or after any moment the diagram holds — `-0.5` falls before the first column, and `1.5` midway between the second column and the third (if any).
+- A **time** is a position along logical time.  It is a real number placed along the axis the timelines run on.  `0` is the *first column*: the solver starts every point there and only ever pushes one later, so nothing is solved before `0` — though a lane whose opening point waits on a message does start further along than that.  Times are what let a drawing be placed at, before or after any moment the diagram holds — `-0.5` falls before the first column, and `1.5` midway between the second column and the third (if any).
 
 - A **column** is one of the whole times the solver hands out, `0` up to `ncols - 1`.  Every column is a time; most times are not columns.  This is the discrete thing the layout reasons about, and the only kind that can answer "did these two land at the same moment".  Columns count from `0`, so a lane's opening point sits in column `0` unless a message it receives pushes it later.  That is not the numbering an index uses: `column("A", 1)` says "the first item written on A", by an index counting from `1`, and answers `0`, the column the solver put it in.  An index says where in the lane's array a point stands; a column says when it happens.
 
@@ -190,6 +196,25 @@ overlays: (
 
 The diagram draws its own marks from exactly this, which is the point of it: a hollow ring for a point where the replica touches the network, a solid dot for a purely local step, a send drawn smaller than the receive it feeds.  None of that has to be restated, and a drawing that spreads `mark-args` follows the library if any of it ever changes.
 
+A `sync`'s ring carries a dot inside it, and that dot is a second circle rather than part of the first — `pip-args` is where it comes from.
+
+### `pip-args(replica, id-or-index)`
+
+Return the dot inside that point's ring, as `arguments` ready to spread into `circle` — or `none` for a point that carries none, which is every kind but a `sync`.  It is drawn over the mark's own fill, so a drawing that restates both puts this one second.
+
+The diagram draws that dot from exactly this, the same way it draws the ring from `mark-args`.  So an overlay that recolours an end of an exchange has both halves of it to hand:
+
+```typ
+overlays: (
+  marks: d => {
+    import draw: *
+    let (mark-args, pip-args, ..) = d
+    circle(..mark-args("A", "a-pushes"), fill: red.transparentize(55%))
+    circle(..pip-args("A", "a-pushes"), fill: red)
+  },
+)
+```
+
 ### `column(replica, id-or-index)`
 
 Return the column the solver put that point in: a whole number, `0` up to `ncols - 1`.  It carries no lane and no displacement — it is the moment, and nothing about where on the page that moment was drawn.
@@ -214,6 +239,12 @@ overlays: (
 `mark("C", "c-reads")` cannot start that rectangle: it sits on C's lane, not on the first one.  So the two compose — `column` gets the moment, `point` puts it on whichever lane you meant.
 
 `column` is also what to reach for when you want to *reason* rather than draw.  `column("A", "x") == column("B", "y")` is "the solver found nothing ordering these two", which is a real question to ask of a Lamport diagram.
+
+### `time(replica, id-or-index)`
+
+Return the time that point's mark was drawn at, in columns: its column, plus whatever `displacement` leant it off that column.  Where `column` is the moment the solver settled on, this is the moment the drawing used, and the two are the same number until a displacement separates them — which is what a `recv` does by default, landing half a column past its own column at the default `col-gap`.
+
+It is a time, so it composes with a lane: `point(time("C", "c-reads"), "C")` is exactly `mark("C", "c-reads")` — the same place, said in the diagram's own axes rather than on the page.  That is what makes it the one to reach for when a drawing has to line something up with a mark *across* the lanes, which a coordinate cannot do.
 
 ### `point(time, lane)`
 

@@ -13,8 +13,9 @@ Every part a diagram draws, called out on a diagram that draws its own callouts:
 | Mark | Meaning |
 | --- | --- |
 | Solid dot | A purely local step. |
-| Hollow dot | The replica touches the network here; the attached arrow says in which direction, and a two-headed one says both. |
-| Small hollow dot | A send, drawn smaller than the receive it feeds, so the two ends of a message stay tellable apart without tracing the arrow.  The two ends of a `sync` are the same size, because neither of them is the sender. |
+| Hollow dot | The replica touches the network here; the attached arrow says in which direction. |
+| Small hollow dot | A send, drawn smaller than the receive it feeds, so the two ends of a message stay tellable apart without tracing the arrow. |
+| Hollow dot with a dot inside it | One end of a `sync`, whose arrow carries a head at each end.  Neither end of an exchange is the sender, so neither is drawn as one; the inner dot is what tells a sync's end from a receive without following the arrow out to count its heads. |
 | Dotted timeline | Elided time — events the diagram does not show. |
 | Timeline arrowhead | Every lane ends in one: it says which way time runs, and that the lane goes on past what is drawn. |
 
