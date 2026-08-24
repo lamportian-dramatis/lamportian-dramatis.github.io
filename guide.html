@@ -5,13 +5,13 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Reference" href="reference.html"><link rel="prev" title="lamportian-dramatis" href="index.html">
 
-    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Guide - lamportian-dramatis</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Literata:opsz,wght@7..72,300..700&family=Inconsolata:wght@400..700&display=swap" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=98200049" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=38087438" />
     
     
 
@@ -40,7 +40,10 @@
       }
     }
   }
-</style></head>
+</style>
+  
+  <link rel="icon" href="_static/favicon.svg" type="image/svg+xml">
+</head>
   <body>
     
     <script>
@@ -187,9 +190,10 @@
     <div class="sidebar-container">
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <img class="sidebar-icon" src="_static/favicon.svg" alt="">
   
   <span class="sidebar-brand-text">lamportian-dramatis</span>
-  
+
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
@@ -256,32 +260,53 @@
 <td><p>The replica touches the network here; the attached arrow says in which direction.</p></td>
 </tr>
 <tr class="row-even"><td><p>Small hollow dot</p></td>
-<td><p>A send, drawn smaller than the receive it feeds, so the two ends of a message stay tellable apart without tracing the arrow.</p></td>
+<td><p>A send, drawn smaller than the receive it feeds, so the two ends of a message stay tellable
+apart without tracing the arrow.</p></td>
 </tr>
 <tr class="row-odd"><td><p>Hollow dot with a dot inside it</p></td>
-<td><p>One end of a <code class="docutils literal notranslate"><span class="pre">sync</span></code>, whose arrow carries a head at each end.  Neither end of an exchange is the sender, so neither is drawn as one; the inner dot is what tells a sync’s end from a receive without following the arrow out to count its heads.</p></td>
+<td><p>One end of a <code class="docutils literal notranslate"><span class="pre">sync</span></code>, whose arrow carries a head at each end.  Neither end of an exchange is
+the sender, so neither is drawn as one; the inner dot is what tells a sync’s end from a
+receive without following the arrow out to count its heads.</p></td>
 </tr>
 <tr class="row-even"><td><p>Dotted timeline</p></td>
 <td><p>Elided time — events the diagram does not show.</p></td>
 </tr>
 <tr class="row-odd"><td><p>Timeline arrowhead</p></td>
-<td><p>Every lane ends in one: it says which way time runs, and that the lane goes on past what is drawn.</p></td>
+<td><p>Every lane ends in one: it says which way time runs, and that the lane goes on past what is
+drawn.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>A receive is drawn by default a centimetre further along in time than its send, so every message arrow follows the direction of time without the diagram needing padding put in by hand.  <code class="docutils literal notranslate"><span class="pre">recv(...,</span> <span class="pre">displacement:</span> <span class="pre">none)</span></code> puts it in the send’s own column instead, for an arrow that runs straight across the lanes.</p>
-<p>Labels are centred on their own mark and sit on the orientation’s default side — <code class="docutils literal notranslate"><span class="pre">above</span></code> a horizontal timeline, <code class="docutils literal notranslate"><span class="pre">right</span></code> of a vertical one — except a lane’s opening label on a horizontal diagram, nudged forward in time so it does not read as belonging to the replica name at its left.  A vertical lane takes no such nudge: its name sits before the lane <em>in time</em> while its labels sit beside it, so the two were never at risk of reading as one.  <code class="docutils literal notranslate"><span class="pre">event</span></code> overrides both for one event, <code class="docutils literal notranslate"><span class="pre">replica</span></code> for a whole lane.</p>
-<p>Arrows are drawn first and everything else on top, so an arrow that crosses a lane it has no endpoint on passes <em>under</em> that lane rather than striking through it.  A lane erases across the whole strip it occupies, marks included: each mark clears the same annulus that an arrow landing on it would stop short of, so a passing arrow breaks around a dot instead of running into its edge.  Labels knock out the arrow behind them for the same reason.</p>
+<p>A receive is drawn by default a centimetre further along in time than its send, so every message
+arrow follows the direction of time without the diagram needing padding put in by hand.  <code class="docutils literal notranslate"><span class="pre">recv(...,</span> <span class="pre">displacement:</span> <span class="pre">none)</span></code> puts it in the send’s own column instead, for an arrow that runs
+straight across the lanes.</p>
+<p>Labels are centred on their own mark and sit on the orientation’s default side — <code class="docutils literal notranslate"><span class="pre">above</span></code> a
+horizontal timeline, <code class="docutils literal notranslate"><span class="pre">right</span></code> of a vertical one — except a lane’s opening label on a horizontal
+diagram, nudged forward in time so it does not read as belonging to the replica name at its left.  A
+vertical lane takes no such nudge: its name sits before the lane <em>in time</em> while its labels sit
+beside it, so the two were never at risk of reading as one.  <code class="docutils literal notranslate"><span class="pre">event</span></code> overrides both for one
+event, <code class="docutils literal notranslate"><span class="pre">replica</span></code> for a whole lane.</p>
+<p>Arrows are drawn first and everything else on top, so an arrow that crosses a lane it has no
+endpoint on passes <em>under</em> that lane rather than striking through it.  A lane erases across the
+whole strip it occupies, marks included: each mark clears the same annulus that an arrow landing on
+it would stop short of, so a passing arrow breaks around a dot instead of running into its edge.
+Labels knock out the arrow behind them for the same reason.</p>
 </section>
 <section id="columns-are-mostly-solved-not-authored">
 <h2>Columns are (mostly) solved, not authored<a class="headerlink" href="#columns-are-mostly-solved-not-authored" title="Link to this heading">¶</a></h2>
-<p>You list each replica’s local events in order and name the messages.  The layout then puts every event in the earliest column that keeps it after its predecessor on the same replica <em>and</em> after the send of every message it receives.</p>
-<p>Two things follow.  A diagram stays correct while you insert events — nothing needs re-padding, because no position along the time axis was ever written by hand.  And a receive that would land before its own send is a causal cycle, which fails compilation instead of quietly drawing a backwards arrow.</p>
+<p>You list each replica’s local events in order and name the messages.  The layout then puts every
+event in the earliest column that keeps it after its predecessor on the same replica <em>and</em> after the
+send of every message it receives.</p>
+<p>Two things follow.  A diagram stays correct while you insert events — nothing needs re-padding,
+because no position along the time axis was ever written by hand.  And a receive that would land
+before its own send is a causal cycle, which fails compilation instead of quietly drawing a
+backwards arrow.</p>
 </section>
 <section id="figures-and-cross-references">
 <h2>Figures and cross-references<a class="headerlink" href="#figures-and-cross-references" title="Link to this heading">¶</a></h2>
-<p>Attach the <code class="docutils literal notranslate"><span class="pre">&lt;label&gt;</span></code> <em>after</em> the call.  With a <code class="docutils literal notranslate"><span class="pre">caption</span></code> the function returns a <code class="docutils literal notranslate"><span class="pre">figure</span></code>, so the reference resolves to it and it numbers alongside the document’s other figures.</p>
+<p>Attach the <code class="docutils literal notranslate"><span class="pre">&lt;label&gt;</span></code> <em>after</em> the call.  With a <code class="docutils literal notranslate"><span class="pre">caption</span></code> the function returns a <code class="docutils literal notranslate"><span class="pre">figure</span></code>, so
+the reference resolves to it and it numbers alongside the document’s other figures.</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span><span class="nf">#lamport-diagram</span><span class="p">(</span>
 <span class="w">  </span><span class="nv">caption</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="sb">`DeleteFile1`</span><span class="w"> </span>can<span class="w"> </span>be<span class="w"> </span>applied<span class="w"> </span>twice<span class="w"> </span>under<span class="w"> </span>concurrency<span class="p">],</span>
 <span class="w">  </span><span class="nv">replicas</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="s2">"B"</span><span class="p">,</span><span class="w"> </span><span class="nf">replica</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="nv">below</span><span class="p">)),</span>

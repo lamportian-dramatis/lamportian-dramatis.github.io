@@ -5,13 +5,13 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Guide" href="guide.html">
 
-    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>lamportian-dramatis</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Literata:opsz,wght@7..72,300..700&family=Inconsolata:wght@400..700&display=swap" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=98200049" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=38087438" />
     
     
 
@@ -40,7 +40,10 @@
       }
     }
   }
-</style></head>
+</style>
+  
+  <link rel="icon" href="_static/favicon.svg" type="image/svg+xml">
+</head>
   <body>
     
     <script>
@@ -187,9 +190,10 @@
     <div class="sidebar-container">
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
+  <img class="sidebar-icon" src="_static/favicon.svg" alt="">
   
   <span class="sidebar-brand-text">lamportian-dramatis</span>
-  
+
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
@@ -238,9 +242,15 @@
         <article role="main" id="furo-main-content">
           <section id="lamportian-dramatis">
 <h1>lamportian-dramatis<a class="headerlink" href="#lamportian-dramatis" title="Link to this heading">¶</a></h1>
-<p>Lamport diagrams for replicated systems, as a <a class="reference external" href="https://typst.app/">Typst</a> package: one horizontal timeline per replica, local events as dots on that timeline, and arrows for the messages that carry events from one replica to another.  The horizontal axis is logical time, in the sense of the clocks of <a class="reference external" href="https://lamport.azurewebsites.net/pubs/time-clocks.pdf">Time, Clocks, and the Ordering of Events in a Distributed System</a>.</p>
+<p>Lamport diagrams for replicated systems, as a <a class="reference external" href="https://typst.app/">Typst</a> package: one horizontal
+timeline per replica, local events as dots on that timeline, and arrows for the messages that carry
+events from one replica to another.  The horizontal axis is logical time, in the sense of the clocks
+of <a class="reference external" href="https://lamport.azurewebsites.net/pubs/time-clocks.pdf">Time, Clocks, and the Ordering of Events in a Distributed System</a>.</p>
 <blockquote>
-<div><p><strong>Pre-1.0.</strong>  This is young and still changing a lot.  Nothing here is a stable API until 1.0.0, so expect breaking changes between 0.x releases — argument names, defaults and the shape of what the helpers return are all still open.  A Typst import names an exact version, so nothing breaks under you: upgrading is always a deliberate edit.</p>
+<div><p><strong>Pre-1.0.</strong>  This is young and still changing a lot.  Nothing here is a stable API until 1.0.0,
+so expect breaking changes between 0.x releases — argument names, defaults and the shape of what
+the helpers return are all still open.  A Typst import names an exact version, so nothing breaks
+under you: upgrading is always a deliberate edit.</p>
 </div></blockquote>
 <img alt="A fictional scenario showing a convergence bug in a fictional system" src="_images/gorgeous.png" />
 <p>The whole document that draws it:</p>
@@ -282,10 +292,13 @@
 <section id="read-on">
 <h2>Read on<a class="headerlink" href="#read-on" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="guide.html"><span class="doc">Guide</span></a> — how to read the marks, how the columns are solved, and how a diagram becomes a cross-referenced figure.</p></li>
+<li><p><a class="reference internal" href="guide.html"><span class="doc">Guide</span></a> — how to read the marks, how the columns are solved, and how a diagram
+becomes a cross-referenced figure.</p></li>
 <li><p><a class="reference internal" href="reference.html"><span class="doc">Reference</span></a> — every function and every argument.</p></li>
-<li><p><a class="reference internal" href="overlays.html"><span class="doc">Overlays</span></a> — drawing your own CeTZ into a diagram, addressing its own points, at a depth of your choosing.</p></li>
-<li><p><a class="reference internal" href="gallery.html"><span class="doc">Gallery</span></a> — every example that ships with the package, each a complete document, with its source.</p></li>
+<li><p><a class="reference internal" href="overlays.html"><span class="doc">Overlays</span></a> — drawing your own CeTZ into a diagram, addressing its own points, at a
+depth of your choosing.</p></li>
+<li><p><a class="reference internal" href="gallery.html"><span class="doc">Gallery</span></a> — every example that ships with the package, each a complete document,
+with its source.</p></li>
 <li><p><a class="reference internal" href="changelog.html"><span class="doc">Changelog</span></a> — what each release changed, and what is waiting unreleased.</p></li>
 </ul>
 </section>

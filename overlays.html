@@ -5,13 +5,13 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Gallery" href="gallery.html"><link rel="prev" title="Reference" href="reference.html">
 
-    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>overlays - lamportian-dramatis</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Literata:opsz,wght@7..72,300..700&family=Inconsolata:wght@400..700&display=swap" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=98200049" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=38087438" />
     
     
 
@@ -40,7 +40,10 @@
       }
     }
   }
-</style></head>
+</style>
+  
+  <link rel="icon" href="_static/favicon.svg" type="image/svg+xml">
+</head>
   <body>
     
     <script>
@@ -187,9 +190,10 @@
     <div class="sidebar-container">
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <img class="sidebar-icon" src="_static/favicon.svg" alt="">
   
   <span class="sidebar-brand-text">lamportian-dramatis</span>
-  
+
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
@@ -238,33 +242,56 @@
         <article role="main" id="furo-main-content">
           <section id="overlays">
 <h1><code class="docutils literal notranslate"><span class="pre">overlays</span></code><a class="headerlink" href="#overlays" title="Link to this heading">¶</a></h1>
-<p>An escape hatch for drawing arbitrary <a class="reference external" href="https://typst.app/universe/package/cetz/">CeTZ</a> into a diagram, in the diagram’s own coordinates, addressing the diagram’s own points — and at a chosen depth, so a drawing can sit behind what the diagram draws as readily as in front of it.</p>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>lamport-diagram(
-<span class="w">  </span>caption:<span class="w"> </span>none,
-<span class="w">  </span>replicas:<span class="w"> </span>(),
-<span class="w">  </span>events:<span class="w"> </span>(:),
-<span class="w">  </span>orientation:<span class="w"> </span>horizontal,
-<span class="w">  </span>overlays:<span class="w"> </span>none,
-<span class="w">  </span><span class="p">...</span>
-)
-</pre></div>
-</div>
+<p>This page describes the <code class="docutils literal notranslate"><span class="pre">overlays</span></code> argument of <a class="reference internal" href="reference.html#typst-function-lamport-diagram" title="lamport-diagram"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">lamport-diagram</span></code></a>: an escape hatch for
+drawing arbitrary <a class="reference external" href="https://typst.app/universe/package/cetz/">CeTZ</a> into a diagram, in the
+diagram’s own coordinates, addressing the diagram’s own points — and at a chosen depth, so a drawing
+can sit behind what the diagram draws as readily as in front of it.</p>
 <section id="terminology-values-and-types">
 <h2>Terminology, values and types<a class="headerlink" href="#terminology-values-and-types" title="Link to this heading">¶</a></h2>
-<p>The entries of the <em>locator</em> — the dictionary a drawing is handed, described under <a class="reference internal" href="#shape">Shape</a> — take and answer in a handful of kinds of value, and the kinds are worth keeping apart:</p>
+<p>The entries of the <em>locator</em> — the dictionary a drawing is handed, described under <a class="reference internal" href="#shape">Shape</a> — take
+and answer in a handful of kinds of value, and the kinds are worth keeping apart:</p>
 <img alt="Two replicas crossed by dotted guides: one at column 1, which is time 1 as well; a pair at the message, one on the column the solver settled on and one on the time the receiving end was drawn at, with the displacement between the two measured; and one running along lane 0.5, between the replicas" src="_images/locators.png" />
-<ul class="simple">
-<li><p>A <strong>time</strong> is a position along logical time.  It is a real number placed along the axis the timelines run on.  <code class="docutils literal notranslate"><span class="pre">0</span></code> is the <em>first column</em>: the solver starts every point there and only ever pushes one later, so nothing is solved before <code class="docutils literal notranslate"><span class="pre">0</span></code> — though a lane whose opening point waits on a message does start further along than that.  Times are what let a drawing be placed at, before or after any moment the diagram holds — <code class="docutils literal notranslate"><span class="pre">-0.5</span></code> falls before the first column, and <code class="docutils literal notranslate"><span class="pre">1.5</span></code> midway between the second column and the third (if any).</p></li>
-<li><p>A <strong>column</strong> is one of the whole times the solver hands out, <code class="docutils literal notranslate"><span class="pre">0</span></code> up to <code class="docutils literal notranslate"><span class="pre">ncols</span> <span class="pre">-</span> <span class="pre">1</span></code>.  Every column is a time; most times are not columns.  This is the discrete thing the layout reasons about, and the only kind that can answer “did these two land at the same moment”.  Columns count from <code class="docutils literal notranslate"><span class="pre">0</span></code>, so a lane’s opening point sits in column <code class="docutils literal notranslate"><span class="pre">0</span></code> unless a message it receives pushes it later.  That is not the numbering an index uses — see <a class="reference internal" href="#addressing-a-point">Addressing a point</a> — and <code class="docutils literal notranslate"><span class="pre">column(&quot;A&quot;,</span> <span class="pre">1)</span></code> says “the first item written on A”, by an index counting from <code class="docutils literal notranslate"><span class="pre">1</span></code>, and answers <code class="docutils literal notranslate"><span class="pre">0</span></code>, the column the solver put it in.  An index says where in the lane’s array a point stands; a column says when it happens.</p></li>
-<li><p>A <strong>lane</strong> is a position on the replica axis, a real number: <code class="docutils literal notranslate"><span class="pre">0</span></code> is the first replica, <code class="docutils literal notranslate"><span class="pre">1</span></code> the second, <code class="docutils literal notranslate"><span class="pre">0.5</span></code> between them, and <code class="docutils literal notranslate"><span class="pre">-0.4</span></code> a little to the outside of the first.  It is a position and not an index, so <code class="docutils literal notranslate"><span class="pre">-1</span></code> is one lane clear of the first rather than the last one; for that, ask <code class="docutils literal notranslate"><span class="pre">replicas</span></code> how many there are.  A replica id is accepted wherever a lane is.</p></li>
-<li><p>A <strong>coordinate</strong> is a CeTZ point, <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> in canvas centimetres.  It is what every CeTZ function wants, and the only kind here that knows which way the diagram runs.</p></li>
-<li><p>A <strong>rectangle</strong> is a pair of coordinates — two opposite corners — handed back as <code class="docutils literal notranslate"><span class="pre">arguments</span></code>, so it spreads straight into <code class="docutils literal notranslate"><span class="pre">rect</span></code>.  It is measured off what the diagram actually drew, and it takes a <code class="docutils literal notranslate"><span class="pre">pad</span></code> that grows it.</p></li>
-</ul>
-<p>A time and a lane together make a coordinate, and <code class="docutils literal notranslate"><span class="pre">point</span></code> is the one entry that does that conversion.  Everything else either hands you a coordinate outright or stays in times and lanes, where it survives a change of orientation.  A rectangle hands out coordinates and survives it too, because what fixes one is the part of the diagram it is asked for and the pad it is grown by, and neither of those is a position on the page.</p>
+<dl class="simple glossary">
+<dt id="term-time">time<a class="headerlink" href="#term-time" title="Link to this term">¶</a></dt><dd><p>A position along logical time.  It is a real number placed along the axis the timelines run on.
+<code class="docutils literal notranslate"><span class="pre">0</span></code> is the first <a class="reference internal" href="#term-column"><span class="xref std std-term">column</span></a>: the solver starts every point there and only ever pushes
+one later, so nothing is solved before <code class="docutils literal notranslate"><span class="pre">0</span></code> — though a lane whose opening point waits on a
+message does start further along than that.  Times are what let a drawing be placed at, before
+or after any moment the diagram holds — <code class="docutils literal notranslate"><span class="pre">-0.5</span></code> falls before the first column, and <code class="docutils literal notranslate"><span class="pre">1.5</span></code>
+midway between the second column and the third (if any).</p>
+</dd>
+<dt id="term-column">column<a class="headerlink" href="#term-column" title="Link to this term">¶</a></dt><dd><p>One of the whole times the solver hands out, <code class="docutils literal notranslate"><span class="pre">0</span></code> up to <code class="docutils literal notranslate"><span class="pre">ncols</span> <span class="pre">-</span> <span class="pre">1</span></code>.  Every column is a
+<a class="reference internal" href="#term-time"><span class="xref std std-term">time</span></a>; most times are not columns.  This is the discrete thing the layout reasons about,
+and the only kind that can answer “did these two land at the same moment”.  Columns count from
+<code class="docutils literal notranslate"><span class="pre">0</span></code>, so a lane’s opening point sits in column <code class="docutils literal notranslate"><span class="pre">0</span></code> unless a message it receives pushes it
+later.  That is not the numbering an index uses — see <a class="reference internal" href="#addressing-a-point">Addressing a point</a> — and <code class="docutils literal notranslate"><span class="pre">column(&quot;A&quot;,</span>
+<span class="pre">1)</span></code> says “the first item written on A”, by an index counting from <code class="docutils literal notranslate"><span class="pre">1</span></code>, and answers <code class="docutils literal notranslate"><span class="pre">0</span></code>,
+the column the solver put it in.  An index says where in the lane’s array a point stands; a
+column says when it happens.</p>
+</dd>
+<dt id="term-lane">lane<a class="headerlink" href="#term-lane" title="Link to this term">¶</a></dt><dd><p>A position on the replica axis, a real number: <code class="docutils literal notranslate"><span class="pre">0</span></code> is the first replica, <code class="docutils literal notranslate"><span class="pre">1</span></code> the second,
+<code class="docutils literal notranslate"><span class="pre">0.5</span></code> between them, and <code class="docutils literal notranslate"><span class="pre">-0.4</span></code> a little to the outside of the first.  It is a position and
+not an index, so <code class="docutils literal notranslate"><span class="pre">-1</span></code> is one lane clear of the first rather than the last one; for that, ask
+<code class="docutils literal notranslate"><span class="pre">replicas</span></code> how many there are.  A replica id is accepted wherever a lane is.</p>
+</dd>
+<dt id="term-coordinate">coordinate<a class="headerlink" href="#term-coordinate" title="Link to this term">¶</a></dt><dd><p>A CeTZ point, <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> in canvas centimetres.  It is what every CeTZ function wants, and the
+only kind here that knows which way the diagram runs.</p>
+</dd>
+<dt id="term-rectangle">rectangle<a class="headerlink" href="#term-rectangle" title="Link to this term">¶</a></dt><dd><p>A pair of <a class="reference internal" href="#term-coordinate"><span class="xref std std-term">coordinate</span></a>s — two opposite corners — handed back as <code class="docutils literal notranslate"><span class="pre">arguments</span></code>, so it
+spreads straight into <code class="docutils literal notranslate"><span class="pre">rect</span></code>.  It is measured off what the diagram actually drew, and it
+takes a <code class="docutils literal notranslate"><span class="pre">pad</span></code> that grows it.</p>
+</dd>
+</dl>
+<p>A <a class="reference internal" href="#term-time"><span class="xref std std-term">time</span></a> and a <a class="reference internal" href="#term-lane"><span class="xref std std-term">lane</span></a> together make a <a class="reference internal" href="#term-coordinate"><span class="xref std std-term">coordinate</span></a>, and <code class="docutils literal notranslate"><span class="pre">point</span></code> is the one entry
+that does that conversion.  Everything else either hands you a coordinate outright or stays in times
+and lanes, where it survives a change of orientation.  A rectangle hands out coordinates and
+survives it too, because what fixes one is the part of the diagram it is asked for and the pad it is
+grown by, and neither of those is a position on the page.</p>
 </section>
 <section id="shape">
 <h2>Shape<a class="headerlink" href="#shape" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">overlays</span></code> takes <code class="docutils literal notranslate"><span class="pre">none</span></code>, a bare CeTZ body, a function of one argument — the <em>locator</em> — returning a CeTZ body, or a dictionary from layer name to either of those.  A body or a function on its own goes in the <code class="docutils literal notranslate"><span class="pre">foreground</span></code>, that being what you want when you have not thought about depth.</p>
+<p><code class="docutils literal notranslate"><span class="pre">overlays</span></code> takes <code class="docutils literal notranslate"><span class="pre">none</span></code>, a bare CeTZ body, a function of one argument — the <em>locator</em> —
+returning a CeTZ body, or a dictionary from layer name to either of those.  A body or a function on
+its own goes in the <code class="docutils literal notranslate"><span class="pre">foreground</span></code>, that being what you want when you have not thought about depth.</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span><span class="c1">// nothing</span>
 overlays:<span class="w"> </span>none
 
@@ -284,8 +311,13 @@ overlays:<span class="w"> </span>(
 )
 </pre></div>
 </div>
-<p>Everything is spliced into the diagram’s own <code class="docutils literal notranslate"><span class="pre">cetz.canvas</span></code>, so a coordinate is a canvas centimetre and every CeTZ coordinate form — <code class="docutils literal notranslate"><span class="pre">rel:</span></code>, <code class="docutils literal notranslate"><span class="pre">to:</span></code>, anchors on elements you name yourself — works as it does anywhere else.  It all runs inside the same <code class="docutils literal notranslate"><span class="pre">context</span></code> the diagram uses, so <code class="docutils literal notranslate"><span class="pre">measure</span></code> is available.</p>
-<p>Your body is written in your own file, though, so the drawing commands have to be in scope there.  The package re-exports the CeTZ module it draws with, which saves pinning a second dependency and keeps the two versions in step:</p>
+<p>Everything is spliced into the diagram’s own <code class="docutils literal notranslate"><span class="pre">cetz.canvas</span></code>, so a coordinate is a canvas centimetre
+and every CeTZ coordinate form — <code class="docutils literal notranslate"><span class="pre">rel:</span></code>, <code class="docutils literal notranslate"><span class="pre">to:</span></code>, anchors on elements you name yourself — works as
+it does anywhere else.  It all runs inside the same <code class="docutils literal notranslate"><span class="pre">context</span></code> the diagram uses, so <code class="docutils literal notranslate"><span class="pre">measure</span></code> is
+available.</p>
+<p>Your body is written in your own file, though, so the drawing commands have to be in scope there.
+The package re-exports the CeTZ module it draws with, which saves pinning a second dependency and
+keeps the two versions in step:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span><span class="kn">#import</span><span class="w"> </span><span class="s2">"@preview/lamportian-dramatis:0.2.0"</span><span class="p">:</span><span class="w"> </span><span class="nv">draw</span>
 
 overlays:<span class="w"> </span>(
@@ -296,14 +328,22 @@ overlays:<span class="w"> </span>(
 )
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">#import</span> <span class="pre">draw:</span> <span class="pre">*</span></code> at the top of the file works as well, if you would rather have them everywhere.  The locator carries that same module under <code class="docutils literal notranslate"><span class="pre">draw</span></code>, so a body can take it from there and import nothing at all — <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">(draw,</span> <span class="pre">mark,</span> <span class="pre">..)</span> <span class="pre">=</span> <span class="pre">d</span></code>, and then <code class="docutils literal notranslate"><span class="pre">draw.circle(..)</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">#import</span> <span class="pre">draw:</span> <span class="pre">*</span></code> at the top of the file works as well, if you would rather have them everywhere.
+The locator carries that same module under <code class="docutils literal notranslate"><span class="pre">draw</span></code>, so a body can take it from there and import
+nothing at all — <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">(draw,</span> <span class="pre">mark,</span> <span class="pre">..)</span> <span class="pre">=</span> <span class="pre">d</span></code>, and then <code class="docutils literal notranslate"><span class="pre">draw.circle(..)</span></code>.</p>
 <p>The locator is a dictionary; unpack the entries a layer needs and call them.</p>
 </section>
 <section id="layers">
 <h2>Layers<a class="headerlink" href="#layers" title="Link to this heading">¶</a></h2>
-<p>A diagram is drawn in a fixed sequence of passes: the arrows first, then the backdrops that erase them wherever a lane crosses, then the timelines, then the marks, then the labels.  Each pass is a <strong>layer</strong>, and each key of <code class="docutils literal notranslate"><span class="pre">overlays</span></code> names one.</p>
-<p>An overlay given for a layer is <strong>appended to that layer’s pass</strong> — after everything the diagram itself draws there, and before anything in any later pass.  So <code class="docutils literal notranslate"><span class="pre">arrows:</span> <span class="pre">...</span></code> draws with the contents of the layer “arrows”: over them, under everything that follows.  That is the whole rule.</p>
-<p><code class="docutils literal notranslate"><span class="pre">background</span></code> and <code class="docutils literal notranslate"><span class="pre">foreground</span></code> are not passes of the diagram.  They are bookends that exist only for overlays, one before the first pass and one after the last, and whatever you put there is all they hold.</p>
+<p>A diagram is drawn in a fixed sequence of passes: the arrows first, then the backdrops that erase
+them wherever a lane crosses, then the timelines, then the marks, then the labels.  Each pass is a
+<strong>layer</strong>, and each key of <code class="docutils literal notranslate"><span class="pre">overlays</span></code> names one.</p>
+<p>An overlay given for a layer is <strong>appended to that layer’s pass</strong> — after everything the diagram
+itself draws there, and before anything in any later pass.  So <code class="docutils literal notranslate"><span class="pre">arrows:</span> <span class="pre">...</span></code> draws with the
+contents of the layer “arrows”: over them, under everything that follows.  That is the whole rule.</p>
+<p><code class="docutils literal notranslate"><span class="pre">background</span></code> and <code class="docutils literal notranslate"><span class="pre">foreground</span></code> are not passes of the diagram.  They are bookends that exist only
+for overlays, one before the first pass and one after the last, and whatever you put there is all
+they hold.</p>
 <p>Bottom to top:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -320,7 +360,8 @@ overlays:<span class="w"> </span>(
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">arrows</span></code></p></td>
 <td><p>the message and <code class="docutils literal notranslate"><span class="pre">sync</span></code> arrows, and their labels</p></td>
-<td><p>annotating one arrow, with the lanes still passing over your drawing the way they pass over its arrow</p></td>
+<td><p>annotating one arrow, with the lanes still passing over your drawing the way they pass over
+its arrow</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">backdrops</span></code></p></td>
 <td><p>the translucent white band that fades an arrow wherever a lane crosses it</p></td>
@@ -345,70 +386,116 @@ overlays:<span class="w"> </span>(
 </tbody>
 </table>
 </div>
-<p>The order is the table’s, never the dictionary’s: a dictionary that happens to list <code class="docutils literal notranslate"><span class="pre">foreground</span></code> first still draws it last.  A key that is not a layer fails compilation, and says which names are.</p>
-<p><code class="docutils literal notranslate"><span class="pre">labels</span></code> and <code class="docutils literal notranslate"><span class="pre">foreground</span></code> land next to each other, the diagram drawing nothing between them, and they are still two layers rather than one: give both and <code class="docutils literal notranslate"><span class="pre">labels</span></code> draws first.  What separates them is not what lies between but what they mean — <code class="docutils literal notranslate"><span class="pre">labels</span></code> joins the diagram’s own last pass, <code class="docutils literal notranslate"><span class="pre">foreground</span></code> sits above everything, that pass included.</p>
+<p>The order is the table’s, never the dictionary’s: a dictionary that happens to list <code class="docutils literal notranslate"><span class="pre">foreground</span></code>
+first still draws it last.  A key that is not a layer fails compilation, and says which names are.</p>
+<p><code class="docutils literal notranslate"><span class="pre">labels</span></code> and <code class="docutils literal notranslate"><span class="pre">foreground</span></code> land next to each other, the diagram drawing nothing between them, and
+they are still two layers rather than one: give both and <code class="docutils literal notranslate"><span class="pre">labels</span></code> draws first.  What separates
+them is not what lies between but what they mean — <code class="docutils literal notranslate"><span class="pre">labels</span></code> joins the diagram’s own last pass,
+<code class="docutils literal notranslate"><span class="pre">foreground</span></code> sits above everything, that pass included.</p>
 <section id="the-layers-are-part-of-the-api">
 <h3>The layers are part of the API<a class="headerlink" href="#the-layers-are-part-of-the-api" title="Link to this heading">¶</a></h3>
-<p>Their names and their order are not an internal detail to be read off this page.  <code class="docutils literal notranslate"><span class="pre">layers</span></code> is the ordered array of them, bottom to top, and the package exports it:</p>
+<p>Their names and their order are not an internal detail to be read off this page.  <code class="docutils literal notranslate"><span class="pre">layers</span></code> is
+the ordered array of them, bottom to top, and the package exports it:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span><span class="kn">#import</span><span class="w"> </span><span class="s2">"@preview/lamportian-dramatis:0.2.0"</span><span class="p">:</span><span class="w"> </span><span class="nv">layers</span>
 
 <span class="nv">#layers</span>
 <span class="c1">// ("background", "arrows", "backdrops", "timelines", "marks", "labels", "foreground")</span>
 </pre></div>
 </div>
-<p>They are plain strings, as orientations are, so <code class="docutils literal notranslate"><span class="pre">overlays:</span> <span class="pre">(marks:</span> <span class="pre">...)</span></code> needs no import.  <code class="docutils literal notranslate"><span class="pre">layers</span></code> is for when you want to check a name, walk the stack, or build an <code class="docutils literal notranslate"><span class="pre">overlays</span></code> dictionary out of something that is not a literal.</p>
-<p>Exposing them settles what would otherwise be a matter of taste: which layers to offer.  The answer is all of them, because the array claims to be how the diagram is drawn.  <code class="docutils literal notranslate"><span class="pre">timelines</span></code> earns its place not by being useful — a dashed line along a lane is the only use I can name for it — but by being a pass; leaving it out would make <code class="docutils literal notranslate"><span class="pre">layers</span></code> a curated list of good ideas rather than a description, and the reader could no longer trust the order.</p>
+<p>They are plain strings, as orientations are, so <code class="docutils literal notranslate"><span class="pre">overlays:</span> <span class="pre">(marks:</span> <span class="pre">...)</span></code> needs no import.  <code class="docutils literal notranslate"><span class="pre">layers</span></code> is for when you want to check a name, walk the stack, or build an <code class="docutils literal notranslate"><span class="pre">overlays</span></code> dictionary
+out of something that is not a literal.</p>
+<p>Exposing them settles what would otherwise be a matter of taste: which layers to offer.  The answer
+is all of them, because the array claims to be how the diagram is drawn.  <code class="docutils literal notranslate"><span class="pre">timelines</span></code> earns its
+place not by being useful — a dashed line along a lane is the only use I can name for it — but by
+being a pass; leaving it out would make <code class="docutils literal notranslate"><span class="pre">layers</span></code> a curated list of good ideas rather than a
+description, and the reader could no longer trust the order.</p>
 </section>
 <section id="arrows-and-backdrops-are-not-the-same-place">
 <h3><code class="docutils literal notranslate"><span class="pre">arrows</span></code> and <code class="docutils literal notranslate"><span class="pre">backdrops</span></code> are not the same place<a class="headerlink" href="#arrows-and-backdrops-are-not-the-same-place" title="Link to this heading">¶</a></h3>
-<p>They sound like one place — “just above the arrows”, “just under the lanes” — and the difference between them is most of why the layers are worth having.</p>
-<p>What makes an arrow pass <em>behind</em> a lane is a translucent white band.  Before any lane is drawn, the diagram strokes white at 88% opacity, five points wide, along every lane, and lays a disc of the same under every mark.  That is the <code class="docutils literal notranslate"><span class="pre">backdrops</span></code> pass.  On a white page the band shows nowhere it has nothing to cover; where it crosses an arrow it leaves a tenth of that arrow showing, which reads as the arrow running underneath rather than as a gap cut in it.</p>
-<p>So nothing is washed by <em>the lanes</em>.  Things are washed by that band, and whether yours is washed depends only on which side of it you drew:</p>
+<p>They sound like one place — “just above the arrows”, “just under the lanes” — and the difference
+between them is most of why the layers are worth having.</p>
+<p>What makes an arrow pass <em>behind</em> a lane is a translucent white band.  Before any lane is drawn, the
+diagram strokes white at 88% opacity, five points wide, along every lane, and lays a disc of the
+same under every mark.  That is the <code class="docutils literal notranslate"><span class="pre">backdrops</span></code> pass.  On a white page the band shows nowhere it
+has nothing to cover; where it crosses an arrow it leaves a tenth of that arrow showing, which reads
+as the arrow running underneath rather than as a gap cut in it.</p>
+<p>So nothing is washed by <em>the lanes</em>.  Things are washed by that band, and whether yours is washed
+depends only on which side of it you drew:</p>
 <ul class="simple">
-<li><p>At <code class="docutils literal notranslate"><span class="pre">background</span></code> or <code class="docutils literal notranslate"><span class="pre">arrows</span></code> you draw first and the band goes down over you.  A fill comes out with a paler five-point stripe along every lane — the same fading the arrows get, and it keeps its hue, since the band is translucent rather than a lid.</p></li>
-<li><p>At <code class="docutils literal notranslate"><span class="pre">backdrops</span></code> the band is already down and you draw over it.  A fill covers page and band alike, so it comes out even — and still sits under the timelines, the marks and the labels, all of which come later.</p></li>
+<li><p>At <code class="docutils literal notranslate"><span class="pre">background</span></code> or <code class="docutils literal notranslate"><span class="pre">arrows</span></code> you draw first and the band goes down over you.  A fill comes out
+with a paler five-point stripe along every lane — the same fading the arrows get, and it keeps its
+hue, since the band is translucent rather than a lid.</p></li>
+<li><p>At <code class="docutils literal notranslate"><span class="pre">backdrops</span></code> the band is already down and you draw over it.  A fill covers page and band
+alike, so it comes out even — and still sits under the timelines, the marks and the labels, all of
+which come later.</p></li>
 </ul>
-<p>Which you want depends on what the drawing means.  A note belonging to one arrow reads better at <code class="docutils literal notranslate"><span class="pre">arrows</span></code>, breaking around the lanes the way its own arrow does.  A band standing for a stretch of time belongs at <code class="docutils literal notranslate"><span class="pre">backdrops</span></code>: it is not something the lanes should be in front of, it is the ground they stand on.</p>
-<p>(The band is white whatever the page is.  Give the page a <code class="docutils literal notranslate"><span class="pre">fill</span></code> other than white and every lane will show as a pale stripe across it, because the band was only ever invisible by matching the white it was drawn on.)</p>
+<p>Which you want depends on what the drawing means.  A note belonging to one arrow reads better at
+<code class="docutils literal notranslate"><span class="pre">arrows</span></code>, breaking around the lanes the way its own arrow does.  A band standing for a stretch of
+time belongs at <code class="docutils literal notranslate"><span class="pre">backdrops</span></code>: it is not something the lanes should be in front of, it is the ground
+they stand on.</p>
+<p>(The band is white whatever the page is.  Give the page a <code class="docutils literal notranslate"><span class="pre">fill</span></code> other than white and every lane
+will show as a pale stripe across it, because the band was only ever invisible by matching the white
+it was drawn on.)</p>
 </section>
 </section>
 <section id="addressing-a-point">
 <h2>Addressing a point<a class="headerlink" href="#addressing-a-point" title="Link to this heading">¶</a></h2>
-<p>Every point on a lane is <code class="docutils literal notranslate"><span class="pre">(replica,</span> <span class="pre">id)</span></code>.  An id need only be unique <em>within its own lane</em>, which is what lets a <code class="docutils literal notranslate"><span class="pre">sync</span></code>’s two ends and a message’s two ends keep the name that pairs them:</p>
+<p>Every point on a lane is <code class="docutils literal notranslate"><span class="pre">(replica,</span> <span class="pre">id)</span></code>.  An id need only be unique <em>within its own lane</em>, which
+is what lets a <code class="docutils literal notranslate"><span class="pre">sync</span></code>’s two ends and a message’s two ends keep the name that pairs them:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>mark("A",<span class="w"> </span>"bad")<span class="w">        </span><span class="c1">// an event, by the id it was given</span>
 mark("S",<span class="w"> </span>"a-pushes")<span class="w">   </span><span class="c1">// this end of the sync;  mark("A", "a-pushes") is the other</span>
 mark("C",<span class="w"> </span>"c-pushes")<span class="w">   </span><span class="c1">// the send;  mark("S", "c-pushes") is its recv</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">send</span></code>, <code class="docutils literal notranslate"><span class="pre">recv</span></code> and <code class="docutils literal notranslate"><span class="pre">sync</span></code> already carry a name, and that name is their id.  A local <code class="docutils literal notranslate"><span class="pre">event</span></code> has none, so it takes one:</p>
+<p><code class="docutils literal notranslate"><span class="pre">send</span></code>, <code class="docutils literal notranslate"><span class="pre">recv</span></code> and <code class="docutils literal notranslate"><span class="pre">sync</span></code> already carry a name, and that name is their id.  A local <code class="docutils literal notranslate"><span class="pre">event</span></code>
+has none, so it takes one:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>"A":<span class="w"> </span>([<span class="sb">`A.1`</span><span class="p">]</span>,<span class="w"> </span>event(id:<span class="w"> </span>"bad")[<span class="sb">`A.2`</span><span class="p">]</span>,<span class="w"> </span>sync("a-pushes")),
 </pre></div>
 </div>
-<p>Ids are opt-in on purpose.  The alternative — addressing an event by where it sits, <code class="docutils literal notranslate"><span class="pre">A.0</span></code>, <code class="docutils literal notranslate"><span class="pre">A.1</span></code>, … — would put back exactly the fragility that solving the columns removed: insert one event and every drawing below it points silently at the wrong dot.  An id you wrote survives the insert.</p>
-<p>Two points on one lane may not share an id, and that is an error rather than a silent win for whichever came first.</p>
+<p>Ids are opt-in on purpose.  The alternative — addressing an event by where it sits, <code class="docutils literal notranslate"><span class="pre">A.0</span></code>,
+<code class="docutils literal notranslate"><span class="pre">A.1</span></code>, … — would put back exactly the fragility that solving the columns removed: insert one event
+and every drawing below it points silently at the wrong dot.  An id you wrote survives the insert.</p>
+<p>Two points on one lane may not share an id, and that is an error rather than a silent win for
+whichever came first.</p>
 <section id="by-index">
 <h3>By index<a class="headerlink" href="#by-index" title="Link to this heading">¶</a></h3>
-<p>Anywhere an id is taken an integer is taken too, addressing the lane positionally, <strong>1-based</strong>, counting <em>every</em> item in the lane’s array including <code class="docutils literal notranslate"><span class="pre">gap</span></code> and <code class="docutils literal notranslate"><span class="pre">idle</span></code>.  It numbers the array and nothing else — the columns the solver hands out count from <code class="docutils literal notranslate"><span class="pre">0</span></code>, so the first item on a lane is index <code class="docutils literal notranslate"><span class="pre">1</span></code> and column <code class="docutils literal notranslate"><span class="pre">0</span></code>:</p>
+<p>Anywhere an id is taken an integer is taken too, addressing the lane positionally, <strong>1-based</strong>,
+counting <em>every</em> item in the lane’s array including <code class="docutils literal notranslate"><span class="pre">gap</span></code> and <code class="docutils literal notranslate"><span class="pre">idle</span></code>.  It numbers the array and
+nothing else — the columns the solver hands out count from <code class="docutils literal notranslate"><span class="pre">0</span></code>, so the first item on a lane is
+index <code class="docutils literal notranslate"><span class="pre">1</span></code> and column <code class="docutils literal notranslate"><span class="pre">0</span></code>:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>mark("A",<span class="w"> </span>1)<span class="w">      </span><span class="c1">// the lane's opening item</span>
 mark("A",<span class="w"> </span>3)
 mark("A",<span class="w"> </span>-1)<span class="w">     </span><span class="c1">// the last item -- the one index that survives an insert</span>
 column("B",<span class="w"> </span>2)<span class="w">    </span><span class="c1">// and the same wherever else a point is asked for</span>
 </pre></div>
 </div>
-<p>Ids are strings and indices are integers, so the two never need telling apart by hand.  An index is what to reach for when naming a one-off is not worth it — bearing in mind that it moves when you insert an event above it, which is exactly what an id does not do.</p>
+<p>Ids are strings and indices are integers, so the two never need telling apart by hand.  An index is
+what to reach for when naming a one-off is not worth it — bearing in mind that it moves when you
+insert an event above it, which is exactly what an id does not do.</p>
 </section>
 </section>
 <section id="what-the-locator-holds">
 <h2>What the locator holds<a class="headerlink" href="#what-the-locator-holds" title="Link to this heading">¶</a></h2>
-<section id="mark-replica-id-or-index">
-<h3><code class="docutils literal notranslate"><span class="pre">mark(replica,</span> <span class="pre">id-or-index)</span></code><a class="headerlink" href="#mark-replica-id-or-index" title="Link to this heading">¶</a></h3>
-<p>Return the CeTZ coordinate of the mark the diagram drew for that point — a local <code class="docutils literal notranslate"><span class="pre">event</span></code>, or either end of a <code class="docutils literal notranslate"><span class="pre">send</span></code>, <code class="docutils literal notranslate"><span class="pre">recv</span></code> or <code class="docutils literal notranslate"><span class="pre">sync</span></code>.  It includes the sub-column <code class="docutils literal notranslate"><span class="pre">displacement</span></code> that leans an arrow off a straight run across the lanes, so it is where the dot really landed rather than where its column nominally is.</p>
-<p>A coordinate has a lane baked into it: the lane of the replica you named.  That is the whole difference from <code class="docutils literal notranslate"><span class="pre">column</span></code>, and it is what makes <code class="docutils literal notranslate"><span class="pre">column</span></code> the one to reach for when a drawing crosses lanes.</p>
-</section>
-<section id="mark-args-replica-id-or-index">
-<h3><code class="docutils literal notranslate"><span class="pre">mark-args(replica,</span> <span class="pre">id-or-index)</span></code><a class="headerlink" href="#mark-args-replica-id-or-index" title="Link to this heading">¶</a></h3>
-<p>Return everything the diagram used to draw that mark — its coordinate, radius, fill and stroke — as <code class="docutils literal notranslate"><span class="pre">arguments</span></code> ready to spread into <code class="docutils literal notranslate"><span class="pre">circle</span></code>.  A <code class="docutils literal notranslate"><span class="pre">gap</span></code> or an <code class="docutils literal notranslate"><span class="pre">idle</span></code> draws no mark, so for those it returns <code class="docutils literal notranslate"><span class="pre">none</span></code>.</p>
-<p>It is for restating a mark rather than placing something near it.  Spread it and override what you want changed; a later argument wins, so the rest stays whatever the diagram chose:</p>
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-mark">
+<span class="sig-name descname"><span class="pre">mark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">replica</span></em>, <em class="sig-param"><span class="pre">id-or-index</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-mark" title="Link to this definition">¶</a></dt>
+<dd><p>Return the CeTZ coordinate of the mark the diagram drew for that point — a local <code class="docutils literal notranslate"><span class="pre">event</span></code>, or
+either end of a <code class="docutils literal notranslate"><span class="pre">send</span></code>, <code class="docutils literal notranslate"><span class="pre">recv</span></code> or <code class="docutils literal notranslate"><span class="pre">sync</span></code>.  It includes the sub-column <code class="docutils literal notranslate"><span class="pre">displacement</span></code> that
+leans an arrow off a straight run across the lanes, so it is where the dot really landed rather than
+where its column nominally is.</p>
+<p>A coordinate has a lane baked into it: the lane of the replica you named.  That is the whole
+difference from <code class="docutils literal notranslate"><span class="pre">column</span></code>, and it is what makes <code class="docutils literal notranslate"><span class="pre">column</span></code> the one to reach for when a drawing
+crosses lanes.</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-mark-args">
+<span class="sig-name descname"><span class="pre">mark-args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">replica</span></em>, <em class="sig-param"><span class="pre">id-or-index</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-mark-args" title="Link to this definition">¶</a></dt>
+<dd><p>Return everything the diagram used to draw that mark — its coordinate, radius, fill and stroke — as
+<code class="docutils literal notranslate"><span class="pre">arguments</span></code> ready to spread into <code class="docutils literal notranslate"><span class="pre">circle</span></code>.  A <code class="docutils literal notranslate"><span class="pre">gap</span></code> or an <code class="docutils literal notranslate"><span class="pre">idle</span></code> draws no mark, so for those
+it returns <code class="docutils literal notranslate"><span class="pre">none</span></code>.</p>
+<p>It is for restating a mark rather than placing something near it.  Spread it and override what you
+want changed; a later argument wins, so the rest stays whatever the diagram chose:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>overlays:<span class="w"> </span>(
 <span class="w">  </span>marks:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{
 <span class="w">    </span>import<span class="w"> </span>draw:<span class="w"> </span><span class="err">*</span>
@@ -421,13 +508,22 @@ column("B",<span class="w"> </span>2)<span class="w">    </span><span class="c1"
 )
 </pre></div>
 </div>
-<p>The diagram draws its own marks from exactly this, which is the point of it: a hollow ring for a point where the replica touches the network, a solid dot for a purely local step, a send drawn smaller than the receive it feeds.  None of that has to be restated, and a drawing that spreads <code class="docutils literal notranslate"><span class="pre">mark-args</span></code> follows the library if any of it ever changes.</p>
-<p>A <code class="docutils literal notranslate"><span class="pre">sync</span></code>’s ring carries a dot inside it, and that dot is a second circle rather than part of the first — <code class="docutils literal notranslate"><span class="pre">pip-args</span></code> is where it comes from.</p>
-</section>
-<section id="pip-args-replica-id-or-index">
-<h3><code class="docutils literal notranslate"><span class="pre">pip-args(replica,</span> <span class="pre">id-or-index)</span></code><a class="headerlink" href="#pip-args-replica-id-or-index" title="Link to this heading">¶</a></h3>
-<p>Return the dot inside that point’s ring, as <code class="docutils literal notranslate"><span class="pre">arguments</span></code> ready to spread into <code class="docutils literal notranslate"><span class="pre">circle</span></code> — or <code class="docutils literal notranslate"><span class="pre">none</span></code> for a point that carries none, which is every kind but a <code class="docutils literal notranslate"><span class="pre">sync</span></code>.  It is drawn over the mark’s own fill, so a drawing that restates both puts this one second.</p>
-<p>The diagram draws that dot from exactly this, the same way it draws the ring from <code class="docutils literal notranslate"><span class="pre">mark-args</span></code>.  So an overlay that recolours an end of an exchange has both halves of it to hand:</p>
+<p>The diagram draws its own marks from exactly this, which is the point of it: a hollow ring for a
+point where the replica touches the network, a solid dot for a purely local step, a send drawn
+smaller than the receive it feeds.  None of that has to be restated, and a drawing that spreads
+<code class="docutils literal notranslate"><span class="pre">mark-args</span></code> follows the library if any of it ever changes.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">sync</span></code>’s ring carries a dot inside it, and that dot is a second circle rather than part of the
+first — <code class="docutils literal notranslate"><span class="pre">pip-args</span></code> is where it comes from.</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-pip-args">
+<span class="sig-name descname"><span class="pre">pip-args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">replica</span></em>, <em class="sig-param"><span class="pre">id-or-index</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-pip-args" title="Link to this definition">¶</a></dt>
+<dd><p>Return the dot inside that point’s ring, as <code class="docutils literal notranslate"><span class="pre">arguments</span></code> ready to spread into <code class="docutils literal notranslate"><span class="pre">circle</span></code> — or
+<code class="docutils literal notranslate"><span class="pre">none</span></code> for a point that carries none, which is every kind but a <code class="docutils literal notranslate"><span class="pre">sync</span></code>.  It is drawn over the
+mark’s own fill, so a drawing that restates both puts this one second.</p>
+<p>The diagram draws that dot from exactly this, the same way it draws the ring from <code class="docutils literal notranslate"><span class="pre">mark-args</span></code>.  So
+an overlay that recolours an end of an exchange has both halves of it to hand:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>overlays:<span class="w"> </span>(
 <span class="w">  </span>marks:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{
 <span class="w">    </span>import<span class="w"> </span>draw:<span class="w"> </span><span class="err">*</span>
@@ -438,11 +534,17 @@ column("B",<span class="w"> </span>2)<span class="w">    </span><span class="c1"
 )
 </pre></div>
 </div>
-</section>
-<section id="column-replica-id-or-index">
-<h3><code class="docutils literal notranslate"><span class="pre">column(replica,</span> <span class="pre">id-or-index)</span></code><a class="headerlink" href="#column-replica-id-or-index" title="Link to this heading">¶</a></h3>
-<p>Return the column the solver put that point in: a whole number, <code class="docutils literal notranslate"><span class="pre">0</span></code> up to <code class="docutils literal notranslate"><span class="pre">ncols</span> <span class="pre">-</span> <span class="pre">1</span></code>.  It carries no lane and no displacement — it is the moment, and nothing about where on the page that moment was drawn.</p>
-<p><code class="docutils literal notranslate"><span class="pre">mark</span></code> and <code class="docutils literal notranslate"><span class="pre">column</span></code> ask the same question and answer in different kinds, and that is the whole distinction.  You want the column whenever what you are drawing crosses lanes, because a coordinate is already on a lane.  A column is a time, so it goes straight into <code class="docutils literal notranslate"><span class="pre">point</span></code>:</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-column">
+<span class="sig-name descname"><span class="pre">column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">replica</span></em>, <em class="sig-param"><span class="pre">id-or-index</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-column" title="Link to this definition">¶</a></dt>
+<dd><p>Return the column the solver put that point in: a whole number, <code class="docutils literal notranslate"><span class="pre">0</span></code> up to <code class="docutils literal notranslate"><span class="pre">ncols</span> <span class="pre">-</span> <span class="pre">1</span></code>.  It
+carries no lane and no displacement — it is the moment, and nothing about where on the page that
+moment was drawn.</p>
+<p><code class="docutils literal notranslate"><span class="pre">mark</span></code> and <code class="docutils literal notranslate"><span class="pre">column</span></code> ask the same question and answer in different kinds, and that is the whole
+distinction.  You want the column whenever what you are drawing crosses lanes, because a coordinate
+is already on a lane.  A column is a time, so it goes straight into <code class="docutils literal notranslate"><span class="pre">point</span></code>:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>overlays:<span class="w"> </span>(
 <span class="w">  </span>backdrops:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{
 <span class="w">    </span>let<span class="w"> </span>(column,<span class="w"> </span>point,<span class="w"> </span>replicas,<span class="w"> </span>..)<span class="w"> </span>=<span class="w"> </span>d
@@ -457,22 +559,42 @@ column("B",<span class="w"> </span>2)<span class="w">    </span><span class="c1"
 )
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">mark(&quot;C&quot;,</span> <span class="pre">&quot;c-reads&quot;)</span></code> cannot start that rectangle: it sits on C’s lane, not on the first one.  So the two compose — <code class="docutils literal notranslate"><span class="pre">column</span></code> gets the moment, <code class="docutils literal notranslate"><span class="pre">point</span></code> puts it on whichever lane you meant.</p>
-<p><code class="docutils literal notranslate"><span class="pre">column</span></code> is also what to reach for when you want to <em>reason</em> rather than draw.  <code class="docutils literal notranslate"><span class="pre">column(&quot;A&quot;,</span> <span class="pre">&quot;x&quot;)</span> <span class="pre">==</span> <span class="pre">column(&quot;B&quot;,</span> <span class="pre">&quot;y&quot;)</span></code> is “the solver found nothing ordering these two”, which is a real question to ask of a Lamport diagram.</p>
-</section>
-<section id="time-replica-id-or-index">
-<h3><code class="docutils literal notranslate"><span class="pre">time(replica,</span> <span class="pre">id-or-index)</span></code><a class="headerlink" href="#time-replica-id-or-index" title="Link to this heading">¶</a></h3>
-<p>Return the time that point’s mark was drawn at, in columns: its column, plus whatever <code class="docutils literal notranslate"><span class="pre">displacement</span></code> leant it off that column.  Where <code class="docutils literal notranslate"><span class="pre">column</span></code> is the moment the solver settled on, this is the moment the drawing used, and the two are the same number until a displacement separates them — which is what a <code class="docutils literal notranslate"><span class="pre">recv</span></code> does by default, landing half a column past its own column at the default <code class="docutils literal notranslate"><span class="pre">col-gap</span></code>.</p>
-<p>It is a time, so it composes with a lane: <code class="docutils literal notranslate"><span class="pre">point(time(&quot;C&quot;,</span> <span class="pre">&quot;c-reads&quot;),</span> <span class="pre">&quot;C&quot;)</span></code> is exactly <code class="docutils literal notranslate"><span class="pre">mark(&quot;C&quot;,</span> <span class="pre">&quot;c-reads&quot;)</span></code> — the same place, said in the diagram’s own axes rather than on the page.  That is what makes it the one to reach for when a drawing has to line something up with a mark <em>across</em> the lanes, which a coordinate cannot do.</p>
-</section>
-<section id="point-time-lane">
-<h3><code class="docutils literal notranslate"><span class="pre">point(time,</span> <span class="pre">lane)</span></code><a class="headerlink" href="#point-time-lane" title="Link to this heading">¶</a></h3>
-<p>Return the coordinate of a time on a lane.  Both arguments are the kinds above: <code class="docutils literal notranslate"><span class="pre">time</span></code> is a number of columns, whole or not, and <code class="docutils literal notranslate"><span class="pre">lane</span></code> is a number of lanes, or the id of the replica on one.</p>
-<p>It is the entry that turns a time and a lane into a position on the page, which is what makes it the one to write a drawing in terms of — see <a class="reference internal" href="#staying-orientation-independent">Staying orientation-independent</a> below.</p>
-</section>
+<p><code class="docutils literal notranslate"><span class="pre">mark(&quot;C&quot;,</span> <span class="pre">&quot;c-reads&quot;)</span></code> cannot start that rectangle: it sits on C’s lane, not on the first one.  So
+the two compose — <code class="docutils literal notranslate"><span class="pre">column</span></code> gets the moment, <code class="docutils literal notranslate"><span class="pre">point</span></code> puts it on whichever lane you meant.</p>
+<p><code class="docutils literal notranslate"><span class="pre">column</span></code> is also what to reach for when you want to <em>reason</em> rather than draw.  <code class="docutils literal notranslate"><span class="pre">column(&quot;A&quot;,</span>
+<span class="pre">&quot;x&quot;)</span> <span class="pre">==</span> <span class="pre">column(&quot;B&quot;,</span> <span class="pre">&quot;y&quot;)</span></code> is “the solver found nothing ordering these two”, which is a real
+question to ask of a Lamport diagram.</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-time">
+<span class="sig-name descname"><span class="pre">time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">replica</span></em>, <em class="sig-param"><span class="pre">id-or-index</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-time" title="Link to this definition">¶</a></dt>
+<dd><p>Return the time that point’s mark was drawn at, in columns: its column, plus whatever
+<code class="docutils literal notranslate"><span class="pre">displacement</span></code> leant it off that column.  Where <code class="docutils literal notranslate"><span class="pre">column</span></code> is the moment the solver settled on,
+this is the moment the drawing used, and the two are the same number until a displacement separates
+them — which is what a <code class="docutils literal notranslate"><span class="pre">recv</span></code> does by default, landing half a column past its own column at the
+default <code class="docutils literal notranslate"><span class="pre">col-gap</span></code>.</p>
+<p>It is a time, so it composes with a lane: <code class="docutils literal notranslate"><span class="pre">point(time(&quot;C&quot;,</span> <span class="pre">&quot;c-reads&quot;),</span> <span class="pre">&quot;C&quot;)</span></code> is exactly
+<code class="docutils literal notranslate"><span class="pre">mark(&quot;C&quot;,</span> <span class="pre">&quot;c-reads&quot;)</span></code> — the same place, said in the diagram’s own axes rather than on the page.
+That is what makes it the one to reach for when a drawing has to line something up with a mark
+<em>across</em> the lanes, which a coordinate cannot do.</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-point">
+<span class="sig-name descname"><span class="pre">point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">time</span></em>, <em class="sig-param"><span class="pre">lane</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-point" title="Link to this definition">¶</a></dt>
+<dd><p>Return the coordinate of a time on a lane.  Both arguments are the kinds above: <code class="docutils literal notranslate"><span class="pre">time</span></code> is a number
+of columns, whole or not, and <code class="docutils literal notranslate"><span class="pre">lane</span></code> is a number of lanes, or the id of the replica on one.</p>
+<p>It is the entry that turns a time and a lane into a position on the page, which is what makes it the
+one to write a drawing in terms of — see <a class="reference internal" href="#staying-orientation-independent">Staying orientation-independent</a> below.</p>
+</dd></dl>
+
 <section id="the-rectangles">
 <h3>The rectangles<a class="headerlink" href="#the-rectangles" title="Link to this heading">¶</a></h3>
-<p>The five that follow answer with two opposite corners, so each spreads straight into <code class="docutils literal notranslate"><span class="pre">rect</span></code> — or into anything else that takes two, <code class="docutils literal notranslate"><span class="pre">content</span></code> included.  Naming that <code class="docutils literal notranslate"><span class="pre">rect</span></code> leaves CeTZ holding the anchors, which is what lets a note be hung off the box instead of off a position worked out by hand:</p>
+<p>The five that follow answer with two opposite corners, so each spreads straight into <code class="docutils literal notranslate"><span class="pre">rect</span></code> — or
+into anything else that takes two, <code class="docutils literal notranslate"><span class="pre">content</span></code> included.  Naming that <code class="docutils literal notranslate"><span class="pre">rect</span></code> leaves CeTZ holding
+the anchors, which is what lets a note be hung off the box instead of off a position worked out by
+hand:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>overlays:<span class="w"> </span>(
 <span class="w">  </span>foreground:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{
 <span class="w">    </span>import<span class="w"> </span>draw:<span class="w"> </span><span class="err">*</span>
@@ -483,74 +605,141 @@ column("B",<span class="w"> </span>2)<span class="w">    </span><span class="c1"
 )
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">pad</span></code> grows a rectangle on every side, in canvas centimetres.  One number pads all four the same; a pair pads in the diagram’s own axes — how far along the timelines, how far across them — which is what keeps a padded box the same box when the diagram is turned on its side:</p>
+<p><code class="docutils literal notranslate"><span class="pre">pad</span></code> grows a rectangle on every side, in canvas centimetres.  One number pads all four the same;
+a pair pads in the diagram’s own axes — how far along the timelines, how far across them — which is
+what keeps a padded box the same box when the diagram is turned on its side:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>gap-rect("R1",<span class="w"> </span>3)<span class="w">                  </span><span class="c1">// exactly the dotted span, and nothing more</span>
 gap-rect("R1",<span class="w"> </span>3,<span class="w"> </span>pad:<span class="w"> </span>0.1)<span class="w">        </span><span class="c1">// a millimetre of air on every side</span>
 gap-rect("R1",<span class="w"> </span>3,<span class="w"> </span>pad:<span class="w"> </span>(0,<span class="w"> </span>0.14))<span class="w">  </span><span class="c1">// tight in time, standing clear of the lane</span>
 </pre></div>
 </div>
-<p>Unpadded, a rectangle is exactly the part it names, and that is what makes it worth asking for: the diagram sets its names into the very box <code class="docutils literal notranslate"><span class="pre">names-rect</span></code> hands out, interrupts a lane over the very stretch <code class="docutils literal notranslate"><span class="pre">gap-rect</span></code> answers with, and runs its arrows between the very points <code class="docutils literal notranslate"><span class="pre">arrow-mid</span></code> takes the middle of.  None of it is re-derived, so none of it can drift.</p>
-</section>
-<section id="lane-rect-lane-pad-0">
-<h3><code class="docutils literal notranslate"><span class="pre">lane-rect(lane,</span> <span class="pre">pad:</span> <span class="pre">0)</span></code><a class="headerlink" href="#lane-rect-lane-pad-0" title="Link to this heading">¶</a></h3>
-<p>Return the rectangle round the whole strip a lane occupies: from where its line leads in to past the arrowhead, and as thick across as the band the lane erases behind itself.  It holds every mark on that lane and no label off it, and it stops short of the replica name, which has <code class="docutils literal notranslate"><span class="pre">names-rect</span></code> of its own.</p>
-</section>
-<section id="gap-rect-replica-index-pad-0">
-<h3><code class="docutils literal notranslate"><span class="pre">gap-rect(replica,</span> <span class="pre">index,</span> <span class="pre">pad:</span> <span class="pre">0)</span></code><a class="headerlink" href="#gap-rect-replica-index-pad-0" title="Link to this heading">¶</a></h3>
-<p>Return the rectangle round exactly the dotted span of one <code class="docutils literal notranslate"><span class="pre">gap</span></code>, as thick across as its lane.  A <code class="docutils literal notranslate"><span class="pre">gap</span></code> carries no id, so name it by its index on the lane — a negative one counting back from the end.  Naming a point that is not a <code class="docutils literal notranslate"><span class="pre">gap</span></code> fails compilation, saying which kind it found there.</p>
-</section>
-<section id="names-rect-pad-0">
-<h3><code class="docutils literal notranslate"><span class="pre">names-rect(pad:</span> <span class="pre">0)</span></code><a class="headerlink" href="#names-rect-pad-0" title="Link to this heading">¶</a></h3>
-<p>Return the rectangle round the strip the replica names are set in: the column the diagram keeps clear before the lanes begin.  Given a replica — <code class="docutils literal notranslate"><span class="pre">names-rect(&quot;A&quot;)</span></code> — it is that one name’s own box instead.</p>
-</section>
-<section id="arrow-rect-name-pad-0">
-<h3><code class="docutils literal notranslate"><span class="pre">arrow-rect(name,</span> <span class="pre">pad:</span> <span class="pre">0)</span></code><a class="headerlink" href="#arrow-rect-name-pad-0" title="Link to this heading">¶</a></h3>
-<p>Return the rectangle round a message or a <code class="docutils literal notranslate"><span class="pre">sync</span></code>, by the name that pairs its two ends: the shaft together with both the marks it runs between, so a box drawn round an exchange reads as round the exchange rather than round the gap in the middle of it.</p>
-</section>
-<section id="arrow-mid-name">
-<h3><code class="docutils literal notranslate"><span class="pre">arrow-mid(name)</span></code><a class="headerlink" href="#arrow-mid-name" title="Link to this heading">¶</a></h3>
-<p>Return the coordinate of the middle of that arrow’s shaft — where the diagram sets an arrow’s own label, before stepping it off the shaft.  A note hung here hangs where a label would have.</p>
-</section>
-<section id="color-of-replica">
-<h3><code class="docutils literal notranslate"><span class="pre">color-of(replica)</span></code><a class="headerlink" href="#color-of-replica" title="Link to this heading">¶</a></h3>
-<p>Return the colour that replica’s timeline and marks are drawn in, so a drawing can match a lane rather than restate its colour.  A lane between two replicas has none, so this takes a replica and not a lane.  Next to <code class="docutils literal notranslate"><span class="pre">mark-args</span></code> it is the smaller tool: for when you want a lane’s colour and nothing else.</p>
-</section>
-<section id="span">
-<h3><code class="docutils literal notranslate"><span class="pre">span</span></code><a class="headerlink" href="#span" title="Link to this heading">¶</a></h3>
-<p>Two times: the one each lane’s line starts at, and the one it ends at.  The first is slightly negative, because a lane leads in a little before column <code class="docutils literal notranslate"><span class="pre">0</span></code>; the second is past <code class="docutils literal notranslate"><span class="pre">ncols</span> <span class="pre">-</span> <span class="pre">1</span></code>, because the line runs on beyond the last mark to carry its arrowhead.  Neither is a column, which is what the distinction above is for.  Every lane is drawn over the same stretch, so there is one pair for the whole diagram and no replica to ask about.</p>
-</section>
-<section id="replicas">
-<h3><code class="docutils literal notranslate"><span class="pre">replicas</span></code><a class="headerlink" href="#replicas" title="Link to this heading">¶</a></h3>
-<p>The replica ids, in order.  The id at index <code class="docutils literal notranslate"><span class="pre">n</span></code> is the replica on lane <code class="docutils literal notranslate"><span class="pre">n</span></code>, which is how a drawing turns an id into a lane when it needs to arrive at one by arithmetic.</p>
-</section>
-<section id="ncols">
-<h3><code class="docutils literal notranslate"><span class="pre">ncols</span></code><a class="headerlink" href="#ncols" title="Link to this heading">¶</a></h3>
-<p>How many columns the diagram was solved into, so the last of them is <code class="docutils literal notranslate"><span class="pre">ncols</span> <span class="pre">-</span> <span class="pre">1</span></code>.</p>
-</section>
-<section id="orientation">
-<h3><code class="docutils literal notranslate"><span class="pre">orientation</span></code><a class="headerlink" href="#orientation" title="Link to this heading">¶</a></h3>
-<p>Which way this diagram runs, as its canonical name: <code class="docutils literal notranslate"><span class="pre">rightwards</span></code>, <code class="docutils literal notranslate"><span class="pre">leftwards</span></code>, <code class="docutils literal notranslate"><span class="pre">downwards</span></code> or <code class="docutils literal notranslate"><span class="pre">upwards</span></code>.  The two shorthands resolve to the direction they stand for, so a drawing that tests this never has to test for <code class="docutils literal notranslate"><span class="pre">horizontal</span></code> or <code class="docutils literal notranslate"><span class="pre">vertical</span></code> as well.</p>
-</section>
-<section id="draw">
-<h3><code class="docutils literal notranslate"><span class="pre">draw</span></code><a class="headerlink" href="#draw" title="Link to this heading">¶</a></h3>
-<p>The CeTZ module the diagram draws with — the same one the package re-exports, for a body that would rather unpack it than import it: <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">(draw,</span> <span class="pre">mark,</span> <span class="pre">..)</span> <span class="pre">=</span> <span class="pre">d</span></code>, and then <code class="docutils literal notranslate"><span class="pre">draw.circle(..)</span></code>.</p>
-</section>
-<section id="col-gap-row-gap-dot">
-<h3><code class="docutils literal notranslate"><span class="pre">col-gap</span></code>, <code class="docutils literal notranslate"><span class="pre">row-gap</span></code>, <code class="docutils literal notranslate"><span class="pre">dot</span></code><a class="headerlink" href="#col-gap-row-gap-dot" title="Link to this heading">¶</a></h3>
-<p>The diagram’s own measurements, in canvas centimetres: one column of time, one lane, and the radius of an event’s dot.</p>
-<p>They are here so a drawing can speak the diagram’s own language.  A brace half a column clear of the last mark stays half a column clear when you retune <code class="docutils literal notranslate"><span class="pre">col-gap</span></code>; one written as <code class="docutils literal notranslate"><span class="pre">+1.0</span></code> does not.</p>
+<p>Unpadded, a rectangle is exactly the part it names, and that is what makes it worth asking for: the
+diagram sets its names into the very box <code class="docutils literal notranslate"><span class="pre">names-rect</span></code> hands out, interrupts a lane over the very
+stretch <code class="docutils literal notranslate"><span class="pre">gap-rect</span></code> answers with, and runs its arrows between the very points <code class="docutils literal notranslate"><span class="pre">arrow-mid</span></code> takes
+the middle of.  None of it is re-derived, so none of it can drift.</p>
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-lane-rect">
+<span class="sig-name descname"><span class="pre">lane-rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lane</span></em>, <em class="sig-param"><span class="pre">pad:</span> <span class="pre">0</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-lane-rect" title="Link to this definition">¶</a></dt>
+<dd><p>Return the rectangle round the whole strip a lane occupies: from where its line leads in to past the
+arrowhead, and as thick across as the band the lane erases behind itself.  It holds every mark on
+that lane and no label off it, and it stops short of the replica name, which has <code class="docutils literal notranslate"><span class="pre">names-rect</span></code> of
+its own.</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-gap-rect">
+<span class="sig-name descname"><span class="pre">gap-rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">replica</span></em>, <em class="sig-param"><span class="pre">index</span></em>, <em class="sig-param"><span class="pre">pad:</span> <span class="pre">0</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-gap-rect" title="Link to this definition">¶</a></dt>
+<dd><p>Return the rectangle round exactly the dotted span of one <code class="docutils literal notranslate"><span class="pre">gap</span></code>, as thick across as its lane.  A
+<code class="docutils literal notranslate"><span class="pre">gap</span></code> carries no id, so name it by its index on the lane — a negative one counting back from the
+end.  Naming a point that is not a <code class="docutils literal notranslate"><span class="pre">gap</span></code> fails compilation, saying which kind it found there.</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-names-rect">
+<span class="sig-name descname"><span class="pre">names-rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">pad:</span> <span class="pre">0</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-names-rect" title="Link to this definition">¶</a></dt>
+<dd><p>Return the rectangle round the strip the replica names are set in: the column the diagram keeps
+clear before the lanes begin.  Given a replica — <code class="docutils literal notranslate"><span class="pre">names-rect(&quot;A&quot;)</span></code> — it is that one name’s own box
+instead.</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-arrow-rect">
+<span class="sig-name descname"><span class="pre">arrow-rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em>, <em class="sig-param"><span class="pre">pad:</span> <span class="pre">0</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-arrow-rect" title="Link to this definition">¶</a></dt>
+<dd><p>Return the rectangle round a message or a <code class="docutils literal notranslate"><span class="pre">sync</span></code>, by the name that pairs its two ends: the shaft
+together with both the marks it runs between, so a box drawn round an exchange reads as round the
+exchange rather than round the gap in the middle of it.</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-arrow-mid">
+<span class="sig-name descname"><span class="pre">arrow-mid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-arrow-mid" title="Link to this definition">¶</a></dt>
+<dd><p>Return the coordinate of the middle of that arrow’s shaft — where the diagram sets an arrow’s own
+label, before stepping it off the shaft.  A note hung here hangs where a label would have.</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-color-of">
+<span class="sig-name descname"><span class="pre">color-of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">replica</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-color-of" title="Link to this definition">¶</a></dt>
+<dd><p>Return the colour that replica’s timeline and marks are drawn in, so a drawing can match a lane
+rather than restate its colour.  A lane between two replicas has none, so this takes a replica and
+not a lane.  Next to <code class="docutils literal notranslate"><span class="pre">mark-args</span></code> it is the smaller tool: for when you want a lane’s colour and
+nothing else.</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-span">
+<span class="sig-name descname"><span class="pre">span</span></span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-span" title="Link to this definition">¶</a></dt>
+<dd><p>Two times: the one each lane’s line starts at, and the one it ends at.  The first is slightly
+negative, because a lane leads in a little before column <code class="docutils literal notranslate"><span class="pre">0</span></code>; the second is past <code class="docutils literal notranslate"><span class="pre">ncols</span> <span class="pre">-</span> <span class="pre">1</span></code>,
+because the line runs on beyond the last mark to carry its arrowhead.  Neither is a column, which is
+what the distinction above is for.  Every lane is drawn over the same stretch, so there is one pair
+for the whole diagram and no replica to ask about.</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-replicas">
+<span class="sig-name descname"><span class="pre">replicas</span></span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-replicas" title="Link to this definition">¶</a></dt>
+<dd><p>The replica ids, in order.  The id at index <code class="docutils literal notranslate"><span class="pre">n</span></code> is the replica on lane <code class="docutils literal notranslate"><span class="pre">n</span></code>, which is how a
+drawing turns an id into a lane when it needs to arrive at one by arithmetic.</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-ncols">
+<span class="sig-name descname"><span class="pre">ncols</span></span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-ncols" title="Link to this definition">¶</a></dt>
+<dd><p>How many columns the diagram was solved into, so the last of them is <code class="docutils literal notranslate"><span class="pre">ncols</span> <span class="pre">-</span> <span class="pre">1</span></code>.</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-orientation">
+<span class="sig-name descname"><span class="pre">orientation</span></span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-orientation" title="Link to this definition">¶</a></dt>
+<dd><p>Which way this diagram runs, as its canonical name: <code class="docutils literal notranslate"><span class="pre">rightwards</span></code>, <code class="docutils literal notranslate"><span class="pre">leftwards</span></code>, <code class="docutils literal notranslate"><span class="pre">downwards</span></code> or
+<code class="docutils literal notranslate"><span class="pre">upwards</span></code>.  The two shorthands resolve to the direction they stand for, so a drawing that tests
+this never has to test for <code class="docutils literal notranslate"><span class="pre">horizontal</span></code> or <code class="docutils literal notranslate"><span class="pre">vertical</span></code> as well.</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-draw" title="Link to this definition">¶</a></dt>
+<dd><p>The CeTZ module the diagram draws with — the same one the package re-exports, for a body that would
+rather unpack it than import it: <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">(draw,</span> <span class="pre">mark,</span> <span class="pre">..)</span> <span class="pre">=</span> <span class="pre">d</span></code>, and then <code class="docutils literal notranslate"><span class="pre">draw.circle(..)</span></code>.</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-col-gap">
+<span class="sig-name descname"><span class="pre">col-gap</span></span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-col-gap" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-row-gap">
+<span class="sig-name descname"><span class="pre">row-gap</span></span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-row-gap" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-dot">
+<span class="sig-name descname"><span class="pre">dot</span></span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-dot" title="Link to this definition">¶</a></dt>
+<dd><p>The diagram’s own measurements, in canvas centimetres: one column of time, one lane, and the radius
+of an event’s dot.</p>
+<p>They are here so a drawing can speak the diagram’s own language.  A brace half a column clear of the
+last mark stays half a column clear when you retune <code class="docutils literal notranslate"><span class="pre">col-gap</span></code>; one written as <code class="docutils literal notranslate"><span class="pre">+1.0</span></code> does not.</p>
+</dd></dl>
+
 </section>
 </section>
 <section id="staying-orientation-independent">
 <h2>Staying orientation-independent<a class="headerlink" href="#staying-orientation-independent" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">point(time,</span> <span class="pre">lane)</span></code> is stated in the diagram’s own axes — logical time along the lanes, and lanes across it — so a drawing written in terms of it survives a flip from <code class="docutils literal notranslate"><span class="pre">horizontal</span></code> to <code class="docutils literal notranslate"><span class="pre">vertical</span></code>.  One written against raw <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> arithmetic does not:</p>
+<p><code class="docutils literal notranslate"><span class="pre">point(time,</span> <span class="pre">lane)</span></code> is stated in the diagram’s own axes — logical time along the lanes, and lanes
+across it — so a drawing written in terms of it survives a flip from <code class="docutils literal notranslate"><span class="pre">horizontal</span></code> to <code class="docutils literal notranslate"><span class="pre">vertical</span></code>.
+One written against raw <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> arithmetic does not:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>let<span class="w"> </span>(point,<span class="w"> </span>..)<span class="w"> </span>=<span class="w"> </span>d
 line(point(2,<span class="w"> </span>"A"),<span class="w"> </span>point(2,<span class="w"> </span>"C"))<span class="w">   </span><span class="c1">// flips cleanly</span>
 line((4,<span class="w"> </span>0),<span class="w"> </span>(4,<span class="w"> </span>-3))<span class="w">                </span><span class="c1">// does not</span>
 </pre></div>
 </div>
-<p>Fractional lanes are what make this work for nudges too.  “Just off the lane, towards the next one” is <code class="docutils literal notranslate"><span class="pre">point(c,</span> <span class="pre">0.15)</span></code> whichever way the diagram runs, where a page-space <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">-0.3)</span></code> would point the wrong way the moment it turned.</p>
-<p><code class="docutils literal notranslate"><span class="pre">span</span></code> stays in times for the same reason, and it is what lets a drawing run the full length of a lane without knowing where on the page that lane falls:</p>
+<p>Fractional lanes are what make this work for nudges too.  “Just off the lane, towards the next one”
+is <code class="docutils literal notranslate"><span class="pre">point(c,</span> <span class="pre">0.15)</span></code> whichever way the diagram runs, where a page-space <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">-0.3)</span></code> would point
+the wrong way the moment it turned.</p>
+<p><code class="docutils literal notranslate"><span class="pre">span</span></code> stays in times for the same reason, and it is what lets a drawing run the full length of a
+lane without knowing where on the page that lane falls:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>overlays:<span class="w"> </span>(
 <span class="w">  </span>timelines:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{
 <span class="w">    </span>let<span class="w"> </span>(span,<span class="w"> </span>point,<span class="w"> </span>..)<span class="w"> </span>=<span class="w"> </span>d
@@ -560,23 +749,30 @@ line((4,<span class="w"> </span>0),<span class="w"> </span>(4,<span class="w"> <
 )
 </pre></div>
 </div>
-<p>That line lies along the lane, so the layer decides whether it shows at all: at <code class="docutils literal notranslate"><span class="pre">backdrops</span></code> the lane’s own stroke would cover it, at <code class="docutils literal notranslate"><span class="pre">timelines</span></code> it is drawn over that stroke instead.  To sit <em>beside</em> the lane rather than on it, feed the same span to a fractional lane — <code class="docutils literal notranslate"><span class="pre">point(s,</span> <span class="pre">1.12)</span></code> to <code class="docutils literal notranslate"><span class="pre">point(e,</span> <span class="pre">1.12)</span></code> — which is the pairing coordinates would not have allowed.</p>
+<p>That line lies along the lane, so the layer decides whether it shows at all: at <code class="docutils literal notranslate"><span class="pre">backdrops</span></code> the
+lane’s own stroke would cover it, at <code class="docutils literal notranslate"><span class="pre">timelines</span></code> it is drawn over that stroke instead.  To sit
+<em>beside</em> the lane rather than on it, feed the same span to a fractional lane — <code class="docutils literal notranslate"><span class="pre">point(s,</span> <span class="pre">1.12)</span></code> to
+<code class="docutils literal notranslate"><span class="pre">point(e,</span> <span class="pre">1.12)</span></code> — which is the pairing coordinates would not have allowed.</p>
 </section>
 <section id="errors">
 <h2>Errors<a class="headerlink" href="#errors" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p>An unknown replica id, an unknown point id, or an index past the end of a lane fails compilation, naming what was asked for and what that lane actually holds.</p></li>
+<li><p>An unknown replica id, an unknown point id, or an index past the end of a lane fails compilation,
+naming what was asked for and what that lane actually holds.</p></li>
 <li><p>Two points on one lane sharing an id fails compilation.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">gap-rect</span></code> given a point that is not a <code class="docutils literal notranslate"><span class="pre">gap</span></code> fails compilation, naming the kind it found there.  An arrow name that is neither a message nor a <code class="docutils literal notranslate"><span class="pre">sync</span></code> fails the same way.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gap-rect</span></code> given a point that is not a <code class="docutils literal notranslate"><span class="pre">gap</span></code> fails compilation, naming the kind it found
+there.  An arrow name that is neither a message nor a <code class="docutils literal notranslate"><span class="pre">sync</span></code> fails the same way.</p></li>
 <li><p>A <code class="docutils literal notranslate"><span class="pre">pad</span></code> that is neither a number nor a pair of them fails compilation.</p></li>
 <li><p>A layer name that is not in <code class="docutils literal notranslate"><span class="pre">layers</span></code> fails compilation, and says which names are.</p></li>
-<li><p>An <code class="docutils literal notranslate"><span class="pre">overlays</span></code> that is none of <code class="docutils literal notranslate"><span class="pre">none</span></code>, a dictionary, a function of one argument, or a CeTZ body fails compilation.</p></li>
+<li><p>An <code class="docutils literal notranslate"><span class="pre">overlays</span></code> that is none of <code class="docutils literal notranslate"><span class="pre">none</span></code>, a dictionary, a function of one argument, or a CeTZ body
+fails compilation.</p></li>
 </ul>
 </section>
 <section id="worked-example">
 <h2>Worked example<a class="headerlink" href="#worked-example" title="Link to this heading">¶</a></h2>
 <img alt="The future cone of one event, washed behind the lanes, with a ring round the event itself" src="_images/overlays.png" />
-<p>The future cone of <code class="docutils literal notranslate"><span class="pre">A.2</span></code>, drawn at <code class="docutils literal notranslate"><span class="pre">backdrops</span></code> so the lanes cross it without fading a stripe through it, and a ring at <code class="docutils literal notranslate"><span class="pre">marks</span></code> so <code class="docutils literal notranslate"><span class="pre">A.2</span></code>’s own label stays legible over it.</p>
+<p>The future cone of <code class="docutils literal notranslate"><span class="pre">A.2</span></code>, drawn at <code class="docutils literal notranslate"><span class="pre">backdrops</span></code> so the lanes cross it without fading a stripe
+through it, and a ring at <code class="docutils literal notranslate"><span class="pre">marks</span></code> so <code class="docutils literal notranslate"><span class="pre">A.2</span></code>’s own label stays legible over it.</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span><span class="kn">#import</span><span class="w"> </span><span class="s2">"@preview/lamportian-dramatis:0.2.0"</span><span class="p">:</span><span class="w"> </span><span class="nv">lamport-diagram</span><span class="p">,</span><span class="w"> </span><span class="nv">replica</span><span class="p">,</span><span class="w"> </span><span class="nv">event</span><span class="p">,</span><span class="w"> </span><span class="nv">send</span><span class="p">,</span><span class="w"> </span><span class="nv">recv</span><span class="p">,</span><span class="w"> </span><span class="nv">sync</span><span class="p">,</span><span class="w"> </span><span class="nv">above</span><span class="p">,</span><span class="w"> </span><span class="nv">below</span><span class="p">,</span><span class="w"> </span><span class="nv">draw</span>
 
 <span class="nf">#lamport-diagram</span><span class="p">(</span>
@@ -695,25 +891,29 @@ line((4,<span class="w"> </span>0),<span class="w"> </span>(4,<span class="w"> <
 </ul>
 </li>
 <li><a class="reference internal" href="#what-the-locator-holds">What the locator holds</a><ul>
-<li><a class="reference internal" href="#mark-replica-id-or-index"><code class="docutils literal notranslate"><span class="pre">mark(replica,</span> <span class="pre">id-or-index)</span></code></a></li>
-<li><a class="reference internal" href="#mark-args-replica-id-or-index"><code class="docutils literal notranslate"><span class="pre">mark-args(replica,</span> <span class="pre">id-or-index)</span></code></a></li>
-<li><a class="reference internal" href="#pip-args-replica-id-or-index"><code class="docutils literal notranslate"><span class="pre">pip-args(replica,</span> <span class="pre">id-or-index)</span></code></a></li>
-<li><a class="reference internal" href="#column-replica-id-or-index"><code class="docutils literal notranslate"><span class="pre">column(replica,</span> <span class="pre">id-or-index)</span></code></a></li>
-<li><a class="reference internal" href="#time-replica-id-or-index"><code class="docutils literal notranslate"><span class="pre">time(replica,</span> <span class="pre">id-or-index)</span></code></a></li>
-<li><a class="reference internal" href="#point-time-lane"><code class="docutils literal notranslate"><span class="pre">point(time,</span> <span class="pre">lane)</span></code></a></li>
-<li><a class="reference internal" href="#the-rectangles">The rectangles</a></li>
-<li><a class="reference internal" href="#lane-rect-lane-pad-0"><code class="docutils literal notranslate"><span class="pre">lane-rect(lane,</span> <span class="pre">pad:</span> <span class="pre">0)</span></code></a></li>
-<li><a class="reference internal" href="#gap-rect-replica-index-pad-0"><code class="docutils literal notranslate"><span class="pre">gap-rect(replica,</span> <span class="pre">index,</span> <span class="pre">pad:</span> <span class="pre">0)</span></code></a></li>
-<li><a class="reference internal" href="#names-rect-pad-0"><code class="docutils literal notranslate"><span class="pre">names-rect(pad:</span> <span class="pre">0)</span></code></a></li>
-<li><a class="reference internal" href="#arrow-rect-name-pad-0"><code class="docutils literal notranslate"><span class="pre">arrow-rect(name,</span> <span class="pre">pad:</span> <span class="pre">0)</span></code></a></li>
-<li><a class="reference internal" href="#arrow-mid-name"><code class="docutils literal notranslate"><span class="pre">arrow-mid(name)</span></code></a></li>
-<li><a class="reference internal" href="#color-of-replica"><code class="docutils literal notranslate"><span class="pre">color-of(replica)</span></code></a></li>
-<li><a class="reference internal" href="#span"><code class="docutils literal notranslate"><span class="pre">span</span></code></a></li>
-<li><a class="reference internal" href="#replicas"><code class="docutils literal notranslate"><span class="pre">replicas</span></code></a></li>
-<li><a class="reference internal" href="#ncols"><code class="docutils literal notranslate"><span class="pre">ncols</span></code></a></li>
-<li><a class="reference internal" href="#orientation"><code class="docutils literal notranslate"><span class="pre">orientation</span></code></a></li>
-<li><a class="reference internal" href="#draw"><code class="docutils literal notranslate"><span class="pre">draw</span></code></a></li>
-<li><a class="reference internal" href="#col-gap-row-gap-dot"><code class="docutils literal notranslate"><span class="pre">col-gap</span></code>, <code class="docutils literal notranslate"><span class="pre">row-gap</span></code>, <code class="docutils literal notranslate"><span class="pre">dot</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-mark"><code class="docutils literal notranslate"><span class="pre">mark</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-mark-args"><code class="docutils literal notranslate"><span class="pre">mark-args</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-pip-args"><code class="docutils literal notranslate"><span class="pre">pip-args</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-column"><code class="docutils literal notranslate"><span class="pre">column</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-time"><code class="docutils literal notranslate"><span class="pre">time</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-point"><code class="docutils literal notranslate"><span class="pre">point</span></code></a></li>
+<li><a class="reference internal" href="#the-rectangles">The rectangles</a><ul>
+<li><a class="reference internal" href="#typst-locator-lane-rect"><code class="docutils literal notranslate"><span class="pre">lane-rect</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-gap-rect"><code class="docutils literal notranslate"><span class="pre">gap-rect</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-names-rect"><code class="docutils literal notranslate"><span class="pre">names-rect</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-arrow-rect"><code class="docutils literal notranslate"><span class="pre">arrow-rect</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-arrow-mid"><code class="docutils literal notranslate"><span class="pre">arrow-mid</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-color-of"><code class="docutils literal notranslate"><span class="pre">color-of</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-span"><code class="docutils literal notranslate"><span class="pre">span</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-replicas"><code class="docutils literal notranslate"><span class="pre">replicas</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-ncols"><code class="docutils literal notranslate"><span class="pre">ncols</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-orientation"><code class="docutils literal notranslate"><span class="pre">orientation</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-draw"><code class="docutils literal notranslate"><span class="pre">draw</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-col-gap"><code class="docutils literal notranslate"><span class="pre">col-gap</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-row-gap"><code class="docutils literal notranslate"><span class="pre">row-gap</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-dot"><code class="docutils literal notranslate"><span class="pre">dot</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#staying-orientation-independent">Staying orientation-independent</a></li>

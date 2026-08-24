@@ -5,13 +5,13 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="overlays" href="overlays.html"><link rel="prev" title="Guide" href="guide.html">
 
-    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Reference - lamportian-dramatis</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Literata:opsz,wght@7..72,300..700&family=Inconsolata:wght@400..700&display=swap" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=98200049" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=38087438" />
     
     
 
@@ -40,7 +40,10 @@
       }
     }
   }
-</style></head>
+</style>
+  
+  <link rel="icon" href="_static/favicon.svg" type="image/svg+xml">
+</head>
   <body>
     
     <script>
@@ -187,9 +190,10 @@
     <div class="sidebar-container">
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <img class="sidebar-icon" src="_static/favicon.svg" alt="">
   
   <span class="sidebar-brand-text">lamportian-dramatis</span>
-  
+
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
@@ -238,32 +242,38 @@
         <article role="main" id="furo-main-content">
           <section id="reference">
 <h1>Reference<a class="headerlink" href="#reference" title="Link to this heading">¶</a></h1>
-<p>These pages describe the package as it stands on <code class="docutils literal notranslate"><span class="pre">`main</span></code> &lt;<a class="reference external" href="https://github.com/mvaled/lamportian-dramatis">https://github.com/mvaled/lamportian-dramatis</a>&gt;`__.  A Typst import names an exact version, so what a document sees is whatever it asked for — the <a class="reference internal" href="changelog.html"><span class="doc">changelog</span></a> is what says which release each of these landed in, and what is still waiting.</p>
-<section id="lamport-diagram">
-<h2><code class="docutils literal notranslate"><span class="pre">lamport-diagram</span></code><a class="headerlink" href="#lamport-diagram" title="Link to this heading">¶</a></h2>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>lamport-diagram(
-<span class="w">  </span>caption:<span class="w"> </span>none,
-<span class="w">  </span>replicas:<span class="w"> </span>(),
-<span class="w">  </span>events:<span class="w"> </span>(:),
-<span class="w">  </span>orientation:<span class="w"> </span>horizontal,
-<span class="w">  </span>overlays:<span class="w"> </span>none,
-<span class="w">  </span>col-gap:<span class="w"> </span>none,
-<span class="w">  </span>row-gap:<span class="w"> </span>none,
-<span class="w">  </span>text-size:<span class="w"> </span>0.62em,
-<span class="w">  </span>dot:<span class="w"> </span>0.095,
-<span class="w">  </span>message-stroke:<span class="w"> </span>0.9pt<span class="w"> </span>+<span class="w"> </span>luma(110),
-)
-</pre></div>
-</div>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">caption</span></code> — with one, the result is a <code class="docutils literal notranslate"><span class="pre">figure</span></code>; without one it is the bare drawing, to place inside a <code class="docutils literal notranslate"><span class="pre">figure</span></code> of your own.  Attach a <code class="docutils literal notranslate"><span class="pre">&lt;label&gt;</span></code> <em>after</em> the call and the reference resolves to the figure, numbering alongside the document’s others.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">replicas</span></code> — the lane order: top to bottom on a horizontal diagram, left to right on a vertical one.  Each entry is an id string, a <code class="docutils literal notranslate"><span class="pre">`replica</span></code> &lt;#replica&gt;`__ — which also carries that lane’s event defaults — or a bare dictionary of the same fields.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">events</span></code> — each replica id mapped to that replica’s local history, in order.  An entry is bare content or a bare string for a local event, or one of <a class="reference internal" href="#event"><span class="std std-ref">event</span></a>, <code class="docutils literal notranslate"><span class="pre">`send</span></code> &lt;#send-and-recv&gt;`__, <code class="docutils literal notranslate"><span class="pre">`recv</span></code> &lt;#send-and-recv&gt;`__, <code class="docutils literal notranslate"><span class="pre">`sync</span></code> &lt;#sync&gt;`__, <code class="docutils literal notranslate"><span class="pre">`idle</span></code> &lt;#idle&gt;`__ and <code class="docutils literal notranslate"><span class="pre">`gap</span></code> &lt;#gap&gt;`__.  Every replica must have an entry, and every entry must name a declared replica.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">orientation</span></code> — which way logical time runs.  See <a class="reference internal" href="#orientation"><span class="std std-ref">orientation</span></a>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">overlays</span></code> — your own CeTZ, drawn into the diagram at a layer of your choosing.  See <a class="reference internal" href="overlays.html"><span class="doc">Overlays</span></a>.</p></li>
+<p>These pages describe the package as it stands on <a class="reference external" href="https://github.com/mvaled/lamportian-dramatis">main</a>.  A Typst import names an exact version, so what
+a document sees is whatever it asked for — the <a class="reference internal" href="changelog.html"><span class="doc">changelog</span></a> is what says which
+release each of these landed in, and what is still waiting.</p>
+<dl class="typst function">
+<dt class="sig sig-object typst" id="typst-function-lamport-diagram">
+<span class="sig-name descname"><span class="pre">lamport-diagram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">caption:</span> <span class="pre">none</span></em>, <em class="sig-param"><span class="pre">replicas:</span> <span class="pre">()</span></em>, <em class="sig-param"><span class="pre">events:</span> <span class="pre">(:)</span></em>, <em class="sig-param"><span class="pre">orientation:</span> <span class="pre">horizontal</span></em>, <em class="sig-param"><span class="pre">overlays:</span> <span class="pre">none</span></em>, <em class="sig-param"><span class="pre">col-gap:</span> <span class="pre">none</span></em>, <em class="sig-param"><span class="pre">row-gap:</span> <span class="pre">none</span></em>, <em class="sig-param"><span class="pre">text-size:</span> <span class="pre">0.62em</span></em>, <em class="sig-param"><span class="pre">dot:</span> <span class="pre">0.095</span></em>, <em class="sig-param"><span class="pre">message-stroke:</span> <span class="pre">0.9pt</span> <span class="pre">+</span> <span class="pre">luma(110)</span></em><span class="sig-paren">)</span><a class="headerlink" href="#typst-function-lamport-diagram" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li id="typst-param-lamport-diagram-caption"><p><strong>caption</strong> – with one, the result is a <code class="docutils literal notranslate"><span class="pre">figure</span></code>; without one it is the bare drawing, to
+place inside a <code class="docutils literal notranslate"><span class="pre">figure</span></code> of your own.  Attach a <code class="docutils literal notranslate"><span class="pre">&lt;label&gt;</span></code> <em>after</em> the call and
+the reference resolves to the figure, numbering alongside the document’s others.</p></li>
+<li id="typst-param-lamport-diagram-replicas"><p><strong>replicas</strong> – the lane order: top to bottom on a horizontal diagram, left to right on a
+vertical one.  Each entry is an id string, a <a class="reference internal" href="#typst-function-replica" title="replica"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">replica</span></code></a> — which also
+carries that lane’s event defaults — or a bare dictionary of the same fields.</p></li>
+<li id="typst-param-lamport-diagram-events"><p><strong>events</strong> – each replica id mapped to that replica’s local history, in order.  An entry is
+bare content or a bare string for a local event, or one of <a class="reference internal" href="#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a>,
+<a class="reference internal" href="#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>, <a class="reference internal" href="#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a>, <a class="reference internal" href="#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a>, <a class="reference internal" href="#typst-function-idle" title="idle"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">idle</span></code></a> and <a class="reference internal" href="#typst-function-gap" title="gap"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">gap</span></code></a>.  Every
+replica must have an entry, and every entry must name a declared replica.</p></li>
+<li id="typst-param-lamport-diagram-orientation"><p><strong>orientation</strong> – which way logical time runs.  See <a class="reference internal" href="#typst-value-horizontal" title="horizontal"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">orientation</span></code></a>.</p></li>
+<li id="typst-param-lamport-diagram-overlays"><p><strong>overlays</strong> – your own CeTZ, drawn into the diagram at a layer of your choosing.  See
+<a class="reference internal" href="overlays.html"><span class="doc">Overlays</span></a>.</p></li>
 </ul>
-<p>The rest are the drawing’s measurements.  Lengths without a unit are <strong>canvas centimetres</strong>: the canvas is laid out at <code class="docutils literal notranslate"><span class="pre">length:</span> <span class="pre">1cm</span></code>, so <code class="docutils literal notranslate"><span class="pre">2.0</span></code> is two centimetres before the document scales anything.</p>
-<p>The two gaps default to <code class="docutils literal notranslate"><span class="pre">none</span></code>, which means <em>the value that suits this orientation</em> rather than no gap at all.  What a gap has to make room for is text, and text runs across the page whichever way the diagram does — so the wider default belongs to whichever axis is lying horizontally, and turning a diagram on its side turns the two over with it.</p>
+</dd>
+</dl>
+<p>The rest are the drawing’s measurements.  Lengths without a unit are <strong>canvas centimetres</strong>: the
+canvas is laid out at <code class="docutils literal notranslate"><span class="pre">length:</span> <span class="pre">1cm</span></code>, so <code class="docutils literal notranslate"><span class="pre">2.0</span></code> is two centimetres before the document scales
+anything.</p>
+<p>The two gaps default to <code class="docutils literal notranslate"><span class="pre">none</span></code>, which means <em>the value that suits this orientation</em> rather than
+no gap at all.  What a gap has to make room for is text, and text runs across the page whichever
+way the diagram does — so the wider default belongs to whichever axis is lying horizontally, and
+turning a diagram on its side turns the two over with it.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -273,34 +283,92 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">horizontal</span></code>, <code class="docutils literal notranslate"><span class="pre">rightwards</span></code>, <code class="docutils literal notranslate"><span class="pre">leftwards</span></code></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#typst-value-horizontal" title="horizontal"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">horizontal</span></code></a>, <a class="reference internal" href="#typst-value-rightwards" title="rightwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">rightwards</span></code></a>, <a class="reference internal" href="#typst-value-leftwards" title="leftwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">leftwards</span></code></a></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">2.0</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.5</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">vertical</span></code>, <code class="docutils literal notranslate"><span class="pre">downwards</span></code>, <code class="docutils literal notranslate"><span class="pre">upwards</span></code></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#typst-value-vertical" title="vertical"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">vertical</span></code></a>, <a class="reference internal" href="#typst-value-downwards" title="downwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">downwards</span></code></a>, <a class="reference internal" href="#typst-value-upwards" title="upwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">upwards</span></code></a></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.5</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">2.4</span></code></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">col-gap</span></code> — the distance between two columns of logical time, and so how far apart the solver’s columns land.  Along the page on a horizontal diagram, down it on a vertical one.  A <code class="docutils literal notranslate"><span class="pre">gap</span></code> span given as a ratio is taken against it, as is the <code class="docutils literal notranslate"><span class="pre">displacement</span></code> that nudges a <code class="docutils literal notranslate"><span class="pre">send</span></code>, <code class="docutils literal notranslate"><span class="pre">recv</span></code> or <code class="docutils literal notranslate"><span class="pre">sync</span></code> off its column — so widening the diagram widens those to match.  An <code class="docutils literal notranslate"><span class="pre">event</span></code>’s <code class="docutils literal notranslate"><span class="pre">displacement</span></code> is the exception: it is a ratio of the label’s own extent, the label being what it moves.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">row-gap</span></code> — the distance between two lanes.  Down the page on a horizontal diagram, across it on a vertical one — which is why its default is the larger of the two there: a label sitting beside a lane runs towards the next one.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">text-size</span></code> — the text size the diagram is drawn at, and what every <code class="docutils literal notranslate"><span class="pre">em</span></code> inside it resolves against.  A <code class="docutils literal notranslate"><span class="pre">size:</span> <span class="pre">0.8em</span></code> on an event is therefore eight tenths of <em>this</em> diagram’s em, not of the surrounding document’s, so a diagram keeps its proportions wherever it is placed.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">dot</span></code> — the radius of the mark on a local event.  A <code class="docutils literal notranslate"><span class="pre">recv</span></code> and a <code class="docutils literal notranslate"><span class="pre">sync</span></code> are drawn at the same radius, a <code class="docutils literal notranslate"><span class="pre">send</span></code> at seven tenths of it, and each mark’s backdrop reaches a little past it.  The dot inside a <code class="docutils literal notranslate"><span class="pre">sync</span></code>’s ring is not measured against this one: it is a fraction of the thickness of the timeline it sits on.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">message-stroke</span></code> — the stroke every message and <code class="docutils literal notranslate"><span class="pre">sync</span></code> arrow is drawn with.  Its paint also colours the arrowheads and any label carried by an arrow, so one value dresses the whole of the messaging.</p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li id="typst-param-lamport-diagram-col-gap"><p><strong>col-gap</strong> – the distance between two columns of logical time, and so how far apart the
+solver’s columns land.  Along the page on a horizontal diagram, down it on a
+vertical one.  A <a class="reference internal" href="#typst-function-gap" title="gap"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">gap</span></code></a> span given as a ratio is taken against it, as is the
+<code class="docutils literal notranslate"><span class="pre">displacement</span></code> that nudges a <a class="reference internal" href="#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>, <a class="reference internal" href="#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a> or <a class="reference internal" href="#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a> off its
+column — so widening the diagram widens those to match.  An <a class="reference internal" href="#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event's</span></code></a> <code class="docutils literal notranslate"><span class="pre">displacement</span></code> is the exception: it is a ratio of the label’s
+own extent, the label being what it moves.</p></li>
+<li id="typst-param-lamport-diagram-row-gap"><p><strong>row-gap</strong> – the distance between two lanes.  Down the page on a horizontal diagram, across it
+on a vertical one — which is why its default is the larger of the two there: a
+label sitting beside a lane runs towards the next one.</p></li>
+<li id="typst-param-lamport-diagram-text-size"><p><strong>text-size</strong> – the text size the diagram is drawn at, and what every <code class="docutils literal notranslate"><span class="pre">em</span></code> inside it resolves
+against.  A <code class="docutils literal notranslate"><span class="pre">size:</span> <span class="pre">0.8em</span></code> on an event is therefore eight tenths of <em>this</em>
+diagram’s em, not of the surrounding document’s, so a diagram keeps its
+proportions wherever it is placed.</p></li>
+<li id="typst-param-lamport-diagram-dot"><p><strong>dot</strong> – the radius of the mark on a local event.  A <a class="reference internal" href="#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a> and a <a class="reference internal" href="#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a> are drawn
+at the same radius, a <a class="reference internal" href="#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a> at seven tenths of it, and each mark’s backdrop
+reaches a little past it.  The dot inside a <a class="reference internal" href="#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync's</span></code></a> ring is not
+measured against this one: it is a fraction of the thickness of the timeline it sits
+on.</p></li>
+<li id="typst-param-lamport-diagram-message-stroke"><p><strong>message-stroke</strong> – the stroke every message and <a class="reference internal" href="#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a> arrow is drawn with.  Its paint
+also colours the arrowheads and any label carried by an arrow, so one
+value dresses the whole of the messaging.  <a class="reference internal" href="#typst-param-lamport-diagram-col-gap" title="lamport-diagram.col-gap"><code class="xref typst typst-param docutils literal notranslate"><span class="pre">col-gap</span></code></a> and
+<code class="docutils literal notranslate"><span class="pre">row-gap</span></code> are the two to reach for when a diagram reads too cramped or
+too sparse; <code class="docutils literal notranslate"><span class="pre">dot</span></code> and <code class="docutils literal notranslate"><span class="pre">text-size</span></code> are for when it is going somewhere
+much larger or much smaller than a page.</p></li>
 </ul>
-<p><code class="docutils literal notranslate"><span class="pre">col-gap</span></code> and <code class="docutils literal notranslate"><span class="pre">row-gap</span></code> are the two to reach for when a diagram reads too cramped or too sparse; <code class="docutils literal notranslate"><span class="pre">dot</span></code> and <code class="docutils literal notranslate"><span class="pre">text-size</span></code> are for when it is going somewhere much larger or much smaller than a page.</p>
-</section>
-<section id="orientation">
-<span id="id1"></span><h2><code class="docutils literal notranslate"><span class="pre">orientation</span></code><a class="headerlink" href="#orientation" title="Link to this heading">¶</a></h2>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>horizontal<span class="w">   </span><span class="c1">// = rightwards</span>
-vertical<span class="w">     </span><span class="c1">// = downwards</span>
-rightwards<span class="w">   </span>leftwards<span class="w">   </span>downwards<span class="w">   </span>upwards
-</pre></div>
-</div>
-<p>Which way logical time runs.  <code class="docutils literal notranslate"><span class="pre">rightwards</span></code> and <code class="docutils literal notranslate"><span class="pre">leftwards</span></code> lay the timelines out as rows and stack the replicas downwards; <code class="docutils literal notranslate"><span class="pre">downwards</span></code> and <code class="docutils literal notranslate"><span class="pre">upwards</span></code> lay them out as columns and stack the replicas rightwards.  <code class="docutils literal notranslate"><span class="pre">horizontal</span></code> and <code class="docutils literal notranslate"><span class="pre">vertical</span></code> are the two that need no thinking about, and are <code class="docutils literal notranslate"><span class="pre">rightwards</span></code> and <code class="docutils literal notranslate"><span class="pre">downwards</span></code> under a shorter name.  These are plain strings, so <code class="docutils literal notranslate"><span class="pre">orientation:</span> <span class="pre">&quot;vertical&quot;</span></code> works without importing anything.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="typst argument">
+<dt class="sig sig-object typst" id="typst-argument-orientation">
+<span class="sig-name descname"><span class="pre">orientation</span></span><span class="property"> <span class="pre">(argument)</span></span><a class="headerlink" href="#typst-argument-orientation" title="Link to this definition">¶</a></dt>
+<dd><p>Which way logical time runs.  It takes one of the six values below.</p>
+</dd></dl>
+
+<dl class="typst value">
+<dt class="sig sig-object typst" id="typst-value-horizontal">
+<span class="sig-name descname"><span class="pre">horizontal</span></span><span class="property"> <span class="pre">(value)</span></span><a class="headerlink" href="#typst-value-horizontal" title="Link to this definition">¶</a></dt>
+<dd><p>Alias of <a class="reference internal" href="#typst-value-rightwards" title="rightwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">rightwards</span></code></a></p>
+</dd></dl>
+
+<dl class="typst value">
+<dt class="sig sig-object typst" id="typst-value-vertical">
+<span class="sig-name descname"><span class="pre">vertical</span></span><span class="property"> <span class="pre">(value)</span></span><a class="headerlink" href="#typst-value-vertical" title="Link to this definition">¶</a></dt>
+<dd><p>Alias of <a class="reference internal" href="#typst-value-downwards" title="downwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">downwards</span></code></a></p>
+</dd></dl>
+
+<dl class="typst value">
+<dt class="sig sig-object typst" id="typst-value-rightwards">
+<span class="sig-name descname"><span class="pre">rightwards</span></span><span class="property"> <span class="pre">(value)</span></span><a class="headerlink" href="#typst-value-rightwards" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="typst value">
+<dt class="sig sig-object typst" id="typst-value-leftwards">
+<span class="sig-name descname"><span class="pre">leftwards</span></span><span class="property"> <span class="pre">(value)</span></span><a class="headerlink" href="#typst-value-leftwards" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="typst value">
+<dt class="sig sig-object typst" id="typst-value-downwards">
+<span class="sig-name descname"><span class="pre">downwards</span></span><span class="property"> <span class="pre">(value)</span></span><a class="headerlink" href="#typst-value-downwards" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="typst value">
+<dt class="sig sig-object typst" id="typst-value-upwards">
+<span class="sig-name descname"><span class="pre">upwards</span></span><span class="property"> <span class="pre">(value)</span></span><a class="headerlink" href="#typst-value-upwards" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Which way logical time runs.  <a class="reference internal" href="#typst-value-rightwards" title="rightwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">rightwards</span></code></a> and <a class="reference internal" href="#typst-value-leftwards" title="leftwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">leftwards</span></code></a> lay the timelines out as
+rows and stack the replicas downwards; <a class="reference internal" href="#typst-value-downwards" title="downwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">downwards</span></code></a> and <a class="reference internal" href="#typst-value-upwards" title="upwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">upwards</span></code></a> lay them out as
+columns and stack the replicas rightwards.  <a class="reference internal" href="#typst-value-horizontal" title="horizontal"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">horizontal</span></code></a> and <a class="reference internal" href="#typst-value-vertical" title="vertical"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">vertical</span></code></a> are the two
+that need no thinking about, and are <a class="reference internal" href="#typst-value-rightwards" title="rightwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">rightwards</span></code></a> and <a class="reference internal" href="#typst-value-downwards" title="downwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">downwards</span></code></a> under a shorter
+name.  These are plain strings, so <code class="docutils literal notranslate"><span class="pre">orientation:</span> <span class="pre">&quot;vertical&quot;</span></code> works without importing anything.</p>
 <p>The orientation decides which sides a label may sit on, and which one it sits on by default:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -322,72 +390,147 @@ rightwards<span class="w">   </span>leftwards<span class="w">   </span>downwards
 </tbody>
 </table>
 </div>
-<p>A side the orientation has no room for — <code class="docutils literal notranslate"><span class="pre">above</span></code> on a vertical diagram, <code class="docutils literal notranslate"><span class="pre">left</span></code> on a horizontal one — is <em>not</em> an error: it is dropped back to that default and otherwise ignored, so flipping a finished diagram from horizontal to vertical stays one edit rather than a compile error on every lane that named a side.  It passes in silence, which is not the ideal: the ideal is a compiler warning, and Typst gives user code no way to raise one.  Printing the complaint into the document instead would put it in front of the reader rather than the author, which is worse than saying nothing.</p>
+<p>A side the orientation has no room for — <a class="reference internal" href="#typst-value-above" title="above"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">above</span></code></a> on a vertical diagram, <a class="reference internal" href="#typst-value-left" title="left"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">left</span></code></a> on a
+horizontal one — is <em>not</em> an error: it is dropped back to that default and otherwise ignored, so
+flipping a finished diagram from horizontal to vertical stays one edit rather than a compile error
+on every lane that named a side.  It passes in silence, which is not the ideal: the ideal is a
+compiler warning, and Typst gives user code no way to raise one.  Printing the complaint into the
+document instead would put it in front of the reader rather than the author, which is worse than
+saying nothing.</p>
 <img alt="The worked example from the front page, drawn vertically" src="_images/vertical.png" />
-</section>
-<section id="replica">
-<h2><code class="docutils literal notranslate"><span class="pre">replica</span></code><a class="headerlink" href="#replica" title="Link to this heading">¶</a></h2>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>replica(name,<span class="w"> </span>..defaults)
-</pre></div>
-</div>
-<p>A replica lane, and the defaults the local events on it fall back on.  <code class="docutils literal notranslate"><span class="pre">name</span></code> is the id that the <code class="docutils literal notranslate"><span class="pre">events</span></code> dictionary keys on.</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">label</span></code> — what the diagram prints for the lane.  Defaults to <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">color</span></code> — the lane’s colour.  Defaults to the next entry of <code class="docutils literal notranslate"><span class="pre">default-palette</span></code>, cycled over <code class="docutils literal notranslate"><span class="pre">replicas</span></code> in order.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">position</span></code> — <code class="docutils literal notranslate"><span class="pre">above</span></code> or <code class="docutils literal notranslate"><span class="pre">below</span></code>, the side of the timeline this lane’s event labels sit on — <code class="docutils literal notranslate"><span class="pre">left</span></code> or <code class="docutils literal notranslate"><span class="pre">right</span></code> on a vertical diagram; see <a class="reference internal" href="#orientation"><span class="std std-ref">orientation</span></a>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">size</span></code> — the text size of this lane’s event labels.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">displacement</span></code> — how far this lane’s event labels slide off their own dot.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">first-displacement</span></code> — the same, for the lane’s opening event, the one that would otherwise crowd the replica name.  Left alone it is the orientation’s own: <code class="docutils literal notranslate"><span class="pre">20%</span></code> on a horizontal diagram, where the name sits immediately left of that first label, and <code class="docutils literal notranslate"><span class="pre">0%</span></code> on a vertical one, where the name is before the lane in time and the labels are beside it, so there is nothing to move out of.</p></li>
+<dl class="typst function">
+<dt class="sig sig-object typst" id="typst-function-replica">
+<span class="sig-name descname"><span class="pre">replica</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em>, <em class="sig-param"><span class="pre">..defaults</span></em><span class="sig-paren">)</span><a class="headerlink" href="#typst-function-replica" title="Link to this definition">¶</a></dt>
+<dd><p>A replica lane, and the defaults the local events on it fall back on.  <code class="docutils literal notranslate"><span class="pre">name</span></code> is the id that
+the <code class="docutils literal notranslate"><span class="pre">events</span></code> dictionary keys on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li id="typst-param-replica-label"><p><strong>label</strong> – what the diagram prints for the lane.  Defaults to <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p></li>
+<li id="typst-param-replica-color"><p><strong>color</strong> – the lane’s colour.  Defaults to the next entry of <code class="docutils literal notranslate"><span class="pre">default-palette</span></code>, cycled over
+<a class="reference internal" href="#typst-function-replica" title="replica"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">replicas</span></code></a> in order.</p></li>
+<li id="typst-param-replica-position"><p><strong>position</strong> – <code class="docutils literal notranslate"><span class="pre">above</span></code> or <code class="docutils literal notranslate"><span class="pre">below</span></code>, the side of the timeline this lane’s event labels sit on
+— <code class="docutils literal notranslate"><span class="pre">left</span></code> or <code class="docutils literal notranslate"><span class="pre">right</span></code> on a vertical diagram; see <a class="reference internal" href="#typst-argument-orientation" title="orientation"><code class="xref typst typst-arg docutils literal notranslate"><span class="pre">orientation</span></code></a>.</p></li>
+<li id="typst-param-replica-size"><p><strong>size</strong> – the text size of this lane’s event labels.</p></li>
+<li id="typst-param-replica-displacement"><p><strong>displacement</strong> – how far this lane’s event labels slide off their own dot.</p></li>
+<li id="typst-param-replica-first-displacement"><p><strong>first-displacement</strong> – the same, for the lane’s opening event, the one that would otherwise
+crowd the replica name.  Left alone it is the orientation’s own:
+<code class="docutils literal notranslate"><span class="pre">20%</span></code> on a horizontal diagram, where the name sits immediately left
+of that first label, and <code class="docutils literal notranslate"><span class="pre">0%</span></code> on a vertical one, where the name is
+before the lane in time and the labels are beside it, so there is
+nothing to move out of.  <code class="docutils literal notranslate"><span class="pre">label</span></code>, <code class="docutils literal notranslate"><span class="pre">color</span></code> and <code class="docutils literal notranslate"><span class="pre">position</span></code> may
+also be given positionally, in any order: they are told apart by type,
+so <code class="docutils literal notranslate"><span class="pre">replica(&quot;A&quot;,</span> <span class="pre">below,</span> <span class="pre">red)</span></code> and <code class="docutils literal notranslate"><span class="pre">replica(&quot;B&quot;,</span> <span class="pre">red,</span> <span class="pre">below)</span></code> are
+the same lane.  The rest must be named.</p></li>
 </ul>
-<p><code class="docutils literal notranslate"><span class="pre">label</span></code>, <code class="docutils literal notranslate"><span class="pre">color</span></code> and <code class="docutils literal notranslate"><span class="pre">position</span></code> may also be given positionally, in any order: they are told apart by type, so <code class="docutils literal notranslate"><span class="pre">replica(&quot;A&quot;,</span> <span class="pre">below,</span> <span class="pre">red)</span></code> and <code class="docutils literal notranslate"><span class="pre">replica(&quot;B&quot;,</span> <span class="pre">red,</span> <span class="pre">below)</span></code> are the same lane.  The rest must be named.</p>
-<p>None of these defaults reach a <code class="docutils literal notranslate"><span class="pre">send</span></code> or <code class="docutils literal notranslate"><span class="pre">recv</span></code> label: those keep their own arguments, and their side is chosen to stay clear of the message arrow.</p>
-</section>
-<section id="event">
-<span id="id2"></span><h2><code class="docutils literal notranslate"><span class="pre">event</span></code><a class="headerlink" href="#event" title="Link to this heading">¶</a></h2>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>event(..args)
-</pre></div>
-</div>
+</dd>
+</dl>
+<p>None of these defaults reach a <code class="docutils literal notranslate"><span class="pre">send</span></code> or <code class="docutils literal notranslate"><span class="pre">recv</span></code> label: those keep their own arguments, and
+their side is chosen to stay clear of the message arrow.</p>
+</dd></dl>
+
+<dl class="typst function">
+<dt class="sig sig-object typst" id="typst-function-event">
+<span class="sig-name descname"><span class="pre">event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">..args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#typst-function-event" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <p>A local event on a replica’s timeline.  Its body is the label — content or a plain string.</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">position</span></code> — <code class="docutils literal notranslate"><span class="pre">above</span></code> or <code class="docutils literal notranslate"><span class="pre">below</span></code> the timeline, or <code class="docutils literal notranslate"><span class="pre">left</span></code> or <code class="docutils literal notranslate"><span class="pre">right</span></code> on a vertical diagram; see <a class="reference internal" href="#orientation"><span class="std std-ref">orientation</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">position</span></code> — <a class="reference internal" href="#typst-value-above" title="above"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">above</span></code></a> or <a class="reference internal" href="#typst-value-below" title="below"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">below</span></code></a> the timeline, or <a class="reference internal" href="#typst-value-left" title="left"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">left</span></code></a> or <a class="reference internal" href="#typst-value-right" title="right"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">right</span></code></a>
+on a vertical diagram; see <a class="reference internal" href="#typst-argument-orientation" title="orientation"><code class="xref typst typst-arg docutils literal notranslate"><span class="pre">orientation</span></code></a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">size</span></code> — the label’s text size.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">displacement</span></code> — slides the label along the timeline, out of being centred on its own dot.  A ratio is taken against the label’s own width, so <code class="docutils literal notranslate"><span class="pre">+50%</span></code> leaves the label’s left edge over the dot and <code class="docutils literal notranslate"><span class="pre">-50%</span></code> its right edge, while a length is an exact offset and <code class="docutils literal notranslate"><span class="pre">0</span></code> (or <code class="docutils literal notranslate"><span class="pre">0%</span></code>) centres it.  On a vertical diagram the ratio is taken against the label’s height instead, that being what runs along the timeline there.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">width</span></code> — wraps the label to a fixed width instead of letting it run along the timeline on one line, which is what keeps a long label from crowding its neighbours.  <strong>Named only</strong>: a bare length is read as a <code class="docutils literal notranslate"><span class="pre">displacement</span></code>, that being the far commoner one to reach for.  The box is centred on the mark like any other label, and its contents are left to you — wrap the body in <code class="docutils literal notranslate"><span class="pre">align(center,</span> <span class="pre">..)</span></code> if centred lines read better than the ragged right edge.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">halo</span></code> — how far the label’s backdrop reaches past the label’s own box, which is what breaks an arrow crossing the lane so it does not crowd the glyphs.  <code class="docutils literal notranslate"><span class="pre">auto</span></code> (the default) matches the reach of the disc under a mark, so a label and a dot break an arrow by the same amount; a length sets an exact reach, and <code class="docutils literal notranslate"><span class="pre">none</span></code> drops the backdrop, letting whatever is behind show through.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">fill</span></code> — what that backdrop is painted with.  <code class="docutils literal notranslate"><span class="pre">auto</span></code> (the default) is white, which is what breaks whatever runs behind the label; a paint is used as given, so a label sitting in a wash an <a class="reference internal" href="overlays.html"><span class="doc">overlay</span></a> laid down can be given that same wash and read as part of it rather than as a hole punched in it; and <code class="docutils literal notranslate"><span class="pre">none</span></code> leaves the backdrop unpainted, which is <code class="docutils literal notranslate"><span class="pre">halo:</span> <span class="pre">none</span></code> with the label’s box kept.  A translucent paint hides no more than it says, so an arrow behind a washed label still shows through — and a translucent fill over a wash of its own colour compounds with it into a slightly darker patch.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">displacement</span></code> — slides the label along the timeline, out of being centred on its own dot.  A
+ratio is taken against the label’s own width, so <code class="docutils literal notranslate"><span class="pre">+50%</span></code> leaves the label’s left edge over the
+dot and <code class="docutils literal notranslate"><span class="pre">-50%</span></code> its right edge, while a length is an exact offset and <code class="docutils literal notranslate"><span class="pre">0</span></code> (or <code class="docutils literal notranslate"><span class="pre">0%</span></code>) centres
+it.  On a vertical diagram the ratio is taken against the label’s height instead, that being what
+runs along the timeline there.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">width</span></code> — wraps the label to a fixed width instead of letting it run along the timeline on one
+line, which is what keeps a long label from crowding its neighbours.  <strong>Named only</strong>: a bare
+length is read as a <code class="docutils literal notranslate"><span class="pre">displacement</span></code>, that being the far commoner one to reach for.  The box is
+centred on the mark like any other label, and its contents are left to you — wrap the body in
+<code class="docutils literal notranslate"><span class="pre">align(center,</span> <span class="pre">..)</span></code> if centred lines read better than the ragged right edge.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">halo</span></code> — how far the label’s backdrop reaches past the label’s own box, which is what breaks an
+arrow crossing the lane so it does not crowd the glyphs.  <code class="docutils literal notranslate"><span class="pre">auto</span></code> (the default) matches the reach
+of the disc under a mark, so a label and a dot break an arrow by the same amount; a length sets an
+exact reach, and <code class="docutils literal notranslate"><span class="pre">none</span></code> drops the backdrop, letting whatever is behind show through.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fill</span></code> — what that backdrop is painted with.  <code class="docutils literal notranslate"><span class="pre">auto</span></code> (the default) is white, which is what
+breaks whatever runs behind the label; a paint is used as given, so a label sitting in a wash an
+<a class="reference internal" href="overlays.html"><span class="doc">overlay</span></a> laid down can be given that same wash and read as part of it rather than
+as a hole punched in it; and <code class="docutils literal notranslate"><span class="pre">none</span></code> leaves the backdrop unpainted, which is <code class="docutils literal notranslate"><span class="pre">halo:</span> <span class="pre">none</span></code> with
+the label’s box kept.  A translucent paint hides no more than it says, so an arrow behind a washed
+label still shows through — and a translucent fill over a wash of its own colour compounds with it
+into a slightly darker patch.</p></li>
 </ul>
 <p>The dot itself never moves: it is the event’s place in time, which the layout solves for.</p>
-<p>Arguments are told apart by type, so they may come in any order and every one of them is optional: <code class="docutils literal notranslate"><span class="pre">event(below,</span> <span class="pre">+50%)[AddFile1]</span></code> and <code class="docutils literal notranslate"><span class="pre">event(+50%,</span> <span class="pre">below,</span> <span class="pre">&quot;AddFile1&quot;)</span></code> are the same event.  For the common case of a label and nothing else, bare content or a bare string in an <code class="docutils literal notranslate"><span class="pre">events</span></code> array is shorthand, so <code class="docutils literal notranslate"><span class="pre">[AddFile1]</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;AddFile1&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">event[AddFile1]</span></code> are the same event too.</p>
-</section>
-<section id="send-and-recv">
-<h2><code class="docutils literal notranslate"><span class="pre">send</span></code> and <code class="docutils literal notranslate"><span class="pre">recv</span></code><a class="headerlink" href="#send-and-recv" title="Link to this heading">¶</a></h2>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>send(name,<span class="w"> </span>..args)
-recv(name,<span class="w"> </span>..args)
-</pre></div>
-</div>
-<p>The points where the message <code class="docutils literal notranslate"><span class="pre">name</span></code> leaves one replica and is applied on another.  Exactly one <code class="docutils literal notranslate"><span class="pre">send</span></code> and one <code class="docutils literal notranslate"><span class="pre">recv</span></code> must exist for each name.</p>
-<p>An optional label for the point goes positionally — <code class="docutils literal notranslate"><span class="pre">send(&quot;push&quot;)[pushed]</span></code>, <code class="docutils literal notranslate"><span class="pre">recv(&quot;pull&quot;)[now</span> <span class="pre">duplicated]</span></code> — or as <code class="docutils literal notranslate"><span class="pre">body</span></code>, with <code class="docutils literal notranslate"><span class="pre">size</span></code> setting its text size and <code class="docutils literal notranslate"><span class="pre">at</span></code> overriding the side it sits on.</p>
-<p>Both take <code class="docutils literal notranslate"><span class="pre">displacement</span></code>, which nudges the point off the column it is solved into, in either direction.  A ratio is taken against the column gap.  Only the defaults differ:</p>
+<p>Arguments are told apart by type, so they may come in any order and every one of them is optional:
+<code class="docutils literal notranslate"><span class="pre">event(below,</span> <span class="pre">+50%)[AddFile1]</span></code> and <code class="docutils literal notranslate"><span class="pre">event(+50%,</span> <span class="pre">below,</span> <span class="pre">&quot;AddFile1&quot;)</span></code> are the same event.  For the
+common case of a label and nothing else, bare content or a bare string in an <code class="docutils literal notranslate"><span class="pre">events</span></code> array is
+shorthand, so <code class="docutils literal notranslate"><span class="pre">[AddFile1]</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;AddFile1&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">event[AddFile1]</span></code> are the same event too.</p>
+<dl class="typst function">
+<dt class="sig sig-object typst" id="typst-function-send">
+<span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em>, <em class="sig-param"><span class="pre">..args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#typst-function-send" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="typst function">
+<dt class="sig sig-object typst" id="typst-function-recv">
+<span class="sig-name descname"><span class="pre">recv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em>, <em class="sig-param"><span class="pre">..args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#typst-function-recv" title="Link to this definition">¶</a></dt>
+<dd><p>The points where the message <code class="docutils literal notranslate"><span class="pre">name</span></code> leaves one replica and is applied on another.  Exactly one
+<code class="docutils literal notranslate"><span class="pre">send</span></code> and one <code class="docutils literal notranslate"><span class="pre">recv</span></code> must exist for each name.</p>
+<p>An optional label for the point goes positionally — <code class="docutils literal notranslate"><span class="pre">send(&quot;push&quot;)[pushed]</span></code>, <code class="docutils literal notranslate"><span class="pre">recv(&quot;pull&quot;)[now</span>
+<span class="pre">duplicated]</span></code> — or as <code class="docutils literal notranslate"><span class="pre">body</span></code>, with <code class="docutils literal notranslate"><span class="pre">size</span></code> setting its text size and <code class="docutils literal notranslate"><span class="pre">at</span></code> overriding the
+side it sits on.</p>
+<p>Both take <code class="docutils literal notranslate"><span class="pre">displacement</span></code>, which nudges the point off the column it is solved into, in either
+direction.  A ratio is taken against the column gap.  Only the defaults differ:</p>
 <ul class="simple">
-<li><p>on a <code class="docutils literal notranslate"><span class="pre">recv</span></code> it is <code class="docutils literal notranslate"><span class="pre">1cm</span></code> — how far right of its <code class="docutils literal notranslate"><span class="pre">send</span></code> the point lands whenever nothing on its own replica pushes it further, and enough to lean the arrow forward.  <code class="docutils literal notranslate"><span class="pre">recv(...,</span> <span class="pre">displacement:</span> <span class="pre">none)</span></code> leaves it on its column, drawing a vertical arrow when the receiving replica has nothing else competing for that column.</p></li>
-<li><p>on a <code class="docutils literal notranslate"><span class="pre">send</span></code> it is <code class="docutils literal notranslate"><span class="pre">none</span></code> — a send sits on its own column unless you say otherwise, since it is the receive that leans a message forward.  Reach for it to tilt an arrow away from whatever a vertical line would otherwise run through, or to separate two sends the solver put in one column.</p></li>
+<li><p>on a <code class="docutils literal notranslate"><span class="pre">recv</span></code> it is <code class="docutils literal notranslate"><span class="pre">1cm</span></code> — how far right of its <code class="docutils literal notranslate"><span class="pre">send</span></code> the point lands whenever nothing on
+its own replica pushes it further, and enough to lean the arrow forward.  <code class="docutils literal notranslate"><span class="pre">recv(...,</span>
+<span class="pre">displacement:</span> <span class="pre">none)</span></code> leaves it on its column, drawing a vertical arrow when the receiving
+replica has nothing else competing for that column.</p></li>
+<li><p>on a <code class="docutils literal notranslate"><span class="pre">send</span></code> it is <code class="docutils literal notranslate"><span class="pre">none</span></code> — a send sits on its own column unless you say otherwise, since it
+is the receive that leans a message forward.  Reach for it to tilt an arrow away from whatever
+a vertical line would otherwise run through, or to separate two sends the solver put in one
+column.</p></li>
 </ul>
-<p>Both also take <code class="docutils literal notranslate"><span class="pre">halo</span></code> and <code class="docutils literal notranslate"><span class="pre">fill</span></code>, the label’s backdrop, which mean exactly what they mean on an <a class="reference internal" href="#event"><span class="std std-ref">event</span></a>.</p>
+<p>Both also take <code class="docutils literal notranslate"><span class="pre">halo</span></code> and <code class="docutils literal notranslate"><span class="pre">fill</span></code>, the label’s backdrop, which mean exactly what they mean on
+an <a class="reference internal" href="#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">send</span></code> also takes:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">label</span></code> — labels the arrow itself rather than the point, and keeps its own styling.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">delay</span></code> — the minimum number of columns the matching <code class="docutils literal notranslate"><span class="pre">recv</span></code> is pushed forward.  <code class="docutils literal notranslate"><span class="pre">0</span></code> (the default) leaves the two in one column, where the receive’s own <code class="docutils literal notranslate"><span class="pre">displacement</span></code> is what leans the arrow forward; <code class="docutils literal notranslate"><span class="pre">1</span></code> or more buys the message a whole column of flight.</p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li id="typst-param-recv-label"><p><strong>label</strong> – labels the arrow itself rather than the point, and keeps its own styling.</p></li>
+<li id="typst-param-recv-delay"><p><strong>delay</strong> – the minimum number of columns the matching <code class="docutils literal notranslate"><span class="pre">recv</span></code> is pushed forward.  <code class="docutils literal notranslate"><span class="pre">0</span></code>
+(the default) leaves the two in one column, where the receive’s own
+<code class="docutils literal notranslate"><span class="pre">displacement</span></code> is what leans the arrow forward; <code class="docutils literal notranslate"><span class="pre">1</span></code> or more buys the message a
+whole column of flight.  The nudge is a drawing offset the column solver knows
+nothing about, so a negative one wide enough to put a point visually behind its own
+counterpart does <em>not</em> trip the causal-cycle check.  It is equally outside what the
+drawing sizes itself to, so a displacement large enough to push a bodiless mark
+left of where its lane starts will leave it overhanging the replica name.</p></li>
 </ul>
-<p>The nudge is a drawing offset the column solver knows nothing about, so a negative one wide enough to put a point visually behind its own counterpart does <em>not</em> trip the causal-cycle check.  It is equally outside what the drawing sizes itself to, so a displacement large enough to push a bodiless mark left of where its lane starts will leave it overhanging the replica name.</p>
-</section>
-<section id="sync">
-<h2><code class="docutils literal notranslate"><span class="pre">sync</span></code><a class="headerlink" href="#sync" title="Link to this heading">¶</a></h2>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>sync(name,<span class="w"> </span>..args)
-</pre></div>
-</div>
-<p>One end of a two-way exchange.  In a single round trip each side gives the other the events it lacks, so both ends come out of the exchange holding the same events — which is not the same as holding the same state, so each end takes its own label.  A <code class="docutils literal notranslate"><span class="pre">send</span></code>/<code class="docutils literal notranslate"><span class="pre">recv</span></code> pair is the one-way message by comparison.</p>
-<p>Exactly two <code class="docutils literal notranslate"><span class="pre">sync</span></code> points must carry the same name, and they must sit on two different replicas.  The pair is drawn as one arrow with a head at each end, and each end as a hollow mark with a dot of ink inside it, narrower than the timeline it sits on: neither side of an exchange is the sender, so neither is drawn smaller the way a <code class="docutils literal notranslate"><span class="pre">send</span></code> is, and the inner dot is what tells a sync’s end from a <code class="docutils literal notranslate"><span class="pre">recv</span></code>.  The two ends share a column: neither side can finish the exchange before the other one starts it.  A name cannot be both a <code class="docutils literal notranslate"><span class="pre">sync</span></code> and a <code class="docutils literal notranslate"><span class="pre">send</span></code>/<code class="docutils literal notranslate"><span class="pre">recv</span></code> message.</p>
-<p>An optional label for the point goes positionally — <code class="docutils literal notranslate"><span class="pre">sync(&quot;push&quot;)[rolled</span> <span class="pre">back]</span></code> — or as <code class="docutils literal notranslate"><span class="pre">body</span></code>, with <code class="docutils literal notranslate"><span class="pre">size</span></code> setting its text size, <code class="docutils literal notranslate"><span class="pre">at</span></code> forcing the side the label sits on, and <code class="docutils literal notranslate"><span class="pre">halo</span></code> and <code class="docutils literal notranslate"><span class="pre">fill</span></code> setting its backdrop as they do on an <a class="reference internal" href="#event"><span class="std std-ref">event</span></a>.  <code class="docutils literal notranslate"><span class="pre">label</span></code> instead labels the arrow itself; either end may carry it, and the first one given wins.  <code class="docutils literal notranslate"><span class="pre">displacement</span></code> nudges this end off the shared column, which tilts the arrow away from whatever the vertical line would otherwise run through; it is a drawing offset and says nothing about the order.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="typst function">
+<dt class="sig sig-object typst" id="typst-function-sync">
+<span class="sig-name descname"><span class="pre">sync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em>, <em class="sig-param"><span class="pre">..args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#typst-function-sync" title="Link to this definition">¶</a></dt>
+<dd><p>One end of a two-way exchange.  In a single round trip each side gives the other the events it
+lacks, so both ends come out of the exchange holding the same events — which is not the same as
+holding the same state, so each end takes its own label.  A <code class="docutils literal notranslate"><span class="pre">send</span></code>/<code class="docutils literal notranslate"><span class="pre">recv</span></code> pair is the one-way
+message by comparison.</p>
+<p>Exactly two <code class="docutils literal notranslate"><span class="pre">sync</span></code> points must carry the same name, and they must sit on two different
+replicas.  The pair is drawn as one arrow with a head at each end, and each end as a hollow mark
+with a dot of ink inside it, narrower than the timeline it sits on: neither side of an exchange
+is the sender, so neither is drawn smaller the way a <code class="docutils literal notranslate"><span class="pre">send</span></code> is, and the inner dot is what tells
+a sync’s end from a <code class="docutils literal notranslate"><span class="pre">recv</span></code>.  The two ends share a column: neither side can finish the exchange
+before the other one starts it.  A name cannot be both a <code class="docutils literal notranslate"><span class="pre">sync</span></code> and a <code class="docutils literal notranslate"><span class="pre">send</span></code>/<code class="docutils literal notranslate"><span class="pre">recv</span></code>
+message.</p>
+<p>An optional label for the point goes positionally — <code class="docutils literal notranslate"><span class="pre">sync(&quot;push&quot;)[rolled</span> <span class="pre">back]</span></code> — or as
+<code class="docutils literal notranslate"><span class="pre">body</span></code>, with <code class="docutils literal notranslate"><span class="pre">size</span></code> setting its text size, <code class="docutils literal notranslate"><span class="pre">at</span></code> forcing the side the label sits on, and
+<code class="docutils literal notranslate"><span class="pre">halo</span></code> and <code class="docutils literal notranslate"><span class="pre">fill</span></code> setting its backdrop as they do on an <a class="reference internal" href="#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a>.  <code class="docutils literal notranslate"><span class="pre">label</span></code> instead
+labels the arrow itself; either end may carry it, and the first one given wins.  <code class="docutils literal notranslate"><span class="pre">displacement</span></code> nudges this end off the shared column, which tilts the arrow away from whatever
+the vertical line would otherwise run through; it is a drawing offset and says nothing about the
+order.</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span><span class="nf">#lamport-diagram</span><span class="p">(</span>
 <span class="w">  </span><span class="nv">replicas</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="s2">"Client A"</span><span class="p">,</span><span class="w"> </span><span class="nf">replica</span><span class="p">(</span><span class="s2">"Server"</span><span class="p">,</span><span class="w"> </span><span class="nv">below</span><span class="p">),</span><span class="w"> </span><span class="nf">replica</span><span class="p">(</span><span class="s2">"Client B"</span><span class="p">,</span><span class="w"> </span><span class="nv">below</span><span class="p">)),</span>
 <span class="w">  </span><span class="nv">events</span><span class="p">:</span><span class="w"> </span><span class="p">(</span>
@@ -398,43 +541,72 @@ recv(name,<span class="w"> </span>..args)
 <span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="idle">
-<h2><code class="docutils literal notranslate"><span class="pre">idle</span></code><a class="headerlink" href="#idle" title="Link to this heading">¶</a></h2>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>idle
-idle(n)
-</pre></div>
-</div>
-<p>Spacing to convey idle time passing: <code class="docutils literal notranslate"><span class="pre">n</span></code> columns of ordinary timeline with nothing drawn on them.  The specific semantics are for the author to explain.  The solver counts them, so the next event on this lane lands <code class="docutils literal notranslate"><span class="pre">n</span></code> columns later.</p>
-<p>Usable bare or called, so <code class="docutils literal notranslate"><span class="pre">idle</span></code>, <code class="docutils literal notranslate"><span class="pre">idle()</span></code> and <code class="docutils literal notranslate"><span class="pre">idle(2)</span></code> are the same thing: two columns is enough for the stretch to read as a pause rather than as the ordinary spacing between two events.</p>
-<p><code class="docutils literal notranslate"><span class="pre">gap</span></code> is the sibling that <em>shows</em> the stretch, with dots, for time the diagram elides; <code class="docutils literal notranslate"><span class="pre">idle</span></code> shows nothing, because nothing happened.</p>
-</section>
-<section id="gap">
-<h2><code class="docutils literal notranslate"><span class="pre">gap</span></code><a class="headerlink" href="#gap" title="Link to this heading">¶</a></h2>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>gap
-gap(size)
-</pre></div>
-</div>
-<p>Elided time: a stretch of dotted timeline standing for events the diagram does not show, taking one column of its own.  The size is how much of that column the dots span — <code class="docutils literal notranslate"><span class="pre">&quot;small&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;medium&quot;</span></code> (the default) or <code class="docutils literal notranslate"><span class="pre">&quot;large&quot;</span></code>, or a length or a ratio of the column gap for an exact span, which past a full column runs into the neighbouring marks.</p>
+</dd></dl>
+
+<dl class="typst function">
+<dt class="sig sig-object typst" id="typst-function-idle">
+<span class="sig-name descname"><span class="pre">idle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">n</span></em><span class="sig-paren">)</span><a class="headerlink" href="#typst-function-idle" title="Link to this definition">¶</a></dt>
+<dd><p>Spacing to convey idle time passing: <code class="docutils literal notranslate"><span class="pre">n</span></code> columns of ordinary timeline with nothing drawn on
+them.  The specific semantics are for the author to explain.  The solver counts them, so the next
+event on this lane lands <code class="docutils literal notranslate"><span class="pre">n</span></code> columns later.</p>
+<p>Usable bare or called, so <code class="docutils literal notranslate"><span class="pre">idle</span></code>, <code class="docutils literal notranslate"><span class="pre">idle()</span></code> and <code class="docutils literal notranslate"><span class="pre">idle(2)</span></code> are the same thing: two columns is
+enough for the stretch to read as a pause rather than as the ordinary spacing between two events.</p>
+<p><code class="docutils literal notranslate"><span class="pre">gap</span></code> is the sibling that <em>shows</em> the stretch, with dots, for time the diagram elides; <code class="docutils literal notranslate"><span class="pre">idle</span></code>
+shows nothing, because nothing happened.</p>
+</dd></dl>
+
+<dl class="typst function">
+<dt class="sig sig-object typst" id="typst-function-gap">
+<span class="sig-name descname"><span class="pre">gap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#typst-function-gap" title="Link to this definition">¶</a></dt>
+<dd><p>Elided time: a stretch of dotted timeline standing for events the diagram does not show, taking
+one column of its own.  The size is how much of that column the dots span — <code class="docutils literal notranslate"><span class="pre">&quot;small&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;medium&quot;</span></code> (the default) or <code class="docutils literal notranslate"><span class="pre">&quot;large&quot;</span></code>, or a length or a ratio of the column gap for an exact
+span, which past a full column runs into the neighbouring marks.</p>
 <p>Usable bare or called, so <code class="docutils literal notranslate"><span class="pre">gap</span></code>, <code class="docutils literal notranslate"><span class="pre">gap()</span></code> and <code class="docutils literal notranslate"><span class="pre">gap(&quot;medium&quot;)</span></code> are the same thing.</p>
-</section>
-<section id="above-and-below">
-<h2><code class="docutils literal notranslate"><span class="pre">above</span></code> and <code class="docutils literal notranslate"><span class="pre">below</span></code><a class="headerlink" href="#above-and-below" title="Link to this heading">¶</a></h2>
-<p>These are <code class="docutils literal notranslate"><span class="pre">top</span></code> and <code class="docutils literal notranslate"><span class="pre">bottom</span></code> under names that read better for a diagram of one horizontal line per replica, and they <em>are</em> those same values, so either spelling works wherever a side is asked for.</p>
-<p><code class="docutils literal notranslate"><span class="pre">left</span></code> and <code class="docutils literal notranslate"><span class="pre">right</span></code> are re-exported alongside them, so one import line covers every side a diagram may ask for whichever way it runs.  They are the built-in alignments of those names.</p>
-</section>
-<section id="default-palette">
-<h2><code class="docutils literal notranslate"><span class="pre">default-palette</span></code><a class="headerlink" href="#default-palette" title="Link to this heading">¶</a></h2>
-<p>The lane colours, cycled over <code class="docutils literal notranslate"><span class="pre">replicas</span></code> in order.  Override per replica with <code class="docutils literal notranslate"><span class="pre">replica(&quot;A&quot;,</span> <span class="pre">red)</span></code>.</p>
-</section>
-<section id="overlays">
-<h2><code class="docutils literal notranslate"><span class="pre">overlays</span></code><a class="headerlink" href="#overlays" title="Link to this heading">¶</a></h2>
-<p>An escape hatch for drawing arbitrary CeTZ into a diagram, in the diagram’s own coordinates, addressing the diagram’s own points, and at a chosen depth — a band behind a stretch of time, a ring around the event that went wrong, a note that breaks around the lanes the way its own arrow does.  It has a page of its own: <a class="reference internal" href="overlays.html"><span class="doc">Overlays</span></a>.</p>
-</section>
-<section id="dependencies">
-<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">¶</a></h2>
-<p>Drawing is done with <a class="reference external" href="https://typst.app/universe/package/cetz/">CeTZ</a> 0.5.2.  The minimum Typst compiler is 0.14.0.</p>
-</section>
+</dd></dl>
+
+<dl class="typst value">
+<dt class="sig sig-object typst" id="typst-value-above">
+<span class="sig-name descname"><span class="pre">above</span></span><span class="property"> <span class="pre">(value)</span></span><a class="headerlink" href="#typst-value-above" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="typst value">
+<dt class="sig sig-object typst" id="typst-value-below">
+<span class="sig-name descname"><span class="pre">below</span></span><span class="property"> <span class="pre">(value)</span></span><a class="headerlink" href="#typst-value-below" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="typst value">
+<dt class="sig sig-object typst" id="typst-value-left">
+<span class="sig-name descname"><span class="pre">left</span></span><span class="property"> <span class="pre">(value)</span></span><a class="headerlink" href="#typst-value-left" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="typst value">
+<dt class="sig sig-object typst" id="typst-value-right">
+<span class="sig-name descname"><span class="pre">right</span></span><span class="property"> <span class="pre">(value)</span></span><a class="headerlink" href="#typst-value-right" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#typst-value-above" title="above"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">above</span></code></a> and <a class="reference internal" href="#typst-value-below" title="below"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">below</span></code></a> are <code class="docutils literal notranslate"><span class="pre">top</span></code> and <code class="docutils literal notranslate"><span class="pre">bottom</span></code> under names that read better for a
+diagram of one horizontal line per replica, and they <em>are</em> those same values, so either spelling
+works wherever a side is asked for.</p>
+<p><a class="reference internal" href="#typst-value-left" title="left"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">left</span></code></a> and <a class="reference internal" href="#typst-value-right" title="right"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">right</span></code></a> are re-exported alongside them, so one import line covers every
+side a diagram may ask for whichever way it runs.  They are the built-in alignments of those
+names.</p>
+</dd></dl>
+
+<dl class="typst value">
+<dt class="sig sig-object typst" id="typst-value-default-palette">
+<span class="sig-name descname"><span class="pre">default-palette</span></span><span class="property"> <span class="pre">(value)</span></span><a class="headerlink" href="#typst-value-default-palette" title="Link to this definition">¶</a></dt>
+<dd><p>The lane colours, cycled over <a class="reference internal" href="#typst-function-replica" title="replica"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">replicas</span></code></a> in order.  Override per replica with
+<code class="docutils literal notranslate"><span class="pre">replica(&quot;A&quot;, red)</span></code>.</p>
+</dd></dl>
+
+<dl class="typst argument">
+<dt class="sig sig-object typst" id="typst-argument-overlays">
+<span class="sig-name descname"><span class="pre">overlays</span></span><span class="property"> <span class="pre">(argument)</span></span><a class="headerlink" href="#typst-argument-overlays" title="Link to this definition">¶</a></dt>
+<dd><p>An escape hatch for drawing arbitrary CeTZ into a diagram, in the diagram’s own coordinates,
+addressing the diagram’s own points, and at a chosen depth — a band behind a stretch of time, a
+ring around the event that went wrong, a note that breaks around the lanes the way its own arrow
+does.  It has a page of its own: <a class="reference internal" href="overlays.html"><span class="doc">Overlays</span></a>.</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -493,18 +665,27 @@ gap(size)
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Reference</a><ul>
-<li><a class="reference internal" href="#lamport-diagram"><code class="docutils literal notranslate"><span class="pre">lamport-diagram</span></code></a></li>
-<li><a class="reference internal" href="#orientation"><code class="docutils literal notranslate"><span class="pre">orientation</span></code></a></li>
-<li><a class="reference internal" href="#replica"><code class="docutils literal notranslate"><span class="pre">replica</span></code></a></li>
-<li><a class="reference internal" href="#event"><code class="docutils literal notranslate"><span class="pre">event</span></code></a></li>
-<li><a class="reference internal" href="#send-and-recv"><code class="docutils literal notranslate"><span class="pre">send</span></code> and <code class="docutils literal notranslate"><span class="pre">recv</span></code></a></li>
-<li><a class="reference internal" href="#sync"><code class="docutils literal notranslate"><span class="pre">sync</span></code></a></li>
-<li><a class="reference internal" href="#idle"><code class="docutils literal notranslate"><span class="pre">idle</span></code></a></li>
-<li><a class="reference internal" href="#gap"><code class="docutils literal notranslate"><span class="pre">gap</span></code></a></li>
-<li><a class="reference internal" href="#above-and-below"><code class="docutils literal notranslate"><span class="pre">above</span></code> and <code class="docutils literal notranslate"><span class="pre">below</span></code></a></li>
-<li><a class="reference internal" href="#default-palette"><code class="docutils literal notranslate"><span class="pre">default-palette</span></code></a></li>
-<li><a class="reference internal" href="#overlays"><code class="docutils literal notranslate"><span class="pre">overlays</span></code></a></li>
-<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li><a class="reference internal" href="#typst-function-lamport-diagram"><code class="docutils literal notranslate"><span class="pre">lamport-diagram()</span></code></a></li>
+<li><a class="reference internal" href="#typst-argument-orientation"><code class="docutils literal notranslate"><span class="pre">orientation</span></code></a></li>
+<li><a class="reference internal" href="#typst-value-horizontal"><code class="docutils literal notranslate"><span class="pre">horizontal</span></code></a></li>
+<li><a class="reference internal" href="#typst-value-vertical"><code class="docutils literal notranslate"><span class="pre">vertical</span></code></a></li>
+<li><a class="reference internal" href="#typst-value-rightwards"><code class="docutils literal notranslate"><span class="pre">rightwards</span></code></a></li>
+<li><a class="reference internal" href="#typst-value-leftwards"><code class="docutils literal notranslate"><span class="pre">leftwards</span></code></a></li>
+<li><a class="reference internal" href="#typst-value-downwards"><code class="docutils literal notranslate"><span class="pre">downwards</span></code></a></li>
+<li><a class="reference internal" href="#typst-value-upwards"><code class="docutils literal notranslate"><span class="pre">upwards</span></code></a></li>
+<li><a class="reference internal" href="#typst-function-replica"><code class="docutils literal notranslate"><span class="pre">replica()</span></code></a></li>
+<li><a class="reference internal" href="#typst-function-event"><code class="docutils literal notranslate"><span class="pre">event()</span></code></a></li>
+<li><a class="reference internal" href="#typst-function-send"><code class="docutils literal notranslate"><span class="pre">send()</span></code></a></li>
+<li><a class="reference internal" href="#typst-function-recv"><code class="docutils literal notranslate"><span class="pre">recv()</span></code></a></li>
+<li><a class="reference internal" href="#typst-function-sync"><code class="docutils literal notranslate"><span class="pre">sync()</span></code></a></li>
+<li><a class="reference internal" href="#typst-function-idle"><code class="docutils literal notranslate"><span class="pre">idle()</span></code></a></li>
+<li><a class="reference internal" href="#typst-function-gap"><code class="docutils literal notranslate"><span class="pre">gap()</span></code></a></li>
+<li><a class="reference internal" href="#typst-value-above"><code class="docutils literal notranslate"><span class="pre">above</span></code></a></li>
+<li><a class="reference internal" href="#typst-value-below"><code class="docutils literal notranslate"><span class="pre">below</span></code></a></li>
+<li><a class="reference internal" href="#typst-value-left"><code class="docutils literal notranslate"><span class="pre">left</span></code></a></li>
+<li><a class="reference internal" href="#typst-value-right"><code class="docutils literal notranslate"><span class="pre">right</span></code></a></li>
+<li><a class="reference internal" href="#typst-value-default-palette"><code class="docutils literal notranslate"><span class="pre">default-palette</span></code></a></li>
+<li><a class="reference internal" href="#typst-argument-overlays"><code class="docutils literal notranslate"><span class="pre">overlays</span></code></a></li>
 </ul>
 </li>
 </ul>

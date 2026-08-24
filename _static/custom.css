@@ -46,3 +46,28 @@ code, kbd, samp, pre {
     font-weight: 500;
 }
 
+/* A literal written into a sentence -- ``length: 1cm`` -- is part of that sentence, so it is set at
+   the size of the sentence rather than at the theme's 81.25%.  Inconsolata's x-height is smaller
+   than Literata's, so at a matched em it still reads as slightly quieter than the prose around it.
+   A full listing keeps its own smaller size, which `code-font-size` in conf.py sets. */
+code.literal {
+    font-size: 1em;
+}
+
+/* The sidebar brand is the mark and the name on one line.  Furo stacks the brand in a column, for a
+   logo centred above the title; this turns it on its side, which is all the arrangement needs.  The
+   name keeps the vertical margins the theme gives it, so the brand still sits where it did. */
+.sidebar-brand {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+/* The mark is drawn 32 units square but its two lanes only reach across the middle 24, so a box
+   matched to the name's cap height would leave it looking small.  1.6rem against the name's 1.5
+   is what makes the two read as the same size. */
+.sidebar-icon {
+    flex: none;
+    width: 1.6rem;
+    height: 1.6rem;
+}

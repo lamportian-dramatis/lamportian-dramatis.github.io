@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>lamportian-dramatis</title>
+  <!--
+    The diagram reduced to what survives a browser tab: two timelines running to their arrowheads,
+    an event on each, in the first two colours of the default palette — the same blue and amber the
+    legend gives R1 and R2.
+
+    Every coordinate is chosen for the 16 px grid, which is half of this one.  A rail is 4 units wide
+    on an even centre, so it lands on two whole pixels rather than smearing across three.  An event
+    is r=4.5, a little over twice the rail: any smaller and it reads as a bulge in the line rather
+    than a mark on it, any larger and it runs into the arrowhead.  The two events sit at different
+    times, because level ones would read as a sync rather than as two local events.
+
+    The arrowhead is longer than it is wide, which costs nothing at 16 px and is what keeps the mark
+    from turning blunt in the 48 px entry of the icon.
+  -->
+  <g stroke-width="4" stroke-linecap="butt">
+    <line x1="2" y1="8" x2="23" y2="8" stroke="#1f6feb"/>
+    <line x1="2" y1="24" x2="23" y2="24" stroke="#a16207"/>
+  </g>
+  <polygon points="30,8 23,12 23,4" fill="#1f6feb"/>
+  <polygon points="30,24 23,28 23,20" fill="#a16207"/>
+  <circle cx="10" cy="8" r="4.5" fill="#1f6feb"/>
+  <circle cx="16" cy="24" r="4.5" fill="#a16207"/>
+</svg>
