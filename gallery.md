@@ -6,7 +6,7 @@ title: Gallery
 
 Every example that ships with the package, each one a complete standalone document.  The pictures on the other pages are drawn by these, and this is where their source lives.
 
-They compile against the published package by its exact version, the way the [Typst Universe](https://typst.app/universe/package/lamportian-dramatis/) linter asks an example to, so any of them can be copied into a file and compiled as it stands.
+They compile against the published package by its exact version, the way the [Typst Universe](https://typst.app/universe/package/lamportian-dramatis/) linter asks an example to.  Four of the six stand on their own; the two vertical ones import the arguments their horizontal sibling declares and override the orientation, that being the whole of the difference between the two pictures.
 
 ## [`gorgeous.typ`](https://github.com/mvaled/lamportian-dramatis/blob/main/gallery/gorgeous.typ)
 
@@ -18,7 +18,15 @@ Three replicas, two-way exchanges, a one-way message and a label saying what wen
 
 ![The same scenario drawn vertically, the timelines running down the page](gallery/vertical.png)
 
-The same scenario under `orientation: vertical`, with nothing else changed: the timelines lay out as columns, the replicas stack rightwards, and each label takes a side that a vertical lane has room for.  See [`orientation`]({% link reference.md %}#orientation).
+The same scenario under `orientation: vertical`, and *nothing* else changed — the arguments are the ones `gorgeous.typ` declares:
+
+```typ
+#import "gorgeous.typ": diagram
+
+#lamport-diagram(..diagram, orientation: vertical)
+```
+
+The timelines lay out as columns, the replicas stack rightwards, and the label sides that the horizontal diagram names are dropped back to the side a vertical lane has room for, rather than having to be restated.  See [`orientation`]({% link reference.md %}#orientation).
 
 ## [`overlays.typ`](https://github.com/mvaled/lamportian-dramatis/blob/main/gallery/overlays.typ)
 
@@ -30,7 +38,7 @@ The future cone of `A.2`, drawn at `backdrops` so the lanes cross it without fad
 
 ![The same future cone in a vertical diagram, the cone opening downwards](gallery/vertical-overlays.png)
 
-The same cone in a vertical diagram.  The drawing is written in columns and lanes rather than in page coordinates, so it turns with the diagram instead of being redrawn for it — which is the point of [staying orientation-independent]({% link overlays.md %}#staying-orientation-independent).
+The same cone in a vertical diagram, imported from `overlays.typ` the same way — the overlay included.  The drawing is written in columns and lanes rather than in page coordinates, so it turns with the diagram instead of being redrawn for it, which is the point of [staying orientation-independent]({% link overlays.md %}#staying-orientation-independent).
 
 ## [`legend.typ`](https://github.com/mvaled/lamportian-dramatis/blob/main/gallery/legend.typ)
 
