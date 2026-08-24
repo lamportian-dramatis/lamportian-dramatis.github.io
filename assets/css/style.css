@@ -237,6 +237,15 @@ img {
     border-radius: var(--radius-lg);
 }
 
+/* A picture alone on its line is a figure and not a word, so it sits centred rather than ragged
+   against the left edge.  Only when it is alone in its paragraph: an image written inside a sentence
+   stays inline where it was put. */
+main p > img:only-child {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 hr {
     border: none;
     border-top: 1px solid var(--color-border);
