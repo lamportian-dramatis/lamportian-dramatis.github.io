@@ -67,8 +67,6 @@ A side the orientation has no room for — `above` on a vertical diagram, `left`
 
 ![The worked example from the front page, drawn vertically](gallery/vertical.png)
 
-That is [`gallery/vertical.typ`](https://github.com/mvaled/lamportian-dramatis/blob/main/gallery/vertical.typ).
-
 ## `replica`
 
 ```typ

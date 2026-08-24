@@ -17,6 +17,24 @@ lamport-diagram(
 )
 ```
 
+## Terminology, values and types
+
+The entries of the *locator* — the dictionary a drawing is handed, described under [Shape](#shape) — take and answer in a handful of kinds of value, and the kinds are worth keeping apart:
+
+![Two replicas crossed by dotted guides: one at column 1, which is time 1 as well; a pair at the message, one on the column the solver settled on and one on the time the receiving end was drawn at, with the displacement between the two measured; and one running along lane 0.5, between the replicas](gallery/types.png)
+
+- A **time** is a position along logical time.  It is a real number placed along the axis the timelines run on.  `0` is the *first column*: the solver starts every point there and only ever pushes one later, so nothing is solved before `0` — though a lane whose opening point waits on a message does start further along than that.  Times are what let a drawing be placed at, before or after any moment the diagram holds — `-0.5` falls before the first column, and `1.5` midway between the second column and the third (if any).
+
+- A **column** is one of the whole times the solver hands out, `0` up to `ncols - 1`.  Every column is a time; most times are not columns.  This is the discrete thing the layout reasons about, and the only kind that can answer "did these two land at the same moment".  Columns count from `0`, so a lane's opening point sits in column `0` unless a message it receives pushes it later.  That is not the numbering an index uses — see [addressing a point](#addressing-a-point) — and `column("A", 1)` says "the first item written on A", by an index counting from `1`, and answers `0`, the column the solver put it in.  An index says where in the lane's array a point stands; a column says when it happens.
+
+- A **lane** is a position on the replica axis, a real number: `0` is the first replica, `1` the second, `0.5` between them, and `-0.4` a little to the outside of the first.  It is a position and not an index, so `-1` is one lane clear of the first rather than the last one; for that, ask `replicas` how many there are.  A replica id is accepted wherever a lane is.
+
+- A **coordinate** is a CeTZ point, `(x, y)` in canvas centimetres.  It is what every CeTZ function wants, and the only kind here that knows which way the diagram runs.
+
+- A **rectangle** is a pair of coordinates — two opposite corners — handed back as `arguments`, so it spreads straight into `rect`.  It is measured off what the diagram actually drew, and it takes a `pad` that grows it.
+
+A time and a lane together make a coordinate, and `point` is the one entry that does that conversion.  Everything else either hands you a coordinate outright or stays in times and lanes, where it survives a change of orientation.  A rectangle hands out coordinates and survives it too, because what fixes one is the part of the diagram it is asked for and the pad it is grown by, and neither of those is a position on the page.
+
 ## Shape
 
 `overlays` takes `none`, a bare CeTZ body, a function of one argument — the *locator* — returning a CeTZ body, or a dictionary from layer name to either of those.  A body or a function on its own goes in the `foreground`, that being what you want when you have not thought about depth.
@@ -148,26 +166,6 @@ column("B", 2)    // and the same wherever else a point is asked for
 Ids are strings and indices are integers, so the two never need telling apart by hand.  An index is what to reach for when naming a one-off is not worth it — bearing in mind that it moves when you insert an event above it, which is exactly what an id does not do.
 
 ## What the locator holds
-
-### Values
-
-![Two replicas crossed by dotted guides: one at column 1, which is time 1 as well; a pair at the message, one on the column the solver settled on and one on the time the receiving end was drawn at, with the displacement between the two measured; and one running along lane 0.5, between the replicas](gallery/types.png)
-
-That is [`gallery/types.typ`](https://github.com/mvaled/lamportian-dramatis/blob/main/gallery/types.typ), and every guide in it is drawn from the entries below.
-
-Five kinds of value pass through the locator, and it is worth keeping them apart.
-
-- A **time** is a position along logical time.  It is a real number placed along the axis the timelines run on.  `0` is the *first column*: the solver starts every point there and only ever pushes one later, so nothing is solved before `0` — though a lane whose opening point waits on a message does start further along than that.  Times are what let a drawing be placed at, before or after any moment the diagram holds — `-0.5` falls before the first column, and `1.5` midway between the second column and the third (if any).
-
-- A **column** is one of the whole times the solver hands out, `0` up to `ncols - 1`.  Every column is a time; most times are not columns.  This is the discrete thing the layout reasons about, and the only kind that can answer "did these two land at the same moment".  Columns count from `0`, so a lane's opening point sits in column `0` unless a message it receives pushes it later.  That is not the numbering an index uses: `column("A", 1)` says "the first item written on A", by an index counting from `1`, and answers `0`, the column the solver put it in.  An index says where in the lane's array a point stands; a column says when it happens.
-
-- A **lane** is a position on the replica axis, a real number: `0` is the first replica, `1` the second, `0.5` between them, and `-0.4` a little to the outside of the first.  It is a position and not an index, so `-1` is one lane clear of the first rather than the last one; for that, ask `replicas` how many there are.  A replica id is accepted wherever a lane is.
-
-- A **coordinate** is a CeTZ point, `(x, y)` in canvas centimetres.  It is what every CeTZ function wants, and the only kind here that knows which way the diagram runs.
-
-- A **rectangle** is a pair of coordinates — two opposite corners — handed back as `arguments`, so it spreads straight into `rect`.  It is measured off what the diagram actually drew, and it takes a `pad` that grows it.
-
-A time and a lane together make a coordinate, and `point` is the one entry that does that conversion.  Everything else either hands you a coordinate outright or stays in times and lanes, where it survives a change of orientation.  A rectangle hands out coordinates and survives it too, because what fixes one is the part of the diagram it is asked for and the pad it is grown by, and neither of those is a position on the page.
 
 ### `mark(replica, id-or-index)`
 
@@ -366,7 +364,7 @@ That line lies along the lane, so the layer decides whether it shows at all: at 
 
 ![The future cone of one event, washed behind the lanes, with a ring round the event itself](gallery/overlays.png)
 
-That is [`gallery/overlays.typ`](https://github.com/mvaled/lamportian-dramatis/blob/main/gallery/overlays.typ): the future cone of `A.2`, drawn at `backdrops` so the lanes cross it without fading a stripe through it, and a ring at `marks` so `A.2`'s own label stays legible over it.
+The future cone of `A.2`, drawn at `backdrops` so the lanes cross it without fading a stripe through it, and a ring at `marks` so `A.2`'s own label stays legible over it.
 
 ```typ
 #import "@preview/lamportian-dramatis:0.2.0": lamport-diagram, replica, event, send, recv, sync, above, below, draw
@@ -415,7 +413,3 @@ That is [`gallery/overlays.typ`](https://github.com/mvaled/lamportian-dramatis/b
   ),
 )
 ```
-
-## The legend on the guide
-
-The legend at the top of the [guide]({% link guide.md %}) is the other worked example: [`gallery/legend.typ`](https://github.com/mvaled/lamportian-dramatis/blob/main/gallery/legend.typ) names each part of a diagram with a rectangle from the table above, or with a ring built out of `mark` and `dot`, and hangs a note off it.  The callouts are drawn at `foreground`, so they read over the whole diagram; the rings at `marks`, so each dot's own label stays legible over the ring round it.

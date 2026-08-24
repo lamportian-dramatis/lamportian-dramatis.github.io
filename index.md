@@ -8,7 +8,7 @@ Lamport diagrams for replicated systems, as a [Typst](https://typst.app/) packag
 
 ![A fictional scenario showing a convergence bug in a fictional system](gallery/gorgeous.png)
 
-That is [`gallery/gorgeous.typ`](https://github.com/mvaled/lamportian-dramatis/blob/main/gallery/gorgeous.typ), a complete standalone document and the worked example that ships with the package:
+The whole document that draws it:
 
 ```typ
 #import "@preview/lamportian-dramatis:0.2.0": lamport-diagram, sync, below, above, send, recv, replica
@@ -51,6 +51,7 @@ That is [`gallery/gorgeous.typ`](https://github.com/mvaled/lamportian-dramatis/b
 - **[Guide]({% link guide.md %})** — how to read the marks, how the columns are solved, and how a diagram becomes a cross-referenced figure.
 - **[Reference]({% link reference.md %})** — every function and every argument.
 - **[Overlays]({% link overlays.md %})** — drawing your own CeTZ into a diagram, addressing its own points, at a depth of your choosing.
+- **[Gallery]({% link gallery.md %})** — every example that ships with the package, each a complete document, with its source.
 - **[Changelog]({% link changelog.md %})** — what each release changed, and what is waiting unreleased.
 
 ## Elsewhere
