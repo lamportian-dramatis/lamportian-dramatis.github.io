@@ -38,8 +38,8 @@ The same cone in a vertical diagram.  The drawing is written in columns and lane
 
 Every part of a diagram named, each with a rectangle from the locator round it — or a ring built out of `mark` and `dot` — and a note hung off that.  The callouts are drawn at `foreground`, so they read over the whole diagram; the rings at `marks`, so each dot's own label stays legible over the ring round it.  It is the picture the [guide]({% link guide.md %}) opens on.
 
-## [`types.typ`](https://github.com/mvaled/lamportian-dramatis/blob/main/gallery/types.typ)
+## [`locators.typ`](https://github.com/mvaled/lamportian-dramatis/blob/main/gallery/locators.typ)
 
-![Two replicas crossed by dotted guides: one at column 1, which is time 1 as well; a pair at the message, one on the column the solver settled on and one on the time the receiving end was drawn at, with the displacement between the two measured; and one running along lane 0.5, between the replicas](gallery/types.png)
+![Two replicas crossed by dotted guides: one at column 1, which is time 1 as well; a pair at the message, one on the column the solver settled on and one on the time the receiving end was drawn at, with the displacement between the two measured; and one running along lane 0.5, between the replicas](gallery/locators.png)
 
 Dotted guides at a column, at a time and along a lane, with the gap between a message's column and the time its receiving end was drawn at measured out.  It draws the [kinds of value]({% link overlays.md %}#terminology-values-and-types) a locator answers in.

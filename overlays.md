@@ -21,7 +21,7 @@ lamport-diagram(
 
 The entries of the *locator* — the dictionary a drawing is handed, described under [Shape](#shape) — take and answer in a handful of kinds of value, and the kinds are worth keeping apart:
 
-![Two replicas crossed by dotted guides: one at column 1, which is time 1 as well; a pair at the message, one on the column the solver settled on and one on the time the receiving end was drawn at, with the displacement between the two measured; and one running along lane 0.5, between the replicas](gallery/types.png)
+![Two replicas crossed by dotted guides: one at column 1, which is time 1 as well; a pair at the message, one on the column the solver settled on and one on the time the receiving end was drawn at, with the displacement between the two measured; and one running along lane 0.5, between the replicas](gallery/locators.png)
 
 - A **time** is a position along logical time.  It is a real number placed along the axis the timelines run on.  `0` is the *first column*: the solver starts every point there and only ever pushes one later, so nothing is solved before `0` — though a lane whose opening point waits on a message does start further along than that.  Times are what let a drawing be placed at, before or after any moment the diagram holds — `-0.5` falls before the first column, and `1.5` midway between the second column and the third (if any).
 
