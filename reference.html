@@ -448,7 +448,7 @@ runs along the timeline there.</p></li>
 line, which is what keeps a long label from crowding its neighbours.  <strong>Named only</strong>: a bare
 length is read as a <code class="docutils literal notranslate"><span class="pre">displacement</span></code>, that being the far commoner one to reach for.  The box is
 centred on the mark like any other label, and its contents are left to you — wrap the body in
-<code class="docutils literal notranslate"><span class="pre">align(center,</span> <span class="pre">..)</span></code> if centred lines read better than the ragged right edge.</p></li>
+<code class="docutils literal notranslate"><span class="pre">align(center, ..)</span></code> if centred lines read better than the ragged right edge.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">halo</span></code> — how far the label’s backdrop reaches past the label’s own box, which is what breaks an
 arrow crossing the lane so it does not crowd the glyphs.  <code class="docutils literal notranslate"><span class="pre">auto</span></code> (the default) matches the reach
 of the disc under a mark, so a label and a dot break an arrow by the same amount; a length sets an
@@ -498,14 +498,14 @@ an <a class="reference internal" href="#typst-function-event" title="event"><cod
 <dt class="field-odd">Arguments<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li id="typst-param-recv-label"><p><strong>label</strong> – labels the arrow itself rather than the point, and keeps its own styling.</p></li>
-<li id="typst-param-recv-delay"><p><strong>delay</strong> – the minimum number of columns the matching <code class="docutils literal notranslate"><span class="pre">recv</span></code> is pushed forward.  <code class="docutils literal notranslate"><span class="pre">0</span></code>
-(the default) leaves the two in one column, where the receive’s own
-<code class="docutils literal notranslate"><span class="pre">displacement</span></code> is what leans the arrow forward; <code class="docutils literal notranslate"><span class="pre">1</span></code> or more buys the message a
-whole column of flight.  The nudge is a drawing offset the column solver knows
-nothing about, so a negative one wide enough to put a point visually behind its own
-counterpart does <em>not</em> trip the causal-cycle check.  It is equally outside what the
-drawing sizes itself to, so a displacement large enough to push a bodiless mark
-left of where its lane starts will leave it overhanging the replica name.</p></li>
+<li id="typst-param-recv-delay"><p><strong>delay</strong> – the minimum number of columns the matching <code class="docutils literal notranslate"><span class="pre">recv</span></code> is pushed forward.  <code class="docutils literal notranslate"><span class="pre">0</span></code> (the
+default) leaves the two in one column, where the receive’s own <code class="docutils literal notranslate"><span class="pre">displacement</span></code> is
+what leans the arrow forward; <code class="docutils literal notranslate"><span class="pre">1</span></code> or more buys the message a whole column of
+flight.  The nudge is a drawing offset the column solver knows nothing about, so a
+negative one wide enough to put a point visually behind its own counterpart does
+<em>not</em> trip the causal-cycle check.  It is equally outside what the drawing sizes
+itself to, so a displacement large enough to push a bodiless mark left of where its
+lane starts will leave it overhanging the replica name.</p></li>
 </ul>
 </dd>
 </dl>
@@ -528,9 +528,9 @@ message.</p>
 <p>An optional label for the point goes positionally — <code class="docutils literal notranslate"><span class="pre">sync(&quot;push&quot;)[rolled</span> <span class="pre">back]</span></code> — or as
 <code class="docutils literal notranslate"><span class="pre">body</span></code>, with <code class="docutils literal notranslate"><span class="pre">size</span></code> setting its text size, <code class="docutils literal notranslate"><span class="pre">at</span></code> forcing the side the label sits on, and
 <code class="docutils literal notranslate"><span class="pre">halo</span></code> and <code class="docutils literal notranslate"><span class="pre">fill</span></code> setting its backdrop as they do on an <a class="reference internal" href="#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a>.  <code class="docutils literal notranslate"><span class="pre">label</span></code> instead
-labels the arrow itself; either end may carry it, and the first one given wins.  <code class="docutils literal notranslate"><span class="pre">displacement</span></code> nudges this end off the shared column, which tilts the arrow away from whatever
-the vertical line would otherwise run through; it is a drawing offset and says nothing about the
-order.</p>
+labels the arrow itself; either end may carry it, and the first one given wins.  <code class="docutils literal notranslate"><span class="pre">displacement</span></code>
+nudges this end off the shared column, which tilts the arrow away from whatever the vertical line
+would otherwise run through; it is a drawing offset and says nothing about the order.</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span><span class="nf">#lamport-diagram</span><span class="p">(</span>
 <span class="w">  </span><span class="nv">replicas</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="s2">"Client A"</span><span class="p">,</span><span class="w"> </span><span class="nf">replica</span><span class="p">(</span><span class="s2">"Server"</span><span class="p">,</span><span class="w"> </span><span class="nv">below</span><span class="p">),</span><span class="w"> </span><span class="nf">replica</span><span class="p">(</span><span class="s2">"Client B"</span><span class="p">,</span><span class="w"> </span><span class="nv">below</span><span class="p">)),</span>
 <span class="w">  </span><span class="nv">events</span><span class="p">:</span><span class="w"> </span><span class="p">(</span>
