@@ -4,7 +4,7 @@ title: Reference
 
 # Reference
 
-These pages describe the package as it stands on `main`.  A Typst import names an exact version, so what a document sees is whatever it asked for — the [changelog]({% link changelog.md %}) is what says which release each of these landed in, and what is still waiting.
+These pages describe the package as it stands on [`main`](https://github.com/mvaled/lamportian-dramatis).  A Typst import names an exact version, so what a document sees is whatever it asked for — the [changelog]({% link changelog.md %}) is what says which release each of these landed in, and what is still waiting.
 
 ## `lamport-diagram`
 
