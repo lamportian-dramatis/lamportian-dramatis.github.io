@@ -394,15 +394,16 @@ them is not what lies between but what they mean – <code class="docutils liter
 <code class="docutils literal notranslate"><span class="pre">foreground</span></code> sits above everything, that pass included.</p>
 <section id="the-layers-are-part-of-the-api">
 <h3>The layers are part of the API<a class="headerlink" href="#the-layers-are-part-of-the-api" title="Link to this heading">¶</a></h3>
-<p>Their names and their order are not an internal detail to be read off this page.  <code class="docutils literal notranslate"><span class="pre">layers</span></code> is
-the ordered array of them, bottom to top, and the package exports it:</p>
+<p>Their names and their order are not an internal detail to be read off this page.  <code class="docutils literal notranslate"><span class="pre">layers</span></code> is the
+ordered array of them, bottom to top, and the package exports it:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span><span class="kn">#import</span><span class="w"> </span><span class="s2">"@preview/lamportian-dramatis:0.2.0"</span><span class="p">:</span><span class="w"> </span><span class="nv">layers</span>
 
 <span class="nv">#layers</span>
 <span class="c1">// ("background", "arrows", "backdrops", "timelines", "marks", "labels", "foreground")</span>
 </pre></div>
 </div>
-<p>They are plain strings, as orientations are, so <code class="docutils literal notranslate"><span class="pre">overlays:</span> <span class="pre">(marks:</span> <span class="pre">...)</span></code> needs no import.  <code class="docutils literal notranslate"><span class="pre">layers</span></code> is for when you want to check a name, walk the stack, or build an <code class="docutils literal notranslate"><span class="pre">overlays</span></code> dictionary
+<p>They are plain strings, as orientations are, so <code class="docutils literal notranslate"><span class="pre">overlays:</span> <span class="pre">(marks:</span> <span class="pre">...)</span></code> needs no import.
+<code class="docutils literal notranslate"><span class="pre">layers</span></code> is for when you want to check a name, walk the stack, or build an <code class="docutils literal notranslate"><span class="pre">overlays</span></code> dictionary
 out of something that is not a literal.</p>
 <p>Exposing them settles what would otherwise be a matter of taste: which layers to offer.  The answer
 is all of them, because the array claims to be how the diagram is drawn.  <code class="docutils literal notranslate"><span class="pre">timelines</span></code> earns its
@@ -522,8 +523,8 @@ first – <code class="docutils literal notranslate"><span class="pre">pip-args<
 <dd><p>Return the dot inside that point’s ring, as <code class="docutils literal notranslate"><span class="pre">arguments</span></code> ready to spread into <code class="docutils literal notranslate"><span class="pre">circle</span></code> – or
 <code class="docutils literal notranslate"><span class="pre">none</span></code> for a point that carries none, which is every kind but a <code class="docutils literal notranslate"><span class="pre">sync</span></code>.  It is drawn over the
 mark’s own fill, so a drawing that restates both puts this one second.</p>
-<p>The diagram draws that dot from exactly this, the same way it draws the ring from <code class="docutils literal notranslate"><span class="pre">mark-args</span></code>.  So
-an overlay that recolors an end of an exchange has both halves of it to hand:</p>
+<p>The diagram draws that dot from exactly this, the same way it draws the ring from <code class="docutils literal notranslate"><span class="pre">mark-args</span></code>.
+So an overlay that recolors an end of an exchange has both halves of it to hand:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>overlays:<span class="w"> </span>(
 <span class="w">  </span>marks:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{
 <span class="w">    </span>import<span class="w"> </span>draw:<span class="w"> </span><span class="err">*</span>
@@ -542,9 +543,9 @@ an overlay that recolors an end of an exchange has both halves of it to hand:</p
 <dd><p>Return the column the solver put that point in: a whole number, <code class="docutils literal notranslate"><span class="pre">0</span></code> up to <code class="docutils literal notranslate"><span class="pre">ncols</span> <span class="pre">-</span> <span class="pre">1</span></code>.  It
 carries no lane and no displacement – it is the moment, and nothing about where on the page that
 moment was drawn.</p>
-<p><code class="docutils literal notranslate"><span class="pre">mark</span></code> and <code class="docutils literal notranslate"><span class="pre">column</span></code> ask the same question and answer in different kinds, and that is the whole
-distinction.  You want the column whenever what you are drawing crosses lanes, because a coordinate
-is already on a lane.  A column is a time, so it goes straight into <code class="docutils literal notranslate"><span class="pre">point</span></code>:</p>
+<p><code class="docutils literal notranslate"><span class="pre">mark</span></code> and <code class="docutils literal notranslate"><span class="pre">column</span></code> ask the same question and answer in different kinds, and that is the
+whole distinction.  You want the column whenever what you are drawing crosses lanes, because a
+coordinate is already on a lane.  A column is a time, so it goes straight into <code class="docutils literal notranslate"><span class="pre">point</span></code>:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>overlays:<span class="w"> </span>(
 <span class="w">  </span>backdrops:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{
 <span class="w">    </span>let<span class="w"> </span>(column,<span class="w"> </span>point,<span class="w"> </span>replicas,<span class="w"> </span>..)<span class="w"> </span>=<span class="w"> </span>d
@@ -559,8 +560,8 @@ is already on a lane.  A column is a time, so it goes straight into <code class=
 )
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">mark(&quot;C&quot;,</span> <span class="pre">&quot;c-reads&quot;)</span></code> cannot start that rectangle: it sits on C’s lane, not on the first one.  So
-the two compose – <code class="docutils literal notranslate"><span class="pre">column</span></code> gets the moment, <code class="docutils literal notranslate"><span class="pre">point</span></code> puts it on whichever lane you meant.</p>
+<p><code class="docutils literal notranslate"><span class="pre">mark(&quot;C&quot;,</span> <span class="pre">&quot;c-reads&quot;)</span></code> cannot start that rectangle: it sits on C’s lane, not on the first one.
+So the two compose – <code class="docutils literal notranslate"><span class="pre">column</span></code> gets the moment, <code class="docutils literal notranslate"><span class="pre">point</span></code> puts it on whichever lane you meant.</p>
 <p><code class="docutils literal notranslate"><span class="pre">column</span></code> is also what to reach for when you want to <em>reason</em> rather than draw.  <code class="docutils literal notranslate"><span class="pre">column(&quot;A&quot;,</span>
 <span class="pre">&quot;x&quot;)</span> <span class="pre">==</span> <span class="pre">column(&quot;B&quot;,</span> <span class="pre">&quot;y&quot;)</span></code> is “the solver found nothing ordering these two”, which is a real
 question to ask of a Lamport diagram.</p>
@@ -726,9 +727,9 @@ last mark stays half a column clear when you retune <code class="docutils litera
 </section>
 <section id="staying-orientation-independent">
 <h2>Staying orientation-independent<a class="headerlink" href="#staying-orientation-independent" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">point(time,</span> <span class="pre">lane)</span></code> is stated in the diagram’s own axes – logical time along the lanes, and lanes
-across it – so a drawing written in terms of it survives a flip from <code class="docutils literal notranslate"><span class="pre">horizontal</span></code> to <code class="docutils literal notranslate"><span class="pre">vertical</span></code>.
-One written against raw <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> arithmetic does not:</p>
+<p><a class="reference internal" href="#typst-locator-point" title="point"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">point(time,</span> <span class="pre">lane)</span></code></a> is stated in the diagram’s own axes – logical time along the
+lanes, and lanes across it – so a drawing written in terms of it survives a flip from
+<a class="reference internal" href="reference.html#typst-value-horizontal" title="horizontal"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">horizontal</span></code></a> to <a class="reference internal" href="reference.html#typst-value-vertical" title="vertical"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">vertical</span></code></a>.  One written against raw <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> arithmetic does not:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>let<span class="w"> </span>(point,<span class="w"> </span>..)<span class="w"> </span>=<span class="w"> </span>d
 line(point(2,<span class="w"> </span>"A"),<span class="w"> </span>point(2,<span class="w"> </span>"C"))<span class="w">   </span><span class="c1">// flips cleanly</span>
 line((4,<span class="w"> </span>0),<span class="w"> </span>(4,<span class="w"> </span>-3))<span class="w">                </span><span class="c1">// does not</span>
@@ -737,8 +738,8 @@ line((4,<span class="w"> </span>0),<span class="w"> </span>(4,<span class="w"> <
 <p>Fractional lanes are what make this work for nudges too.  “Just off the lane, toward the next one”
 is <code class="docutils literal notranslate"><span class="pre">point(c,</span> <span class="pre">0.15)</span></code> whichever way the diagram runs, where a page-space <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">-0.3)</span></code> would point
 the wrong way the moment it turned.</p>
-<p><code class="docutils literal notranslate"><span class="pre">span</span></code> stays in times for the same reason, and it is what lets a drawing run the full length of a
-lane without knowing where on the page that lane falls:</p>
+<p><a class="reference internal" href="#typst-locator-span" title="span"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">span</span></code></a> stays in <a class="reference internal" href="#term-time"><span class="xref std std-term">times</span></a> for the same reason, and it is what lets a drawing run
+the full length of a lane without knowing where on the page that lane falls:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>overlays:<span class="w"> </span>(
 <span class="w">  </span>timelines:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{
 <span class="w">    </span>let<span class="w"> </span>(span,<span class="w"> </span>point,<span class="w"> </span>..)<span class="w"> </span>=<span class="w"> </span>d
@@ -750,8 +751,8 @@ lane without knowing where on the page that lane falls:</p>
 </div>
 <p>That line lies along the lane, so the layer decides whether it shows at all: at <code class="docutils literal notranslate"><span class="pre">backdrops</span></code> the
 lane’s own stroke would cover it, at <code class="docutils literal notranslate"><span class="pre">timelines</span></code> it is drawn over that stroke instead.  To sit
-<em>beside</em> the lane rather than on it, feed the same span to a fractional lane – <code class="docutils literal notranslate"><span class="pre">point(s,</span> <span class="pre">1.12)</span></code> to
-<code class="docutils literal notranslate"><span class="pre">point(e,</span> <span class="pre">1.12)</span></code> – which is the pairing coordinates would not have allowed.</p>
+<em>beside</em> the lane rather than on it, feed the same span to a fractional lane – <code class="docutils literal notranslate"><span class="pre">point(s,</span> <span class="pre">1.12)</span></code>
+to <code class="docutils literal notranslate"><span class="pre">point(e,</span> <span class="pre">1.12)</span></code> – which is the pairing coordinates would not have allowed.</p>
 </section>
 <section id="errors">
 <h2>Errors<a class="headerlink" href="#errors" title="Link to this heading">¶</a></h2>
