@@ -293,25 +293,24 @@ grown by, and neither of those is a position on the page.</p>
 <p><code class="docutils literal notranslate"><span class="pre">overlays</span></code> takes <code class="docutils literal notranslate"><span class="pre">none</span></code>, a bare CeTZ body, a function of one argument – the <em>locator</em> –
 returning a CeTZ body, or a dictionary from layer name to either of those.  A body or a function on
 its own goes in the <code class="docutils literal notranslate"><span class="pre">foreground</span></code>, that being what you want when you have not thought about depth.</p>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span><span class="c1">// nothing</span>
-overlays:<span class="w"> </span>none
+<div class="highlight"><pre><span class="c1">// nothing</span>
+<span class="nv">overlays</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">,</span>
 
 <span class="c1">// a bare body, for when you need no points -- drawn in foreground</span>
-overlays:<span class="w"> </span>{<span class="w"> </span>grid((0,<span class="w"> </span>0),<span class="w"> </span>(8,<span class="w"> </span>-3))<span class="w"> </span>}
+<span class="nv">overlays</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nf">grid</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="p">},</span>
 
 <span class="c1">// a function, for when you want the diagram's points -- drawn in foreground</span>
-overlays:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{
-<span class="w">  </span>let<span class="w"> </span>(mark,<span class="w"> </span>..)<span class="w"> </span>=<span class="w"> </span>d
-<span class="w">  </span>circle(mark("A",<span class="w"> </span>"bad"),<span class="w"> </span>radius:<span class="w"> </span>0.3,<span class="w"> </span>stroke:<span class="w"> </span>red)
-}
+<span class="nv">overlays</span><span class="p">:</span><span class="w"> </span><span class="nv">d</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="nv">mark</span><span class="p">,</span><span class="w"> </span><span class="p">..)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">d</span>
+<span class="w">  </span><span class="nf">circle</span><span class="p">(</span><span class="nf">mark</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="s2">"bad"</span><span class="p">),</span><span class="w"> </span><span class="nv">radius</span><span class="p">:</span><span class="w"> </span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="nv">stroke</span><span class="p">:</span><span class="w"> </span><span class="nv">red</span><span class="p">)</span>
+<span class="p">},</span>
 
 <span class="c1">// a dictionary, for when layering matters</span>
-overlays:<span class="w"> </span>(
-<span class="w">  </span>backdrops:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{<span class="w"> </span><span class="p">...</span><span class="w"> </span>},
-<span class="w">  </span>marks:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{<span class="w"> </span><span class="p">...</span><span class="w"> </span>},
-)
+<span class="nv">overlays</span><span class="p">:</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="nv">backdrops</span><span class="p">:</span><span class="w"> </span><span class="nv">d</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nv">marks</span><span class="p">:</span><span class="w"> </span><span class="nv">d</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">},</span>
+<span class="p">),</span>
 </pre></div>
-</div>
 <p>Everything is spliced into the diagram’s own <code class="docutils literal notranslate"><span class="pre">cetz.canvas</span></code>, so a coordinate is a canvas centimeter
 and every CeTZ coordinate form – <code class="docutils literal notranslate"><span class="pre">rel:</span></code>, <code class="docutils literal notranslate"><span class="pre">to:</span></code>, anchors on elements you name yourself – works as
 it does anywhere else.  It all runs inside the same <code class="docutils literal notranslate"><span class="pre">context</span></code> the diagram uses, so <code class="docutils literal notranslate"><span class="pre">measure</span></code> is
@@ -319,16 +318,15 @@ available.</p>
 <p>Your body is written in your own file, though, so the drawing commands have to be in scope there.
 The package re-exports the CeTZ module it draws with, which saves pinning a second dependency and
 keeps the two versions in step:</p>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span><span class="kn">#import</span><span class="w"> </span><span class="s2">"@preview/lamportian-dramatis:0.2.0"</span><span class="p">:</span><span class="w"> </span><span class="nv">draw</span>
+<div class="highlight"><pre><span></span><span class="kn">#import</span><span class="w"> </span><span class="s2">"@preview/lamportian-dramatis:0.2.0"</span><span class="p">:</span><span class="w"> </span><span class="nv">draw</span>
 
-overlays:<span class="w"> </span>(
-<span class="w">  </span>marks:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{
-<span class="w">    </span>import<span class="w"> </span>draw:<span class="w"> </span><span class="err">*</span><span class="w">          </span><span class="c1">// inside the body, so `circle` and `rect` go no further</span>
+<span class="nv">overlays</span><span class="p">:</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="nv">marks</span><span class="p">:</span><span class="w"> </span><span class="nv">d</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kn">import</span><span class="w"> </span><span class="nv">draw</span><span class="p">:</span><span class="w"> </span><span class="o">*</span><span class="w">          </span><span class="c1">// inside the body, so `circle` and `rect` go no further</span>
 <span class="w">    </span><span class="p">...</span>
-<span class="w">  </span>},
-)
+<span class="w">  </span><span class="p">},</span>
+<span class="p">)</span>
 </pre></div>
-</div>
 <p><code class="docutils literal notranslate"><span class="pre">#import</span> <span class="pre">draw:</span> <span class="pre">*</span></code> at the top of the file works as well, if you would rather have them everywhere.
 The locator carries that same module under <code class="docutils literal notranslate"><span class="pre">draw</span></code>, so a body can take it from there and import
 nothing at all – <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">(draw,</span> <span class="pre">mark,</span> <span class="pre">..)</span> <span class="pre">=</span> <span class="pre">d</span></code>, and then <code class="docutils literal notranslate"><span class="pre">draw.circle(..)</span></code>.</p>
@@ -397,12 +395,11 @@ them is not what lies between but what they mean – <code class="docutils liter
 <h3>The layers are part of the API<a class="headerlink" href="#the-layers-are-part-of-the-api" title="Link to this heading">¶</a></h3>
 <p>Their names and their order are not an internal detail to be read off this page.  <code class="docutils literal notranslate"><span class="pre">layers</span></code> is the
 ordered array of them, bottom to top, and the package exports it:</p>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span><span class="kn">#import</span><span class="w"> </span><span class="s2">"@preview/lamportian-dramatis:0.2.0"</span><span class="p">:</span><span class="w"> </span><span class="nv">layers</span>
+<div class="highlight"><pre><span></span><span class="kn">#import</span><span class="w"> </span><span class="s2">"@preview/lamportian-dramatis:0.2.0"</span><span class="p">:</span><span class="w"> </span><span class="nv">layers</span>
 
 <span class="nv">#layers</span>
 <span class="c1">// ("background", "arrows", "backdrops", "timelines", "marks", "labels", "foreground")</span>
 </pre></div>
-</div>
 <p>They are plain strings, as orientations are, so <code class="docutils literal notranslate"><span class="pre">overlays:</span> <span class="pre">(marks:</span> <span class="pre">...)</span></code> needs no import.
 <code class="docutils literal notranslate"><span class="pre">layers</span></code> is for when you want to check a name, walk the stack, or build an <code class="docutils literal notranslate"><span class="pre">overlays</span></code> dictionary
 out of something that is not a literal.</p>
@@ -444,16 +441,14 @@ it was drawn on.)</p>
 <h2>Addressing a point<a class="headerlink" href="#addressing-a-point" title="Link to this heading">¶</a></h2>
 <p>Every point on a lane is <code class="docutils literal notranslate"><span class="pre">(replica,</span> <span class="pre">id)</span></code>.  An id need only be unique <em>within its own lane</em>, which
 is what lets a <code class="docutils literal notranslate"><span class="pre">sync</span></code>’s two ends and a message’s two ends keep the name that pairs them:</p>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>mark("A",<span class="w"> </span>"bad")<span class="w">        </span><span class="c1">// an event, by the id it was given</span>
-mark("S",<span class="w"> </span>"a-pushes")<span class="w">   </span><span class="c1">// this end of the sync;  mark("A", "a-pushes") is the other</span>
-mark("C",<span class="w"> </span>"c-pushes")<span class="w">   </span><span class="c1">// the send;  mark("S", "c-pushes") is its recv</span>
+<div class="highlight"><pre><span class="nf">mark</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="s2">"bad"</span><span class="p">)</span><span class="w">        </span><span class="c1">// an event, by the id it was given</span>
+<span class="nf">mark</span><span class="p">(</span><span class="s2">"S"</span><span class="p">,</span><span class="w"> </span><span class="s2">"a-pushes"</span><span class="p">)</span><span class="w">   </span><span class="c1">// this end of the sync;  mark("A", "a-pushes") is the other</span>
+<span class="nf">mark</span><span class="p">(</span><span class="s2">"C"</span><span class="p">,</span><span class="w"> </span><span class="s2">"c-pushes"</span><span class="p">)</span><span class="w">   </span><span class="c1">// the send;  mark("S", "c-pushes") is its recv</span>
 </pre></div>
-</div>
 <p><code class="docutils literal notranslate"><span class="pre">send</span></code>, <code class="docutils literal notranslate"><span class="pre">recv</span></code> and <code class="docutils literal notranslate"><span class="pre">sync</span></code> already carry a name, and that name is their id.  A local <code class="docutils literal notranslate"><span class="pre">event</span></code>
 has none, so it takes one:</p>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>"A":<span class="w"> </span>([<span class="sb">`A.1`</span><span class="p">]</span>,<span class="w"> </span>event(id:<span class="w"> </span>"bad")[<span class="sb">`A.2`</span><span class="p">]</span>,<span class="w"> </span>sync("a-pushes")),
+<div class="highlight"><pre><span class="w"></span><span class="s2">"A"</span><span class="p">:</span><span class="w"> </span><span class="p">([</span><span class="sb">`A.1`</span><span class="p">],</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span><span class="w"> </span><span class="s2">"bad"</span><span class="p">)[</span><span class="sb">`A.2`</span><span class="p">],</span><span class="w"> </span><span class="nf">sync</span><span class="p">(</span><span class="s2">"a-pushes"</span><span class="p">)),</span>
 </pre></div>
-</div>
 <p>Ids are opt-in on purpose.  The alternative – addressing an event by where it sits, <code class="docutils literal notranslate"><span class="pre">A.0</span></code>,
 <code class="docutils literal notranslate"><span class="pre">A.1</span></code>, … – would put back exactly the fragility that solving the columns removed: insert one event
 and every drawing below it points silently at the wrong dot.  An id you wrote survives the insert.</p>
@@ -465,12 +460,11 @@ whichever came first.</p>
 counting <em>every</em> item in the lane’s array including <code class="docutils literal notranslate"><span class="pre">gap</span></code> and <code class="docutils literal notranslate"><span class="pre">idle</span></code>.  It numbers the array and
 nothing else – the columns the solver hands out count from <code class="docutils literal notranslate"><span class="pre">0</span></code>, so the first item on a lane is
 index <code class="docutils literal notranslate"><span class="pre">1</span></code> and column <code class="docutils literal notranslate"><span class="pre">0</span></code>:</p>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>mark("A",<span class="w"> </span>1)<span class="w">      </span><span class="c1">// the lane's opening item</span>
-mark("A",<span class="w"> </span>3)
-mark("A",<span class="w"> </span>-1)<span class="w">     </span><span class="c1">// the last item -- the one index that survives an insert</span>
-column("B",<span class="w"> </span>2)<span class="w">    </span><span class="c1">// and the same wherever else a point is asked for</span>
+<div class="highlight"><pre><span class="nf">mark</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">      </span><span class="c1">// the lane's opening item</span>
+<span class="nf">mark</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+<span class="nf">mark</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w">     </span><span class="c1">// the last item -- the one index that survives an insert</span>
+<span class="nf">column</span><span class="p">(</span><span class="s2">"B"</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">    </span><span class="c1">// and the same wherever else a point is asked for</span>
 </pre></div>
-</div>
 <p>Ids are strings and indices are integers, so the two never need telling apart by hand.  An index is
 what to reach for when naming a one-off is not worth it – bearing in mind that it moves when you
 insert an event above it, which is exactly what an id does not do.</p>
@@ -498,18 +492,12 @@ crosses lanes.</p>
 it returns <code class="docutils literal notranslate"><span class="pre">none</span></code>.</p>
 <p>It is for restating a mark rather than placing something near it.  Spread it and override what you
 want changed; a later argument wins, so the rest stays whatever the diagram chose:</p>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>overlays:<span class="w"> </span>(
-<span class="w">  </span>marks:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{
-<span class="w">    </span>import<span class="w"> </span>draw:<span class="w"> </span><span class="err">*</span>
-<span class="w">    </span>let<span class="w"> </span>(mark-args,<span class="w"> </span>..)<span class="w"> </span>=<span class="w"> </span>d
-<span class="w">    </span><span class="c1">// Tint three marks, keeping the radius and the ring the diagram gave them.</span>
-<span class="w">    </span>for<span class="w"> </span>point<span class="w"> </span>in<span class="w"> </span>(("S",<span class="w"> </span>3),<span class="w"> </span>("S",<span class="w"> </span>4),<span class="w"> </span>("A",<span class="w"> </span>"a-catches-up"))<span class="w"> </span>{
-<span class="w">      </span>circle(..mark-args(..point),<span class="w"> </span>fill:<span class="w"> </span>red.transparentize(55%))
-<span class="w">    </span>}
-<span class="w">  </span>},
-)
+<div class="highlight"><pre><span class="w">  </span><span class="c1">// Tint three marks, keeping the radius and the ring the diagram gave them.</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">point</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="p">((</span><span class="s2">"S"</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s2">"S"</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="s2">"a-catches-up"</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nf">circle</span><span class="p">(..</span><span class="nf">mark-args</span><span class="p">(..</span><span class="nv">point</span><span class="p">),</span><span class="w"> </span><span class="nv">fill</span><span class="p">:</span><span class="w"> </span><span class="nv">red</span><span class="p">.</span><span class="nf">transparentize</span><span class="p">(</span><span class="m">55</span><span class="kr">%</span><span class="p">))</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">})</span>
 </pre></div>
-</div>
 <p>The diagram draws its own marks from exactly this, which is the point of it: a hollow ring for a
 point where the replica touches the network, a solid dot for a purely local step, a send drawn
 smaller than the receive it feeds.  None of that has to be restated, and a drawing that spreads
@@ -526,16 +514,9 @@ first – <code class="docutils literal notranslate"><span class="pre">pip-args<
 mark’s own fill, so a drawing that restates both puts this one second.</p>
 <p>The diagram draws that dot from exactly this, the same way it draws the ring from <code class="docutils literal notranslate"><span class="pre">mark-args</span></code>.
 So an overlay that recolors an end of an exchange has both halves of it to hand:</p>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>overlays:<span class="w"> </span>(
-<span class="w">  </span>marks:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{
-<span class="w">    </span>import<span class="w"> </span>draw:<span class="w"> </span><span class="err">*</span>
-<span class="w">    </span>let<span class="w"> </span>(mark-args,<span class="w"> </span>pip-args,<span class="w"> </span>..)<span class="w"> </span>=<span class="w"> </span>d
-<span class="w">    </span>circle(..mark-args("A",<span class="w"> </span>"a-pushes"),<span class="w"> </span>fill:<span class="w"> </span>red.transparentize(55%))
-<span class="w">    </span>circle(..pip-args("A",<span class="w"> </span>"a-pushes"),<span class="w"> </span>fill:<span class="w"> </span>red)
-<span class="w">  </span>},
-)
+<div class="highlight"><pre><span class="w"></span><span class="nf">circle</span><span class="p">(..</span><span class="nf">mark-args</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="s2">"a-pushes"</span><span class="p">),</span><span class="w"> </span><span class="nv">fill</span><span class="p">:</span><span class="w"> </span><span class="nv">red</span><span class="p">.</span><span class="nf">transparentize</span><span class="p">(</span><span class="m">55</span><span class="kr">%</span><span class="p">))</span>
+<span class="w"></span><span class="nf">circle</span><span class="p">(..</span><span class="nf">pip-args</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="s2">"a-pushes"</span><span class="p">),</span><span class="w"> </span><span class="nv">fill</span><span class="p">:</span><span class="w"> </span><span class="nv">red</span><span class="p">)</span>
 </pre></div>
-</div>
 </dd></dl>
 
 <dl class="typst locator">
@@ -547,20 +528,13 @@ moment was drawn.</p>
 <p><code class="docutils literal notranslate"><span class="pre">mark</span></code> and <code class="docutils literal notranslate"><span class="pre">column</span></code> ask the same question and answer in different kinds, and that is the
 whole distinction.  You want the column whenever what you are drawing crosses lanes, because a
 coordinate is already on a lane.  A column is a time, so it goes straight into <code class="docutils literal notranslate"><span class="pre">point</span></code>:</p>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>overlays:<span class="w"> </span>(
-<span class="w">  </span>backdrops:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{
-<span class="w">    </span>let<span class="w"> </span>(column,<span class="w"> </span>point,<span class="w"> </span>replicas,<span class="w"> </span>..)<span class="w"> </span>=<span class="w"> </span>d
-<span class="w">    </span>let<span class="w"> </span>last<span class="w"> </span>=<span class="w"> </span>replicas.len()<span class="w"> </span>-<span class="w"> </span>1
-<span class="w">    </span>rect(
-<span class="w">      </span>point(column("C",<span class="w"> </span>"c-reads"),<span class="w"> </span>-0.4),
-<span class="w">      </span>point(column("A",<span class="w"> </span>"a-catches-up"),<span class="w"> </span>last<span class="w"> </span>+<span class="w"> </span>0.4),
-<span class="w">      </span>fill:<span class="w"> </span>yellow.transparentize(85%),
-<span class="w">      </span>stroke:<span class="w"> </span>none,
-<span class="w">    </span>)
-<span class="w">  </span>},
-)
+<div class="highlight"><pre><span class="w"></span><span class="nf">rect</span><span class="p">(</span>
+<span class="w">  </span><span class="nf">point</span><span class="p">(</span><span class="nf">column</span><span class="p">(</span><span class="s2">"C"</span><span class="p">,</span><span class="w"> </span><span class="s2">"c-reads"</span><span class="p">),</span><span class="w"> </span><span class="o">-</span><span class="mf">0.4</span><span class="p">),</span>
+<span class="w">  </span><span class="nf">point</span><span class="p">(</span><span class="nf">column</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="s2">"a-catches-up"</span><span class="p">),</span><span class="w"> </span><span class="nv">last</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.4</span><span class="p">),</span>
+<span class="w">  </span><span class="nv">fill</span><span class="p">:</span><span class="w"> </span><span class="nv">yellow</span><span class="p">.</span><span class="nf">transparentize</span><span class="p">(</span><span class="m">85</span><span class="kr">%</span><span class="p">),</span>
+<span class="w">  </span><span class="nv">stroke</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">,</span>
+<span class="w"></span><span class="p">)</span>
 </pre></div>
-</div>
 <p><code class="docutils literal notranslate"><span class="pre">mark(&quot;C&quot;,</span> <span class="pre">&quot;c-reads&quot;)</span></code> cannot start that rectangle: it sits on C’s lane, not on the first one.
 So the two compose – <code class="docutils literal notranslate"><span class="pre">column</span></code> gets the moment, <code class="docutils literal notranslate"><span class="pre">point</span></code> puts it on whichever lane you meant.</p>
 <p><code class="docutils literal notranslate"><span class="pre">column</span></code> is also what to reach for when you want to <em>reason</em> rather than draw.  <code class="docutils literal notranslate"><span class="pre">column(&quot;A&quot;,</span>
@@ -593,24 +567,16 @@ the one to write a drawing in terms of – see <a class="reference internal" hre
 into anything else that takes two, <code class="docutils literal notranslate"><span class="pre">content</span></code> included.  Naming that <code class="docutils literal notranslate"><span class="pre">rect</span></code> leaves CeTZ holding
 the anchors, which is what lets a note be hung off the box instead of off a position worked out by
 hand:</p>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>overlays:<span class="w"> </span>(
-<span class="w">  </span>foreground:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{
-<span class="w">    </span>import<span class="w"> </span>draw:<span class="w"> </span><span class="err">*</span>
-<span class="w">    </span>let<span class="w"> </span>(gap-rect,<span class="w"> </span>..)<span class="w"> </span>=<span class="w"> </span>d
-<span class="w">    </span>rect(..gap-rect("R1",<span class="w"> </span>3,<span class="w"> </span>pad:<span class="w"> </span>(0,<span class="w"> </span>0.14)),<span class="w"> </span>stroke:<span class="w"> </span>(paint:<span class="w"> </span>gray,<span class="w"> </span>dash:<span class="w"> </span>"densely-dotted"),<span class="w"> </span>name:<span class="w"> </span>"elided")
-<span class="w">    </span>content("elided.north",<span class="w"> </span>anchor:<span class="w"> </span>"south",<span class="w"> </span>text(fill:<span class="w"> </span>gray,<span class="w"> </span><span class="p">[</span>elided<span class="w"> </span>time<span class="p">]</span>))
-<span class="w">  </span>},
-)
+<div class="highlight"><pre><span class="w"></span><span class="nf">rect</span><span class="p">(..</span><span class="nf">gap-rect</span><span class="p">(</span><span class="s2">"R1"</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nv">pad</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.14</span><span class="p">)),</span><span class="w"> </span><span class="nv">stroke</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="nv">paint</span><span class="p">:</span><span class="w"> </span><span class="nv">gray</span><span class="p">,</span><span class="w"> </span><span class="nv">dash</span><span class="p">:</span><span class="w"> </span><span class="s2">"densely-dotted"</span><span class="p">),</span><span class="w"> </span><span class="nv">name</span><span class="p">:</span><span class="w"> </span><span class="s2">"elided"</span><span class="p">)</span>
+<span class="w"></span><span class="nf">content</span><span class="p">(</span><span class="s2">"elided.north"</span><span class="p">,</span><span class="w"> </span><span class="nv">anchor</span><span class="p">:</span><span class="w"> </span><span class="s2">"south"</span><span class="p">,</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">fill</span><span class="p">:</span><span class="w"> </span><span class="nv">gray</span><span class="p">,</span><span class="w"> </span><span class="p">[</span>elided<span class="w"> </span>time<span class="p">]))</span>
 </pre></div>
-</div>
 <p><code class="docutils literal notranslate"><span class="pre">pad</span></code> grows a rectangle on every side, in canvas centimeters.  One number pads all four the same;
 a pair pads in the diagram’s own axes – how far along the timelines, how far across them – which
 is what keeps a padded box the same box when the diagram is turned on its side:</p>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>gap-rect("R1",<span class="w"> </span>3)<span class="w">                  </span><span class="c1">// exactly the dotted span, and nothing more</span>
-gap-rect("R1",<span class="w"> </span>3,<span class="w"> </span>pad:<span class="w"> </span>0.1)<span class="w">        </span><span class="c1">// a millimeter of air on every side</span>
-gap-rect("R1",<span class="w"> </span>3,<span class="w"> </span>pad:<span class="w"> </span>(0,<span class="w"> </span>0.14))<span class="w">  </span><span class="c1">// tight in time, standing clear of the lane</span>
+<div class="highlight"><pre><span class="w"></span><span class="nf">gap-rect</span><span class="p">(</span><span class="s2">"R1"</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w">                  </span><span class="c1">// exactly the dotted span, and nothing more</span>
+<span class="w"></span><span class="nf">gap-rect</span><span class="p">(</span><span class="s2">"R1"</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nv">pad</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1</span><span class="p">)</span><span class="w">        </span><span class="c1">// a millimeter of air on every side</span>
+<span class="w"></span><span class="nf">gap-rect</span><span class="p">(</span><span class="s2">"R1"</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nv">pad</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.14</span><span class="p">))</span><span class="w">  </span><span class="c1">// tight in time, standing clear of the lane</span>
 </pre></div>
-</div>
 <p>Unpadded, a rectangle is exactly the part it names, and that is what makes it worth asking for: the
 diagram sets its names into the very box <code class="docutils literal notranslate"><span class="pre">names-rect</span></code> hands out, interrupts a lane over the very
 stretch <code class="docutils literal notranslate"><span class="pre">gap-rect</span></code> answers with, and runs its arrows between the very points <code class="docutils literal notranslate"><span class="pre">arrow-mid</span></code> takes
@@ -732,25 +698,23 @@ not.</p>
 <p><a class="reference internal" href="#typst-locator-point" title="point"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">point(time,</span> <span class="pre">lane)</span></code></a> is stated in the diagram’s own axes – logical time along the
 lanes, and lanes across it – so a drawing written in terms of it survives a flip from
 <a class="reference internal" href="reference.html#typst-value-horizontal" title="horizontal"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">horizontal</span></code></a> to <a class="reference internal" href="reference.html#typst-value-vertical" title="vertical"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">vertical</span></code></a>.  One written against raw <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> arithmetic does not:</p>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>let<span class="w"> </span>(point,<span class="w"> </span>..)<span class="w"> </span>=<span class="w"> </span>d
-line(point(2,<span class="w"> </span>"A"),<span class="w"> </span>point(2,<span class="w"> </span>"C"))<span class="w">   </span><span class="c1">// flips cleanly</span>
-line((4,<span class="w"> </span>0),<span class="w"> </span>(4,<span class="w"> </span>-3))<span class="w">                </span><span class="c1">// does not</span>
+<div class="highlight"><pre><span class="w">  </span><span class="nf">line</span><span class="p">(</span><span class="nf">point</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s2">"A"</span><span class="p">),</span><span class="w"> </span><span class="nf">point</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s2">"C"</span><span class="p">))</span><span class="w">   </span><span class="c1">// flips cleanly</span>
+<span class="w">  </span><span class="nf">line</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">3</span><span class="p">))</span><span class="w">                </span><span class="c1">// does not</span>
+<span class="p">})</span>
 </pre></div>
-</div>
 <p>Fractional lanes are what make this work for nudges too.  “Just off the lane, toward the next one”
 is <code class="docutils literal notranslate"><span class="pre">point(c,</span> <span class="pre">0.15)</span></code> whichever way the diagram runs, where a page-space <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">-0.3)</span></code> would point
 the wrong way the moment it turned.</p>
 <p><a class="reference internal" href="#typst-locator-span" title="span"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">span</span></code></a> stays in <a class="reference internal" href="#term-time"><span class="xref std std-term">times</span></a> for the same reason, and it is what lets a drawing run
 the full length of a lane without knowing where on the page that lane falls:</p>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>overlays:<span class="w"> </span>(
-<span class="w">  </span>timelines:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{
-<span class="w">    </span>let<span class="w"> </span>(span,<span class="w"> </span>point,<span class="w"> </span>..)<span class="w"> </span>=<span class="w"> </span>d
-<span class="w">    </span>let<span class="w"> </span>(s,<span class="w"> </span>e)<span class="w"> </span>=<span class="w"> </span>span
-<span class="w">    </span>line(point(s,<span class="w"> </span>"B"),<span class="w"> </span>point(e,<span class="w"> </span>"B"),<span class="w"> </span>stroke:<span class="w"> </span>(paint:<span class="w"> </span>red,<span class="w"> </span>dash:<span class="w"> </span>"dashed"))
-<span class="w">  </span>},
-)
+<div class="highlight"><pre><span class="w"></span><span class="nv">overlays</span><span class="p">:</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="nv">timelines</span><span class="p">:</span><span class="w"> </span><span class="nv">d</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="nv">span</span><span class="p">,</span><span class="w"> </span><span class="nv">point</span><span class="p">,</span><span class="w"> </span><span class="p">..)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">d</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="nv">s</span><span class="p">,</span><span class="w"> </span><span class="nv">e</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">span</span>
+<span class="w">    </span><span class="nf">line</span><span class="p">(</span><span class="nf">point</span><span class="p">(</span><span class="nv">s</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">),</span><span class="w"> </span><span class="nf">point</span><span class="p">(</span><span class="nv">e</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">),</span><span class="w"> </span><span class="nv">stroke</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="nv">paint</span><span class="p">:</span><span class="w"> </span><span class="nv">red</span><span class="p">,</span><span class="w"> </span><span class="nv">dash</span><span class="p">:</span><span class="w"> </span><span class="s2">"dashed"</span><span class="p">))</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w"></span><span class="p">),</span>
 </pre></div>
-</div>
 <p>That line lies along the lane, so the layer decides whether it shows at all: at <code class="docutils literal notranslate"><span class="pre">backdrops</span></code> the
 lane’s own stroke would cover it, at <code class="docutils literal notranslate"><span class="pre">timelines</span></code> it is drawn over that stroke instead.  To sit
 <em>beside</em> the lane rather than on it, feed the same span to a fractional lane – <code class="docutils literal notranslate"><span class="pre">point(s,</span> <span class="pre">1.12)</span></code>
@@ -775,7 +739,7 @@ fails compilation.</p></li>
 <img alt="The future cone of one event, washed behind the lanes, with a ring round the event itself" src="_images/overlays.png" />
 <p>The future cone of <code class="docutils literal notranslate"><span class="pre">A.2</span></code>, drawn at <code class="docutils literal notranslate"><span class="pre">backdrops</span></code> so the lanes cross it without fading a stripe
 through it, and a ring at <code class="docutils literal notranslate"><span class="pre">marks</span></code> so <code class="docutils literal notranslate"><span class="pre">A.2</span></code>’s own label stays legible over it.</p>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span><span class="kn">#import</span><span class="w"> </span><span class="s2">"@preview/lamportian-dramatis:0.2.0"</span><span class="p">:</span><span class="w"> </span><span class="nv">lamport-diagram</span><span class="p">,</span><span class="w"> </span><span class="nv">replica</span><span class="p">,</span><span class="w"> </span><span class="nv">event</span><span class="p">,</span><span class="w"> </span><span class="nv">send</span><span class="p">,</span><span class="w"> </span><span class="nv">recv</span><span class="p">,</span><span class="w"> </span><span class="nv">sync</span><span class="p">,</span><span class="w"> </span><span class="nv">above</span><span class="p">,</span><span class="w"> </span><span class="nv">below</span><span class="p">,</span><span class="w"> </span><span class="nv">draw</span>
+<div class="highlight"><pre><span></span><span class="kn">#import</span><span class="w"> </span><span class="s2">"@preview/lamportian-dramatis:0.2.0"</span><span class="p">:</span><span class="w"> </span><span class="nv">lamport-diagram</span><span class="p">,</span><span class="w"> </span><span class="nv">replica</span><span class="p">,</span><span class="w"> </span><span class="nv">event</span><span class="p">,</span><span class="w"> </span><span class="nv">send</span><span class="p">,</span><span class="w"> </span><span class="nv">recv</span><span class="p">,</span><span class="w"> </span><span class="nv">sync</span><span class="p">,</span><span class="w"> </span><span class="nv">above</span><span class="p">,</span><span class="w"> </span><span class="nv">below</span><span class="p">,</span><span class="w"> </span><span class="nv">draw</span>
 
 <span class="nf">#lamport-diagram</span><span class="p">(</span>
 <span class="w">  </span><span class="nv">replicas</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="nf">replica</span><span class="p">(</span><span class="s2">"S"</span><span class="p">,</span><span class="w"> </span><span class="nv">above</span><span class="p">,</span><span class="w"> </span><span class="nv">color</span><span class="p">:</span><span class="w"> </span><span class="nf">luma</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span><span class="w"> </span><span class="nf">replica</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="nv">below</span><span class="p">),</span><span class="w"> </span><span class="nf">replica</span><span class="p">(</span><span class="s2">"C"</span><span class="p">,</span><span class="w"> </span><span class="nv">below</span><span class="p">)),</span>
@@ -821,7 +785,6 @@ through it, and a ring at <code class="docutils literal notranslate"><span class
 <span class="w">  </span><span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
-</div>
 </section>
 </section>
 

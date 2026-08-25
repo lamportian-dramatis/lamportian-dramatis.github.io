@@ -532,7 +532,7 @@ message.</p>
 labels the arrow itself; either end may carry it, and the first one given wins.  <code class="docutils literal notranslate"><span class="pre">displacement</span></code>
 nudges this end off the shared column, which tilts the arrow away from whatever the vertical line
 would otherwise run through; it is a drawing offset and says nothing about the order.</p>
-<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span><span class="nf">#lamport-diagram</span><span class="p">(</span>
+<div class="highlight"><pre><span></span><span class="nf">#lamport-diagram</span><span class="p">(</span>
 <span class="w">  </span><span class="nv">replicas</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="s2">"Client A"</span><span class="p">,</span><span class="w"> </span><span class="nf">replica</span><span class="p">(</span><span class="s2">"Server"</span><span class="p">,</span><span class="w"> </span><span class="nv">below</span><span class="p">),</span><span class="w"> </span><span class="nf">replica</span><span class="p">(</span><span class="s2">"Client B"</span><span class="p">,</span><span class="w"> </span><span class="nv">below</span><span class="p">)),</span>
 <span class="w">  </span><span class="nv">events</span><span class="p">:</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="s2">"Client A"</span><span class="p">:</span><span class="w"> </span><span class="p">([</span>Edit<span class="p">],</span><span class="w"> </span><span class="nf">sync</span><span class="p">(</span><span class="s2">"first"</span><span class="p">,</span><span class="w"> </span><span class="nv">label</span><span class="p">:</span><span class="w"> </span><span class="s2">"round trip"</span><span class="p">),</span><span class="w"> </span><span class="nf">idle</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="nf">sync</span><span class="p">(</span><span class="s2">"third"</span><span class="p">)[</span>has<span class="w"> </span>both<span class="w"> </span>edits<span class="p">]),</span>
@@ -541,7 +541,6 @@ would otherwise run through; it is a drawing offset and says nothing about the o
 <span class="w">  </span><span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
-</div>
 </dd></dl>
 
 <dl class="typst function">
