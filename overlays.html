@@ -523,7 +523,7 @@ first – <code class="docutils literal notranslate"><span class="pre">pip-args<
 <code class="docutils literal notranslate"><span class="pre">none</span></code> for a point that carries none, which is every kind but a <code class="docutils literal notranslate"><span class="pre">sync</span></code>.  It is drawn over the
 mark’s own fill, so a drawing that restates both puts this one second.</p>
 <p>The diagram draws that dot from exactly this, the same way it draws the ring from <code class="docutils literal notranslate"><span class="pre">mark-args</span></code>.  So
-an overlay that recolours an end of an exchange has both halves of it to hand:</p>
+an overlay that recolors an end of an exchange has both halves of it to hand:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>overlays:<span class="w"> </span>(
 <span class="w">  </span>marks:<span class="w"> </span>d<span class="w"> </span>=&gt;<span class="w"> </span>{
 <span class="w">    </span>import<span class="w"> </span>draw:<span class="w"> </span><span class="err">*</span>
@@ -608,7 +608,7 @@ hand:</p>
 a pair pads in the diagram’s own axes – how far along the timelines, how far across them – which is
 what keeps a padded box the same box when the diagram is turned on its side:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>gap-rect("R1",<span class="w"> </span>3)<span class="w">                  </span><span class="c1">// exactly the dotted span, and nothing more</span>
-gap-rect("R1",<span class="w"> </span>3,<span class="w"> </span>pad:<span class="w"> </span>0.1)<span class="w">        </span><span class="c1">// a millimetre of air on every side</span>
+gap-rect("R1",<span class="w"> </span>3,<span class="w"> </span>pad:<span class="w"> </span>0.1)<span class="w">        </span><span class="c1">// a millimeter of air on every side</span>
 gap-rect("R1",<span class="w"> </span>3,<span class="w"> </span>pad:<span class="w"> </span>(0,<span class="w"> </span>0.14))<span class="w">  </span><span class="c1">// tight in time, standing clear of the lane</span>
 </pre></div>
 </div>
