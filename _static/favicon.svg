@@ -2,7 +2,7 @@
   <title>lamportian-dramatis</title>
   <!--
     The diagram reduced to what survives a browser tab: two timelines running to their arrowheads,
-    an event on each, in the first two colours of the default palette — the same blue and amber the
+    an event on each, in the first two colors of the default palette — the same blue and amber the
     legend gives R1 and R2.
 
     Every coordinate is chosen for the 16 px grid, which is half of this one.  A rail is 4 units wide
