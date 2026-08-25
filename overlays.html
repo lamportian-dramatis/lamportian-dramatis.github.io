@@ -206,6 +206,7 @@
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Overlays</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
 </ul>
 
 </div>
@@ -581,12 +582,9 @@ mark <em>across</em> the lanes, which a coordinate cannot do.</p>
 <dl class="typst locator">
 <dt class="sig sig-object typst" id="typst-locator-point">
 <span class="sig-name descname"><span class="pre">point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">time</span></em>, <em class="sig-param"><span class="pre">lane</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-point" title="Link to this definition">¶</a></dt>
-<dd><p>Return the <a class="reference internal" href="#term-coordinate"><span class="xref std std-term">coordinate</span></a> of a <a class="reference internal" href="#term-time"><span class="xref std std-term">time</span></a> on a <a class="reference internal" href="#term-lane"><span class="xref std std-term">lane</span></a>.  Both arguments are those
-kinds: a time is a position along the axis the timelines run on, whole where it falls on a column
-and fractional between two, and a lane is a position across the replicas, or the id of the replica
-on one.</p>
-<p>It is the entry that turns a time and a lane into a position on the page, which is what makes it the
-one to write a drawing in terms of – see <a class="reference internal" href="#staying-orientation-independent">Staying orientation-independent</a> below.</p>
+<dd><p>Return the <a class="reference internal" href="#term-coordinate"><span class="xref std std-term">coordinate</span></a> of a <a class="reference internal" href="#term-time"><span class="xref std std-term">time</span></a> on a <a class="reference internal" href="#term-lane"><span class="xref std std-term">lane</span></a>.</p>
+<p>It is the entry that turns a time and a lane into a position on the page, which is what makes it
+the one to write a drawing in terms of – see <a class="reference internal" href="#orientation-independent"><span class="std std-ref">below</span></a>.</p>
 </dd></dl>
 
 <section id="the-rectangles">
@@ -606,8 +604,8 @@ hand:</p>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">pad</span></code> grows a rectangle on every side, in canvas centimeters.  One number pads all four the same;
-a pair pads in the diagram’s own axes – how far along the timelines, how far across them – which is
-what keeps a padded box the same box when the diagram is turned on its side:</p>
+a pair pads in the diagram’s own axes – how far along the timelines, how far across them – which
+is what keeps a padded box the same box when the diagram is turned on its side:</p>
 <div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>gap-rect("R1",<span class="w"> </span>3)<span class="w">                  </span><span class="c1">// exactly the dotted span, and nothing more</span>
 gap-rect("R1",<span class="w"> </span>3,<span class="w"> </span>pad:<span class="w"> </span>0.1)<span class="w">        </span><span class="c1">// a millimeter of air on every side</span>
 gap-rect("R1",<span class="w"> </span>3,<span class="w"> </span>pad:<span class="w"> </span>(0,<span class="w"> </span>0.14))<span class="w">  </span><span class="c1">// tight in time, standing clear of the lane</span>
@@ -620,41 +618,42 @@ the middle of.  None of it is re-derived, so none of it can drift.</p>
 <dl class="typst locator">
 <dt class="sig sig-object typst" id="typst-locator-lane-rect">
 <span class="sig-name descname"><span class="pre">lane-rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lane</span></em>, <em class="sig-param"><span class="pre">pad:</span> <span class="pre">0</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-lane-rect" title="Link to this definition">¶</a></dt>
-<dd><p>Return the rectangle round the whole strip a lane occupies: from where its line leads in to past the
-arrowhead, and as thick across as the band the lane erases behind itself.  It holds every mark on
-that lane and no label off it, and it stops short of the replica name, which has <code class="docutils literal notranslate"><span class="pre">names-rect</span></code> of
-its own.</p>
+<dd><p>Return the rectangle round the whole strip a lane occupies: from where its line leads in to past
+the arrowhead, and as thick across as the band the lane erases behind itself.  It holds every
+mark on that lane and no label off it, and it stops short of the replica name, which has
+<code class="docutils literal notranslate"><span class="pre">names-rect</span></code> of its own.</p>
 </dd></dl>
 
 <dl class="typst locator">
 <dt class="sig sig-object typst" id="typst-locator-gap-rect">
 <span class="sig-name descname"><span class="pre">gap-rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">replica</span></em>, <em class="sig-param"><span class="pre">index</span></em>, <em class="sig-param"><span class="pre">pad:</span> <span class="pre">0</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-gap-rect" title="Link to this definition">¶</a></dt>
-<dd><p>Return the rectangle round exactly the dotted span of one <code class="docutils literal notranslate"><span class="pre">gap</span></code>, as thick across as its lane.  A
-<code class="docutils literal notranslate"><span class="pre">gap</span></code> carries no id, so name it by its index on the lane – a negative one counting back from the
-end.  Naming a point that is not a <code class="docutils literal notranslate"><span class="pre">gap</span></code> fails compilation, saying which kind it found there.</p>
+<dd><p>Return the rectangle round exactly the dotted span of one <code class="docutils literal notranslate"><span class="pre">gap</span></code>, as thick across as its lane.
+A <code class="docutils literal notranslate"><span class="pre">gap</span></code> carries no id, so name it by its index on the lane – a negative one counting back from
+the end.  Naming a point that is not a <code class="docutils literal notranslate"><span class="pre">gap</span></code> fails compilation, saying which kind it found
+there.</p>
 </dd></dl>
 
 <dl class="typst locator">
 <dt class="sig sig-object typst" id="typst-locator-names-rect">
 <span class="sig-name descname"><span class="pre">names-rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">pad:</span> <span class="pre">0</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-names-rect" title="Link to this definition">¶</a></dt>
 <dd><p>Return the rectangle round the strip the replica names are set in: the column the diagram keeps
-clear before the lanes begin.  Given a replica – <code class="docutils literal notranslate"><span class="pre">names-rect(&quot;A&quot;)</span></code> – it is that one name’s own box
-instead.</p>
+clear before the lanes begin.  Given a replica – <code class="docutils literal notranslate"><span class="pre">names-rect(&quot;A&quot;)</span></code> – it is that one name’s
+own box instead.</p>
 </dd></dl>
 
 <dl class="typst locator">
 <dt class="sig sig-object typst" id="typst-locator-arrow-rect">
 <span class="sig-name descname"><span class="pre">arrow-rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em>, <em class="sig-param"><span class="pre">pad:</span> <span class="pre">0</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-arrow-rect" title="Link to this definition">¶</a></dt>
-<dd><p>Return the rectangle round a message or a <code class="docutils literal notranslate"><span class="pre">sync</span></code>, by the name that pairs its two ends: the shaft
-together with both the marks it runs between, so a box drawn round an exchange reads as round the
-exchange rather than round the gap in the middle of it.</p>
+<dd><p>Return the rectangle round a message or a <code class="docutils literal notranslate"><span class="pre">sync</span></code>, by the name that pairs its two ends: the
+shaft together with both the marks it runs between, so a box drawn round an exchange reads as
+round the exchange rather than round the gap in the middle of it.</p>
 </dd></dl>
 
 <dl class="typst locator">
 <dt class="sig sig-object typst" id="typst-locator-arrow-mid">
 <span class="sig-name descname"><span class="pre">arrow-mid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-arrow-mid" title="Link to this definition">¶</a></dt>
-<dd><p>Return the coordinate of the middle of that arrow’s shaft – where the diagram sets an arrow’s own
-label, before stepping it off the shaft.  A note hung here hangs where a label would have.</p>
+<dd><p>Return the coordinate of the middle of that arrow’s shaft – where the diagram sets an arrow’s
+own label, before stepping it off the shaft.  A note hung here hangs where a label would have.</p>
 </dd></dl>
 
 <dl class="typst locator">
@@ -671,9 +670,9 @@ nothing else.</p>
 <span class="sig-name descname"><span class="pre">span</span></span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-span" title="Link to this definition">¶</a></dt>
 <dd><p>Two times: the one each lane’s line starts at, and the one it ends at.  The first is slightly
 negative, because a lane leads in a little before column <code class="docutils literal notranslate"><span class="pre">0</span></code>; the second is past <code class="docutils literal notranslate"><span class="pre">ncols</span> <span class="pre">-</span> <span class="pre">1</span></code>,
-because the line runs on beyond the last mark to carry its arrowhead.  Neither is a column, which is
-what the distinction above is for.  Every lane is drawn over the same stretch, so there is one pair
-for the whole diagram and no replica to ask about.</p>
+because the line runs on beyond the last mark to carry its arrowhead.  Neither is a column, which
+is what the distinction above is for.  Every lane is drawn over the same stretch, so there is one
+pair for the whole diagram and no replica to ask about.</p>
 </dd></dl>
 
 <dl class="typst locator">
@@ -692,16 +691,18 @@ drawing turns an id into a lane when it needs to arrive at one by arithmetic.</p
 <dl class="typst locator">
 <dt class="sig sig-object typst" id="typst-locator-orientation">
 <span class="sig-name descname"><span class="pre">orientation</span></span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-orientation" title="Link to this definition">¶</a></dt>
-<dd><p>Which way this diagram runs, as its canonical name: <code class="docutils literal notranslate"><span class="pre">rightwards</span></code>, <code class="docutils literal notranslate"><span class="pre">leftwards</span></code>, <code class="docutils literal notranslate"><span class="pre">downwards</span></code> or
-<code class="docutils literal notranslate"><span class="pre">upwards</span></code>.  The two shorthands resolve to the direction they stand for, so a drawing that tests
-this never has to test for <code class="docutils literal notranslate"><span class="pre">horizontal</span></code> or <code class="docutils literal notranslate"><span class="pre">vertical</span></code> as well.</p>
+<dd><p>Which way this diagram runs, as its canonical name: <a class="reference internal" href="reference.html#typst-value-rightwards" title="rightwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">rightwards</span></code></a>, <a class="reference internal" href="reference.html#typst-value-leftwards" title="leftwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">leftwards</span></code></a>,
+<a class="reference internal" href="reference.html#typst-value-downwards" title="downwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">downwards</span></code></a> or <a class="reference internal" href="reference.html#typst-value-upwards" title="upwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">upwards</span></code></a>.  The two shorthands resolve to the direction they stand
+for, so a drawing that tests this never has to test for <a class="reference internal" href="reference.html#typst-value-horizontal" title="horizontal"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">horizontal</span></code></a> or <a class="reference internal" href="reference.html#typst-value-vertical" title="vertical"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">vertical</span></code></a>
+as well.</p>
 </dd></dl>
 
 <dl class="typst locator">
 <dt class="sig sig-object typst" id="typst-locator-draw">
 <span class="sig-name descname"><span class="pre">draw</span></span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-draw" title="Link to this definition">¶</a></dt>
-<dd><p>The CeTZ module the diagram draws with – the same one the package re-exports, for a body that would
-rather unpack it than import it: <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">(draw,</span> <span class="pre">mark,</span> <span class="pre">..)</span> <span class="pre">=</span> <span class="pre">d</span></code>, and then <code class="docutils literal notranslate"><span class="pre">draw.circle(..)</span></code>.</p>
+<dd><p>The CeTZ module the diagram draws with – the same one the package re-exports, for a body that
+would rather unpack it than import it: <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">(draw,</span> <span class="pre">mark,</span> <span class="pre">..)</span> <span class="pre">=</span> <span class="pre">d</span></code>, and then
+<code class="docutils literal notranslate"><span class="pre">draw.circle(..)</span></code>.</p>
 </dd></dl>
 
 <dl class="typst locator">
@@ -717,16 +718,17 @@ rather unpack it than import it: <code class="docutils literal notranslate"><spa
 <dl class="typst locator">
 <dt class="sig sig-object typst" id="typst-locator-dot">
 <span class="sig-name descname"><span class="pre">dot</span></span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-dot" title="Link to this definition">¶</a></dt>
-<dd><p>The diagram’s own measurements, in canvas centimeters: one column of time, one lane, and the radius
-of an event’s dot.</p>
-<p>They are here so a drawing can speak the diagram’s own language.  A brace half a column clear of the
-last mark stays half a column clear when you retune <code class="docutils literal notranslate"><span class="pre">col-gap</span></code>; one written as <code class="docutils literal notranslate"><span class="pre">+1.0</span></code> does not.</p>
+<dd><p>The diagram’s own measurements, in canvas centimeters: one column of time, one lane, and the
+radius of an event’s dot.</p>
+<p>They are here so a drawing can speak the diagram’s own language.  A brace half a column clear of
+the last mark stays half a column clear when you retune <code class="docutils literal notranslate"><span class="pre">col-gap</span></code>; one written as <code class="docutils literal notranslate"><span class="pre">+1.0</span></code> does
+not.</p>
 </dd></dl>
 
 </section>
 </section>
 <section id="staying-orientation-independent">
-<h2>Staying orientation-independent<a class="headerlink" href="#staying-orientation-independent" title="Link to this heading">¶</a></h2>
+<span id="orientation-independent"></span><h2>Staying orientation-independent<a class="headerlink" href="#staying-orientation-independent" title="Link to this heading">¶</a></h2>
 <p><a class="reference internal" href="#typst-locator-point" title="point"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">point(time,</span> <span class="pre">lane)</span></code></a> is stated in the diagram’s own axes – logical time along the
 lanes, and lanes across it – so a drawing written in terms of it survives a flip from
 <a class="reference internal" href="reference.html#typst-value-horizontal" title="horizontal"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">horizontal</span></code></a> to <a class="reference internal" href="reference.html#typst-value-vertical" title="vertical"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">vertical</span></code></a>.  One written against raw <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> arithmetic does not:</p>
