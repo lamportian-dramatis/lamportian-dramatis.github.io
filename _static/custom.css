@@ -70,6 +70,16 @@ article img {
     box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
 }
 
+/* A footnote indents everything it holds by 2rem, to clear the gutter its own label sits in, and that
+   rule is written narrowly enough to beat the automatic margins above -- so a picture inside a
+   footnote takes the indent on its left and gives the whole remainder to its right.  Said here, with
+   the footnote named, the two margins are automatic again and a footnote's picture lines up with
+   every other one on the page. */
+article aside.footnote > img {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* Inconsolata runs light beside a serif at the same size; a little more weight in code holds the two
    together on the page. */
 code, kbd, samp, pre {
