@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Literata:opsz,wght@7..72,300..700&family=Inconsolata:wght@400..700&display=swap" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=26c6bb32" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=c87567c3" />
     
     
 
@@ -249,7 +249,7 @@ version, so what a document sees is whatever it asked for – the <a class="refe
 what says which release each of these landed in, and what is still waiting.</p>
 <dl class="typst function">
 <dt class="sig sig-object typst" id="typst-function-lamport-diagram">
-<span class="sig-name descname"><span class="pre">lamport-diagram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">caption:</span> <span class="pre">none</span></em>, <em class="sig-param"><span class="pre">replicas:</span> <span class="pre">()</span></em>, <em class="sig-param"><span class="pre">events:</span> <span class="pre">(:)</span></em>, <em class="sig-param"><span class="pre">orientation:</span> <span class="pre">horizontal</span></em>, <em class="sig-param"><span class="pre">overlays:</span> <span class="pre">none</span></em>, <em class="sig-param"><span class="pre">col-gap:</span> <span class="pre">none</span></em>, <em class="sig-param"><span class="pre">row-gap:</span> <span class="pre">none</span></em>, <em class="sig-param"><span class="pre">text-size:</span> <span class="pre">0.62em</span></em>, <em class="sig-param"><span class="pre">dot:</span> <span class="pre">0.095</span></em>, <em class="sig-param"><span class="pre">message-stroke:</span> <span class="pre">0.9pt</span> <span class="pre">+</span> <span class="pre">luma(110)</span></em><span class="sig-paren">)</span><a class="headerlink" href="#typst-function-lamport-diagram" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">lamport-diagram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">caption:</span> <span class="pre">none</span></em>, <em class="sig-param"><span class="pre">replicas:</span> <span class="pre">()</span></em>, <em class="sig-param"><span class="pre">events:</span> <span class="pre">(:)</span></em>, <em class="sig-param"><span class="pre">messages:</span> <span class="pre">()</span></em>, <em class="sig-param"><span class="pre">orientation:</span> <span class="pre">horizontal</span></em>, <em class="sig-param"><span class="pre">overlays:</span> <span class="pre">none</span></em>, <em class="sig-param"><span class="pre">col-gap:</span> <span class="pre">none</span></em>, <em class="sig-param"><span class="pre">row-gap:</span> <span class="pre">none</span></em>, <em class="sig-param"><span class="pre">text-size:</span> <span class="pre">0.62em</span></em>, <em class="sig-param"><span class="pre">dot:</span> <span class="pre">0.095</span></em>, <em class="sig-param"><span class="pre">message-stroke:</span> <span class="pre">0.9pt</span> <span class="pre">+</span> <span class="pre">luma(110)</span></em><span class="sig-paren">)</span><a class="headerlink" href="#typst-function-lamport-diagram" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Arguments<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -263,6 +263,11 @@ event defaults – or a bare dictionary of the same fields.</p></li>
 <li id="typst-param-lamport-diagram-events"><p><strong>events</strong> – each replica id mapped to that replica’s local history, in order.  An entry is
 bare content or a bare string for a local event, or one of <a class="reference internal" href="#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a>, <a class="reference internal" href="#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>,
 <a class="reference internal" href="#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a>, <a class="reference internal" href="#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a>, <a class="reference internal" href="#typst-function-idle" title="idle"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">idle</span></code></a> and <a class="reference internal" href="#typst-function-gap" title="gap"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">gap</span></code></a>.</p></li>
+<li id="typst-param-lamport-diagram-messages"><p><strong>messages</strong> – <p>arbitrary arrows the diagram is to draw between two of its own points, as
+<a class="reference internal" href="#typst-function-message" title="message"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">message</span></code></a> items.</p>
+<p>Every other arrow the diagram works out for itself, from the <a class="reference internal" href="#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>, <a class="reference internal" href="#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a> and
+<a class="reference internal" href="#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a> points on the lanes.</p>
+</p></li>
 <li id="typst-param-lamport-diagram-overlays"><p><strong>overlays</strong> – your own CeTZ, drawn into the diagram at a layer of your choosing.  See
 <a class="reference internal" href="overlays.html"><span class="doc">Overlays</span></a>.</p></li>
 </ul>
@@ -552,6 +557,44 @@ would otherwise run through; it is a drawing offset and says nothing about the o
 </dd></dl>
 
 <dl class="typst function">
+<dt class="sig sig-object typst" id="typst-function-message">
+<span class="sig-name descname"><span class="pre">message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">from</span></em>, <em class="sig-param"><span class="pre">to</span></em>, <em class="sig-param"><span class="pre">..args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#typst-function-message" title="Link to this definition">¶</a></dt>
+<dd><p>An arrow between two points the diagram already holds, and the note that goes beside it.  Both
+ends go positionally, each a <code class="docutils literal notranslate"><span class="pre">(replica,</span> <span class="pre">id-or-index)</span></code> pair – the way a point is named
+everywhere else – and the body is the note:</p>
+<div class="highlight"><pre><span class="w">  </span><span class="nv">messages</span><span class="p">:</span><span class="w"> </span><span class="nf">message</span><span class="p">((</span><span class="s2">"server"</span><span class="p">,</span><span class="w"> </span><span class="s2">"http-request"</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s2">"node"</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="nf">luma</span><span class="p">(</span><span class="mi">150</span><span class="p">))[</span>
+<span class="w">    </span>server<span class="w"> </span>already<span class="p">\</span>
+<span class="w">    </span>committed<span class="w"> </span>its<span class="w"> </span>DB
+<span class="w">  </span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+<p>A <a class="reference internal" href="#typst-function-message" title="message"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">message</span></code></a> is drawn and nothing more.  Both of its ends are points the diagram has
+already placed, so it moves no column and says nothing about order.  It is for an arrow the
+diagram has no other way to hold – the reply a <a class="reference internal" href="#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a> stands for, say.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li id="typst-param-message-color"><p><strong>color</strong> – tints the arrow, its head and the note together.  Left alone they take the paint of
+<a class="reference internal" href="#typst-param-lamport-diagram-message-stroke" title="lamport-diagram.message-stroke"><code class="xref typst typst-param docutils literal notranslate"><span class="pre">message-stroke</span></code></a>, which is what makes an arrow given here look like one
+the diagram worked out for itself.  It may be given positionally.</p></li>
+<li id="typst-param-message-position"><p><strong>position</strong> – which side of the middle of the arrow the note sits on: <a class="reference internal" href="#typst-value-above" title="above"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">above</span></code></a>,
+<a class="reference internal" href="#typst-value-below" title="below"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">below</span></code></a>, <a class="reference internal" href="#typst-value-left" title="left"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">left</span></code></a> or <a class="reference internal" href="#typst-value-right" title="right"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">right</span></code></a>.  Left alone the note sits where the
+orientation puts it – after the middle on a horizontal diagram, under it on a vertical one –
+and this is what moves a note off whatever it landed on.</p></li>
+<li id="typst-param-message-stroke"><p><strong>stroke</strong> – replaces the arrow’s stroke outright, for an arrow that is to read as an aside
+rather than as one of the diagram’s own.  A dashed or dotted one says <em>this arrow is a remark</em>
+as plainly as anything can.</p></li>
+<li id="typst-param-message-size"><p><strong>size</strong> – the note’s text size, <code class="docutils literal notranslate"><span class="pre">0.8em</span></code> of the diagram’s own by default, since a note
+annotates a diagram rather than belonging to it.  <code class="docutils literal notranslate"><span class="pre">none</span></code> takes the size the diagram is drawn
+at.</p></li>
+<li id="typst-param-message-padding"><p><strong>padding</strong> – how far the note keeps off the middle of the arrow, in canvas centimeters –
+<code class="docutils literal notranslate"><span class="pre">0.2</span></code> by default – or a length.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="typst function">
 <dt class="sig sig-object typst" id="typst-function-idle">
 <span class="sig-name descname"><span class="pre">idle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">n</span></em><span class="sig-paren">)</span><a class="headerlink" href="#typst-function-idle" title="Link to this definition">¶</a></dt>
 <dd><p>Spacing to convey idle time passing: <code class="docutils literal notranslate"><span class="pre">n</span></code> columns of ordinary timeline with nothing drawn on
@@ -688,6 +731,7 @@ does.  It has a page of its own: <a class="reference internal" href="overlays.ht
 <li><a class="reference internal" href="#typst-function-send"><code class="docutils literal notranslate"><span class="pre">send()</span></code></a></li>
 <li><a class="reference internal" href="#typst-function-recv"><code class="docutils literal notranslate"><span class="pre">recv()</span></code></a></li>
 <li><a class="reference internal" href="#typst-function-sync"><code class="docutils literal notranslate"><span class="pre">sync()</span></code></a></li>
+<li><a class="reference internal" href="#typst-function-message"><code class="docutils literal notranslate"><span class="pre">message()</span></code></a></li>
 <li><a class="reference internal" href="#typst-function-idle"><code class="docutils literal notranslate"><span class="pre">idle()</span></code></a></li>
 <li><a class="reference internal" href="#typst-function-gap"><code class="docutils literal notranslate"><span class="pre">gap()</span></code></a></li>
 <li><a class="reference internal" href="#typst-value-above"><code class="docutils literal notranslate"><span class="pre">above</span></code></a></li>
