@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Literata:opsz,wght@7..72,300..700&family=Inconsolata:wght@400..700&display=swap" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=26c6bb32" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=a67c15e7" />
     
     
 
@@ -248,7 +248,7 @@
 <h2>Reading a diagram<a class="headerlink" href="#reading-a-diagram" title="Link to this heading">¶</a></h2>
 <img alt="A diagram with each of its parts named: a sync between two replicas, a local event, a send and the receive it feeds, an elided stretch of time, and a timeline of its own" src="_images/legend.png" />
 <p>In following is table, each mark is accompany by some <em>intended</em> meaning; but authors might choose
-different semantics.</p>
+different semantics <a class="footnote-reference brackets" href="#sync-semantics" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -282,10 +282,14 @@ consensus.</p></td>
 <p>Time flows in the direction of the arrows of the timeline.  A <a class="reference internal" href="reference.html#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a> event is usually drawn a
 centimeter further in the direction of time, so every message arrow follows the direction of time
 without the diagram needing padding put in by hand.</p>
-<p>Normally, labels are centred w.r.t their own mark and sit on the orientation’s default side –
-<a class="reference internal" href="reference.html#typst-value-above" title="above"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">above</span></code></a> a horizontal timeline, <a class="reference internal" href="reference.html#typst-value-right" title="right"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">right</span></code></a> of a vertical one –.  The exception is the
-lane’s opening label on a <em>horizontal diagram</em>, which is nudged forward in time so it does sit next
-to the replica’s name.</p>
+<p>Normally, labels are centred w.r.t their own mark and sit on the orientation’s default position.
+There are two exceptions:</p>
+<ul class="simple">
+<li><p>The lane’s opening label on a <em>horizontal diagram</em>, which is nudged forward in time so it does sit
+next to the replica’s name.</p></li>
+<li><p>The default position of <a class="reference internal" href="reference.html#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>, <a class="reference internal" href="reference.html#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a>, and <a class="reference internal" href="reference.html#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a> is computed to be on the
+other side of the incoming/outgoing arrow.</p></li>
+</ul>
 </section>
 <section id="columns-are-mostly-solved-not-authored">
 <span id="columns-solver"></span><h2>Columns are (mostly) solved, not authored<a class="headerlink" href="#columns-are-mostly-solved-not-authored" title="Link to this heading">¶</a></h2>
@@ -311,6 +315,20 @@ the reference resolves to it and it numbers alongside the document’s other fig
 
 As<span class="w"> </span><span class="nl">@fig-duplicated-delete</span><span class="w"> </span>shows,<span class="w"> </span><span class="p">...</span>
 </pre></div>
+<hr class="docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="sync-semantics" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>As an example of semantics you might consider <a class="reference internal" href="reference.html#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a>.  This symbolism is
+actually a convenience over a <strong>whole synchronization protocol</strong>.  The protocol should provides
+the expected guarantees that both replicas will agree on the exchanged values.</p>
+<p>In practice a <code class="docutils literal notranslate"><span class="pre">sync</span></code> might really look like</p>
+<img alt="_images/sync-explained.png" src="_images/sync-explained.png" />
+<p>We have implemented a replicated system, in which <em>syncs</em> can be retried so that failure in the
+node after the server’s HTTP handler committed, but before the node’s DB commit happened can be
+achieved by simply executing the same SYNC protocol.</p>
+</aside>
+</aside>
 </section>
 </section>
 

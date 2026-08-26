@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Literata:opsz,wght@7..72,300..700&family=Inconsolata:wght@400..700&display=swap" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=26c6bb32" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=a67c15e7" />
     
     
 
@@ -506,6 +506,38 @@ So an overlay that recolors an end of an exchange has both halves of it to hand:
 </dd></dl>
 
 <dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-message-args">
+<span class="sig-name descname"><span class="pre">message-args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">from</span></em>, <em class="sig-param"><span class="pre">to</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-message-args" title="Link to this definition">¶</a></dt>
+<dd><p>Return everything it takes to draw a message arrow between two points – the shaft, the stroke
+and the head – as <code class="docutils literal notranslate"><span class="pre">arguments</span></code> ready to spread into <code class="docutils literal notranslate"><span class="pre">line</span></code>.  Each end is a
+<code class="docutils literal notranslate"><span class="pre">(replica,</span> <span class="pre">id-or-index)</span></code> pair, the way a point is named everywhere else:</p>
+<div class="highlight"><pre><span class="w"></span><span class="c1">// The reply a sync hides, drawn as the message it is.</span>
+<span class="w"></span><span class="nf">line</span><span class="p">(..</span><span class="nf">message-args</span><span class="p">((</span><span class="s2">"server"</span><span class="p">,</span><span class="w"> </span><span class="s2">"http-request"</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s2">"node"</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+</pre></div>
+<p>The shaft stops short of the mark at each end, by as much as the diagram’s own arrows stop short
+of theirs.  That is the reason to reach for this instead of running a <code class="docutils literal notranslate"><span class="pre">line</span></code> between two
+<code class="docutils literal notranslate"><span class="pre">mark</span></code> coordinates: an arrow drawn to the middle of a mark reaches into the mark and into the
+backdrop the mark carries, so it reads as striking the dot rather than as arriving at it.</p>
+<p>The diagram draws its own messages from exactly this, and a <code class="docutils literal notranslate"><span class="pre">sync</span></code> from the same thing with a
+head at each end.  Spread it and override what you want changed, the way you would <code class="docutils literal notranslate"><span class="pre">mark-args</span></code>.
+<code class="docutils literal notranslate"><span class="pre">mark</span></code> is one dictionary, though, so a head of your own replaces the fill and the scale too.
+Spread what the spec already holds to keep those – <code class="docutils literal notranslate"><span class="pre">spec.at(&quot;mark&quot;)</span></code>, an <code class="docutils literal notranslate"><span class="pre">arguments</span></code> being
+read with <code class="docutils literal notranslate"><span class="pre">at</span></code> and never with brackets:</p>
+<div class="highlight"><pre><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="nv">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">message-args</span><span class="p">((</span><span class="s2">"server"</span><span class="p">,</span><span class="w"> </span><span class="s2">"http-request"</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s2">"node"</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="w"></span><span class="nf">line</span><span class="p">(..</span><span class="nv">spec</span><span class="p">,</span><span class="w"> </span><span class="nv">mark</span><span class="p">:</span><span class="w"> </span><span class="p">(..</span><span class="nv">spec</span><span class="p">.</span><span class="nf">at</span><span class="p">(</span><span class="s2">"mark"</span><span class="p">),</span><span class="w"> </span><span class="nv">end</span><span class="p">:</span><span class="w"> </span><span class="s2">"triangle"</span><span class="p">))</span>
+</pre></div>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-message-mid">
+<span class="sig-name descname"><span class="pre">message-mid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">from</span></em>, <em class="sig-param"><span class="pre">to</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-message-mid" title="Link to this definition">¶</a></dt>
+<dd><p>Return the <a class="reference internal" href="#term-coordinate"><span class="xref std std-term">coordinate</span></a> of the middle of that same shaft, from the same two ends.  It is to
+an arrow an overlay draws what <a class="reference internal" href="#typst-locator-arrow-mid" title="arrow-mid"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">arrow-mid(name)</span></code></a> is to one the diagram drew:
+the place an arrow’s own label goes before it is stepped off the shaft, and so the place to hang
+a note.</p>
+</dd></dl>
+
+<dl class="typst locator">
 <dt class="sig sig-object typst" id="typst-locator-column">
 <span class="sig-name descname"><span class="pre">column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">replica</span></em>, <em class="sig-param"><span class="pre">id-or-index</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-column" title="Link to this definition">¶</a></dt>
 <dd><p>Return the column the solver put that point in: a whole number, <code class="docutils literal notranslate"><span class="pre">0</span></code> up to <code class="docutils literal notranslate"><span class="pre">ncols</span> <span class="pre">-</span> <span class="pre">1</span></code>.  It
@@ -537,6 +569,21 @@ into, plus whatever <code class="docutils literal notranslate"><span class="pre"
 <code class="docutils literal notranslate"><span class="pre">mark(&quot;C&quot;,</span> <span class="pre">&quot;c-reads&quot;)</span></code> – the same place, said in the diagram’s own axes rather than on the
 page.  That is what makes it the one to reach for when a drawing has to line something up with a
 mark <em>across</em> the lanes, which a coordinate cannot do.</p>
+</dd></dl>
+
+<dl class="typst locator">
+<dt class="sig sig-object typst" id="typst-locator-lane">
+<span class="sig-name descname"><span class="pre">lane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">replica</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-lane" title="Link to this definition">¶</a></dt>
+<dd><p>Return the <a class="reference internal" href="#term-lane"><span class="xref std std-term">lane</span></a> a replica is on: <code class="docutils literal notranslate"><span class="pre">0</span></code> for the first of <a class="reference internal" href="reference.html#typst-function-replica" title="replica"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">replicas</span></code></a>, <code class="docutils literal notranslate"><span class="pre">1</span></code>
+for the next, and so on.  A number comes back unchanged, so a lane between two replicas is said
+the same way as a lane on one – <code class="docutils literal notranslate"><span class="pre">(lane(&quot;A&quot;)</span> <span class="pre">+</span> <span class="pre">lane(&quot;B&quot;))</span> <span class="pre">/</span> <span class="pre">2</span></code> is the lane halfway between them,
+ready for <code class="docutils literal notranslate"><span class="pre">point</span></code>:</p>
+<div class="highlight"><pre><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="nv">between</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nf">lane</span><span class="p">(</span><span class="s2">"A"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">lane</span><span class="p">(</span><span class="s2">"B"</span><span class="p">))</span><span class="w"> </span><span class="err">/</span><span class="w"> </span><span class="mi">2</span>
+<span class="w"></span><span class="nf">line</span><span class="p">(</span><span class="nf">point</span><span class="p">(</span><span class="nv">s</span><span class="p">,</span><span class="w"> </span><span class="nv">between</span><span class="p">),</span><span class="w"> </span><span class="nf">point</span><span class="p">(</span><span class="nv">e</span><span class="p">,</span><span class="w"> </span><span class="nv">between</span><span class="p">),</span><span class="w"> </span><span class="nv">stroke</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="nv">paint</span><span class="p">:</span><span class="w"> </span><span class="nv">red</span><span class="p">,</span><span class="w"> </span><span class="nv">dash</span><span class="p">:</span><span class="w"> </span><span class="s2">"dashed"</span><span class="p">))</span>
+</pre></div>
+<p>It is the mirror of <code class="docutils literal notranslate"><span class="pre">time</span></code>: one answers a position along the timelines, the other a position
+across them, and both are in the diagram’s own axes.  Every entry that takes a lane runs it
+through this, which is why an id and a number are interchangeable wherever one is asked for.</p>
 </dd></dl>
 
 <dl class="typst locator">
@@ -649,8 +696,9 @@ because the line runs on beyond the last mark to carry its arrowhead.</p>
 <dl class="typst locator">
 <dt class="sig sig-object typst" id="typst-locator-replicas">
 <span class="sig-name descname"><span class="pre">replicas</span></span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-replicas" title="Link to this definition">¶</a></dt>
-<dd><p>The replica ids, in order.  The id at index <code class="docutils literal notranslate"><span class="pre">n</span></code> is the replica on lane <code class="docutils literal notranslate"><span class="pre">n</span></code>, which is how a
-drawing turns an id into a lane when it needs to arrive at one by arithmetic.</p>
+<dd><p>The replica ids, in order.  The id at index <code class="docutils literal notranslate"><span class="pre">n</span></code> is the replica on lane <code class="docutils literal notranslate"><span class="pre">n</span></code> – for turning one
+id into a lane, reach for <code class="docutils literal notranslate"><span class="pre">lane</span></code> instead; this is for a drawing that walks every replica, or
+asks how many there are.</p>
 </dd></dl>
 
 <dl class="typst locator">
@@ -735,6 +783,8 @@ naming what was asked for and what that lane actually holds.</p></li>
 there.  An arrow name that is neither a message nor a <code class="docutils literal notranslate"><span class="pre">sync</span></code> fails the same way.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">names-rect</span></code> given a point that carries no label fails compilation, and so does a third
 positional argument.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">message-args</span></code> given an end that is not a <code class="docutils literal notranslate"><span class="pre">(replica,</span> <span class="pre">id-or-index)</span></code> pair fails compilation, and
+so does one point given as both ends.</p></li>
 <li><p>A <code class="docutils literal notranslate"><span class="pre">pad</span></code> that is neither a number nor a pair of them fails compilation.</p></li>
 <li><p>A layer name that is not in <code class="docutils literal notranslate"><span class="pre">layers</span></code> fails compilation, and says which names are.</p></li>
 <li><p>An <code class="docutils literal notranslate"><span class="pre">overlays</span></code> that is none of <code class="docutils literal notranslate"><span class="pre">none</span></code>, a dictionary, a function of one argument, or a CeTZ body
@@ -879,8 +929,11 @@ author can provide the correct interpretation.</p>
 <li><a class="reference internal" href="#typst-locator-mark"><code class="docutils literal notranslate"><span class="pre">mark</span></code></a></li>
 <li><a class="reference internal" href="#typst-locator-mark-args"><code class="docutils literal notranslate"><span class="pre">mark-args</span></code></a></li>
 <li><a class="reference internal" href="#typst-locator-pip-args"><code class="docutils literal notranslate"><span class="pre">pip-args</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-message-args"><code class="docutils literal notranslate"><span class="pre">message-args</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-message-mid"><code class="docutils literal notranslate"><span class="pre">message-mid</span></code></a></li>
 <li><a class="reference internal" href="#typst-locator-column"><code class="docutils literal notranslate"><span class="pre">column</span></code></a></li>
 <li><a class="reference internal" href="#typst-locator-time"><code class="docutils literal notranslate"><span class="pre">time</span></code></a></li>
+<li><a class="reference internal" href="#typst-locator-lane"><code class="docutils literal notranslate"><span class="pre">lane</span></code></a></li>
 <li><a class="reference internal" href="#typst-locator-point"><code class="docutils literal notranslate"><span class="pre">point</span></code></a></li>
 <li><a class="reference internal" href="#the-rectangles">The rectangles</a><ul>
 <li><a class="reference internal" href="#typst-locator-lane-rect"><code class="docutils literal notranslate"><span class="pre">lane-rect</span></code></a></li>

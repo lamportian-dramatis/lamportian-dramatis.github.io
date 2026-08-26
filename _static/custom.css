@@ -53,9 +53,15 @@ article li {
 
 /* A picture alone in its paragraph is a figure and not a word, so it sits centred.  Every diagram is
    drawn on white, which in dark mode would read as a hole torn in the page unless the white is framed
-   as belonging to the picture. */
+   as belonging to the picture.
+
+   The width is what makes the centring show.  The theme holds an image to the full width of whatever
+   holds it, which leaves the two automatic margins nothing to divide -- and a narrower box than the
+   text column, a footnote's for one, then reads as a picture pushed to the left.  90% leaves every
+   image a margin to sit in, wherever it is set. */
 article img {
     display: block;
+    max-width: 90%;
     margin-left: auto;
     margin-right: auto;
     background: #fff;

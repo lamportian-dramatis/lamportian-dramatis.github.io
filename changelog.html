@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Literata:opsz,wght@7..72,300..700&family=Inconsolata:wght@400..700&display=swap" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=38087438" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=26c6bb32" />
     
     
 
@@ -204,6 +204,7 @@
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="overlays.html">Overlays</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overlays.html#footnotes">Footnotes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Changelog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
@@ -252,20 +253,24 @@ is always a deliberate edit.</p>
 <h3>Added<a class="headerlink" href="#added" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">fill</span></code> on <a class="reference internal" href="reference.html#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a>, <a class="reference internal" href="reference.html#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>, <a class="reference internal" href="reference.html#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a> and <a class="reference internal" href="reference.html#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a>, which paints the backdrop
-under a point’s label.  <code class="docutils literal notranslate"><span class="pre">auto</span></code> keeps the white that has always broken whatever runs behind the
-label; a paint is used as given, so a label standing in a wash an overlay laid down can be given
-that same wash and read as part of it instead of as a hole punched in it; <code class="docutils literal notranslate"><span class="pre">none</span></code> leaves the
-backdrop unpainted, which is <code class="docutils literal notranslate"><span class="pre">halo:</span> <span class="pre">none</span></code> with the label’s box kept.</p></li>
-<li><p>Rectangles round a diagram’s own parts, for an overlay to draw against: <a class="reference internal" href="overlays.html#typst-locator-lane-rect" title="lane-rect"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">lane-rect(lane)</span></code></a> for a whole timeline, <a class="reference internal" href="overlays.html#typst-locator-gap-rect" title="gap-rect"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">gap-rect(replica,</span> <span class="pre">index)</span></code></a> for the
-stretch one <a class="reference internal" href="reference.html#typst-function-gap" title="gap"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">gap</span></code></a> elides, <a class="reference internal" href="overlays.html#typst-locator-names-rect" title="names-rect"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">names-rect()</span></code></a> – or <a class="reference internal" href="overlays.html#typst-locator-names-rect" title="names-rect"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">names-rect(replica)</span></code></a> – for the strip the replica names are set in, and <a class="reference internal" href="overlays.html#typst-locator-arrow-rect" title="arrow-rect"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">arrow-rect(name)</span></code></a> for a message or a sync together with the two marks it runs between.  Each
-answers with the two corners <code class="docutils literal notranslate"><span class="pre">rect</span></code> takes, so it spreads straight into one, and each takes a
-<code class="docutils literal notranslate"><span class="pre">pad</span></code> that grows it: one number for every side, or a pair said in the diagram’s own axes – how
-far along the timelines, how far across them – so that a padded box turns with the diagram like
-everything else an overlay is given.</p></li>
-<li><p><a class="reference internal" href="overlays.html#typst-locator-time" title="time"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">time(replica,</span> <span class="pre">id-or-index)</span></code></a></p></li>
+under a point’s label.</p></li>
+<li><p>New locators:</p>
+<ul>
+<li><p><a class="reference internal" href="overlays.html#typst-locator-arrow-mid" title="arrow-mid"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">arrow-mid(name)</span></code></a></p></li>
+<li><p><a class="reference internal" href="overlays.html#typst-locator-gap-rect" title="gap-rect"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">gap-rect(replica,</span> <span class="pre">index)</span></code></a></p></li>
+<li><p><a class="reference internal" href="overlays.html#typst-locator-lane" title="lane"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">lane(replica)</span></code></a></p></li>
+<li><p><a class="reference internal" href="overlays.html#typst-locator-lane-rect" title="lane-rect"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">lane-rect(lane)</span></code></a></p></li>
+<li><p><a class="reference internal" href="overlays.html#typst-locator-message-args" title="message-args"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">message-args(from,</span> <span class="pre">to)</span></code></a></p></li>
+<li><p><a class="reference internal" href="overlays.html#typst-locator-message-mid" title="message-mid"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">message-mid(from,</span> <span class="pre">to)</span></code></a></p></li>
+<li><p><a class="reference internal" href="overlays.html#typst-locator-names-rect" title="names-rect"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">names-rect</span></code></a></p></li>
 <li><p><a class="reference internal" href="overlays.html#typst-locator-pip-args" title="pip-args"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">pip-args(replica,</span> <span class="pre">id-or-index)</span></code></a></p></li>
-<li><p><a class="reference internal" href="overlays.html#typst-locator-arrow-mid" title="arrow-mid"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">arrow-mid(name)</span></code></a>.</p></li>
+<li><p><a class="reference internal" href="overlays.html#typst-locator-time" title="time"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">time(replica,</span> <span class="pre">id-or-index)</span></code></a></p></li>
+</ul>
+</li>
 <li><p><code class="docutils literal notranslate"><span class="pre">halo</span></code> on <a class="reference internal" href="reference.html#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>, <a class="reference internal" href="reference.html#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a> and <a class="reference internal" href="reference.html#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">label-displacement</span></code> on <a class="reference internal" href="reference.html#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>, <a class="reference internal" href="reference.html#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a> and <a class="reference internal" href="reference.html#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a>, which slides the point’s own
+label along the timeline.  It is the <code class="docutils literal notranslate"><span class="pre">displacement</span></code> of an <a class="reference internal" href="reference.html#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a>; on these three
+<code class="docutils literal notranslate"><span class="pre">displacement</span></code> moves the mark.</p></li>
 </ul>
 </section>
 <section id="changed">
@@ -273,6 +278,17 @@ everything else an overlay is given.</p></li>
 <ul class="simple">
 <li><p>Either end of a <a class="reference internal" href="reference.html#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a> is drawn with a dot inside its ring.  Previously, a <a class="reference internal" href="reference.html#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a> and
 a <a class="reference internal" href="reference.html#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a> had the same mark.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">at</span></code> is now <code class="docutils literal notranslate"><span class="pre">label-position</span></code> on <a class="reference internal" href="reference.html#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>, <a class="reference internal" href="reference.html#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a> and <a class="reference internal" href="reference.html#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a>, so that it
+matches the “position” naming in other functions and the documentation.</p></li>
+<li><p>Every arrowhead is curved: a message, both ends of a <a class="reference internal" href="reference.html#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a>, and the head each timeline ends
+with.</p></li>
+</ul>
+</section>
+<section id="removed">
+<h3>Removed<a class="headerlink" href="#removed" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">delay</span></code> on <a class="reference internal" href="reference.html#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>.  A message no longer pushes its receive into a later column; reserve
+that column on the receiving lane with <a class="reference internal" href="reference.html#typst-function-idle" title="idle"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">idle(1)</span></code></a> instead.</p></li>
 </ul>
 </section>
 </section>
@@ -402,6 +418,7 @@ colors.</p></li>
 <li><a class="reference internal" href="#unreleased">Unreleased</a><ul>
 <li><a class="reference internal" href="#added">Added</a></li>
 <li><a class="reference internal" href="#changed">Changed</a></li>
+<li><a class="reference internal" href="#removed">Removed</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#id1">0.2.0 – 2026-08-23</a><ul>

@@ -403,8 +403,14 @@ anything.</p>
 <li id="typst-param-replica-label"><p><strong>label</strong> – what the diagram prints for the lane.  Defaults to <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p></li>
 <li id="typst-param-replica-color"><p><strong>color</strong> – the lane’s color.  Defaults to the next entry of <code class="docutils literal notranslate"><span class="pre">default-palette</span></code>, cycled over
 <a class="reference internal" href="#typst-function-replica" title="replica"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">replicas</span></code></a> in order.</p></li>
-<li id="typst-param-replica-position"><p><strong>position</strong> – <a class="reference internal" href="#typst-value-above" title="above"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">above</span></code></a> or <a class="reference internal" href="#typst-value-below" title="below"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">below</span></code></a>, the side of the timeline this lane’s event
-labels sit on – <a class="reference internal" href="#typst-value-left" title="left"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">left</span></code></a> or <cite>right</cite>: on a vertical diagram; see <a class="reference internal" href="#typst-argument-orientation" title="orientation"><code class="xref typst typst-arg docutils literal notranslate"><span class="pre">orientation</span></code></a>.</p></li>
+<li id="typst-param-replica-position"><p><strong>position</strong> – <p><a class="reference internal" href="#typst-value-above" title="above"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">above</span></code></a> or <a class="reference internal" href="#typst-value-below" title="below"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">below</span></code></a>, the side of the timeline this lane’s event
+labels sit on – <a class="reference internal" href="#typst-value-left" title="left"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">left</span></code></a> or <cite>right</cite>: on a vertical diagram; see <a class="reference internal" href="#typst-argument-orientation" title="orientation"><code class="xref typst typst-arg docutils literal notranslate"><span class="pre">orientation</span></code></a>.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><a class="reference internal" href="#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>, <a class="reference internal" href="#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a>, and <a class="reference internal" href="#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a> ignore the position and place the
+label on the <em>opposite</em> side of the arrow.  Their own <code class="docutils literal notranslate"><span class="pre">label-position</span></code> overrides that.</p>
+</div>
+</p></li>
 <li id="typst-param-replica-size"><p><strong>size</strong> – the text size of this lane’s event labels.</p></li>
 <li id="typst-param-replica-displacement"><p><strong>displacement</strong> – how far this lane’s event labels slide off their own dot.</p></li>
 <li id="typst-param-replica-first-displacement"><p><strong>first-displacement</strong> – the same, for the lane’s opening event, the one that would otherwise
@@ -417,8 +423,6 @@ in any order: they are told apart by type, so <code class="docutils literal notr
 </ul>
 </dd>
 </dl>
-<p>None of these defaults reach a <code class="docutils literal notranslate"><span class="pre">send</span></code> or <code class="docutils literal notranslate"><span class="pre">recv</span></code> label: those keep their own arguments, and
-their side is chosen to stay clear of the message arrow.</p>
 </dd></dl>
 
 <dl class="typst function">
@@ -475,36 +479,42 @@ same event too.</p>
 <dd><p>The points where the message <code class="docutils literal notranslate"><span class="pre">name</span></code> leaves one replica and is applied on another.  Exactly one
 <code class="docutils literal notranslate"><span class="pre">send</span></code> and one <code class="docutils literal notranslate"><span class="pre">recv</span></code> must exist for each name.</p>
 <p>An optional label for the point goes positionally – <code class="docutils literal notranslate"><span class="pre">send(&quot;push&quot;)[pushed]</span></code>, <code class="docutils literal notranslate"><span class="pre">recv(&quot;pull&quot;)[now</span>
-<span class="pre">duplicated]</span></code> – or as <code class="docutils literal notranslate"><span class="pre">body</span></code>, with <code class="docutils literal notranslate"><span class="pre">size</span></code> setting its text size and <code class="docutils literal notranslate"><span class="pre">at</span></code> overriding the
-side it sits on.</p>
-<p>Both take <code class="docutils literal notranslate"><span class="pre">displacement</span></code>, which nudges the point off the column it is solved into, in either
-direction.  A ratio is taken against the column gap.  Only the defaults differ:</p>
-<ul class="simple">
-<li><p>on a <code class="docutils literal notranslate"><span class="pre">recv</span></code> it is <code class="docutils literal notranslate"><span class="pre">1cm</span></code> – how far right of its <code class="docutils literal notranslate"><span class="pre">send</span></code> the point lands whenever nothing on
-its own replica pushes it further, and enough to lean the arrow forward.  <code class="docutils literal notranslate"><span class="pre">recv(...,</span>
-<span class="pre">displacement:</span> <span class="pre">none)</span></code> leaves it on its column, drawing a vertical arrow when the receiving
-replica has nothing else competing for that column.</p></li>
-<li><p>on a <code class="docutils literal notranslate"><span class="pre">send</span></code> it is <code class="docutils literal notranslate"><span class="pre">none</span></code> – a send sits on its own column unless you say otherwise, since it
-is the receive that leans a message forward.  Reach for it to tilt an arrow away from whatever
-a vertical line would otherwise run through, or to separate two sends the solver put in one
-column.</p></li>
+<span class="pre">duplicated]</span></code> – or as <code class="docutils literal notranslate"><span class="pre">body</span></code>, with <code class="docutils literal notranslate"><span class="pre">size</span></code> setting its text size, <code class="docutils literal notranslate"><span class="pre">label-position</span></code>
+overriding the side it sits on, and <code class="docutils literal notranslate"><span class="pre">label-displacement</span></code> sliding it along the timeline.  That
+last one is the <code class="docutils literal notranslate"><span class="pre">displacement</span></code> of an <a class="reference internal" href="#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a>, under a name that says which of the two it
+moves: here <code class="docutils literal notranslate"><span class="pre">displacement</span></code> moves the mark, and <code class="docutils literal notranslate"><span class="pre">label-displacement</span></code> only the label.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li id="typst-param-recv-label-position"><p><strong>label-position</strong> – Overrides the position of the label.  But default, the label is placed in
+the opposite side of the arrow.</p></li>
+<li id="typst-param-recv-displacement"><p><strong>displacement</strong> – <p>Nudges the point off the column it is solved into, in either direction.  A
+ratio is taken against the column gap.  Only the defaults differ:</p>
+<ul>
+<li><p>on a <code class="docutils literal notranslate"><span class="pre">recv</span></code> it is <code class="docutils literal notranslate"><span class="pre">1cm</span></code> – how far right of its <code class="docutils literal notranslate"><span class="pre">send</span></code> the point lands whenever
+nothing on its own replica pushes it further, and enough to lean the arrow forward.
+<code class="docutils literal notranslate"><span class="pre">recv(...,</span> <span class="pre">displacement:</span> <span class="pre">none)</span></code> leaves it on its column, drawing a vertical arrow when the
+receiving replica has nothing else competing for that column.</p></li>
+<li><p>on a <code class="docutils literal notranslate"><span class="pre">send</span></code> it is <code class="docutils literal notranslate"><span class="pre">none</span></code> – a send sits on its own column unless you say otherwise,
+since it is the receive that leans a message forward.  Reach for it to tilt an arrow away
+from whatever a vertical line would otherwise run through, or to separate two sends the
+solver put in one column.</p></li>
 </ul>
+<p>The nudge is a drawing offset the column solver knows nothing about.  It reserves no room, so
+it never moves what follows on its lane, and a negative one wide enough to put a point
+visually behind its own counterpart does <em>not</em> trip the causal-cycle check.  It is equally outside what
+the drawing sizes itself to on that side, so a displacement large enough to push a bodiless
+mark left of where its lane starts will leave it overhanging the replica name.</p>
+</p></li>
+</ul>
+</dd>
+</dl>
 <p>Both also take <code class="docutils literal notranslate"><span class="pre">halo</span></code> and <code class="docutils literal notranslate"><span class="pre">fill</span></code>, the label’s backdrop, which mean exactly what they mean on
 an <a class="reference internal" href="#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">send</span></code> also takes:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li id="typst-param-recv-label"><p><strong>label</strong> – labels the arrow itself rather than the point, and keeps its own styling.</p></li>
-<li id="typst-param-recv-delay"><p><strong>delay</strong> – the minimum number of columns the matching <code class="docutils literal notranslate"><span class="pre">recv</span></code> is pushed forward.  <code class="docutils literal notranslate"><span class="pre">0</span></code> (the
-default) leaves the two in one column, where the receive’s own <code class="docutils literal notranslate"><span class="pre">displacement</span></code> is
-what leans the arrow forward; <code class="docutils literal notranslate"><span class="pre">1</span></code> or more buys the message a whole column of
-flight.  The nudge is a drawing offset the column solver knows nothing about, so a
-negative one wide enough to put a point visually behind its own counterpart does
-<em>not</em> trip the causal-cycle check.  It is equally outside what the drawing sizes
-itself to, so a displacement large enough to push a bodiless mark left of where its
-lane starts will leave it overhanging the replica name.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>label</strong> – labels the arrow itself rather than the point, and keeps its own styling.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -524,8 +534,9 @@ a sync’s end from a <code class="docutils literal notranslate"><span class="pr
 before the other one starts it.  A name cannot be both a <code class="docutils literal notranslate"><span class="pre">sync</span></code> and a <code class="docutils literal notranslate"><span class="pre">send</span></code>/<code class="docutils literal notranslate"><span class="pre">recv</span></code>
 message.</p>
 <p>An optional label for the point goes positionally – <code class="docutils literal notranslate"><span class="pre">sync(&quot;push&quot;)[rolled</span> <span class="pre">back]</span></code> – or as
-<code class="docutils literal notranslate"><span class="pre">body</span></code>, with <code class="docutils literal notranslate"><span class="pre">size</span></code> setting its text size, <code class="docutils literal notranslate"><span class="pre">at</span></code> forcing the side the label sits on, and
-<code class="docutils literal notranslate"><span class="pre">halo</span></code> and <code class="docutils literal notranslate"><span class="pre">fill</span></code> setting its backdrop as they do on an <a class="reference internal" href="#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a>.  <code class="docutils literal notranslate"><span class="pre">label</span></code> instead
+<code class="docutils literal notranslate"><span class="pre">body</span></code>, with <code class="docutils literal notranslate"><span class="pre">size</span></code> setting its text size, <code class="docutils literal notranslate"><span class="pre">label-position</span></code> forcing the side the label sits
+on, <code class="docutils literal notranslate"><span class="pre">label-displacement</span></code> sliding it along the timeline, and <code class="docutils literal notranslate"><span class="pre">halo</span></code> and <code class="docutils literal notranslate"><span class="pre">fill</span></code> setting its
+backdrop as they do on an <a class="reference internal" href="#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a>.  <code class="docutils literal notranslate"><span class="pre">label</span></code> instead
 labels the arrow itself; either end may carry it, and the first one given wins.  <code class="docutils literal notranslate"><span class="pre">displacement</span></code>
 nudges this end off the shared column, which tilts the arrow away from whatever the vertical line
 would otherwise run through; it is a drawing offset and says nothing about the order.</p>
