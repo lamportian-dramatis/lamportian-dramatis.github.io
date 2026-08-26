@@ -1,8 +1,32 @@
 /* Everything the theme sizes, it sizes in `rem`, so the whole design scales from here: text, the
    headings above it, the code inside it and the rails either side.  130% of a browser's 16px default
-   is a little over 20px of body text, which is the size this documentation is meant to be read at. */
+   is a little over 20px of body text, which is the size this documentation is meant to be read at.
+
+   The size follows the viewport, because the layout of the theme does not follow the size.  Furo
+   lays out three columns -- sidebar 15em, text 46em inside 3em of padding either side, contents 15em
+   -- which come to the 82em of its widest breakpoint.  Those columns are `em`, so this rule widens
+   them; the breakpoint is also `em`, but a media query measures `em` against the 16px default of the
+   browser and never against this rule.  A flat 130% therefore asks for 107em of screen while the
+   theme still believes 82em is enough, and the table of contents falls off the right of a laptop.
+
+   So each rung divides the viewport by the width its layout needs, with a couple of em spare for the
+   scrollbar: 82em while the three columns show, 67em once the contents move into a drawer at 82em,
+   and 48em once the sidebar follows them at 63em.  A screen wide enough still reaches the 130% the
+   text is meant to be read at; a narrower one gives up size instead of giving up the contents. */
 html {
-    font-size: 130%;
+    font-size: clamp(100%, calc(100vw / 84), 130%);
+}
+
+@media (max-width: 82em) {
+    html {
+        font-size: clamp(100%, calc(100vw / 69), 130%);
+    }
+}
+
+@media (max-width: 63em) {
+    html {
+        font-size: clamp(100%, calc(100vw / 50), 130%);
+    }
 }
 
 /* What the theme does not say, and this project has an opinion about. */

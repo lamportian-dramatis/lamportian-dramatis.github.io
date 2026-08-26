@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="overlays" href="overlays.html"><link rel="prev" title="Guide" href="guide.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Overlays" href="overlays.html"><link rel="prev" title="Guide" href="guide.html">
 
     <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Reference - lamportian-dramatis</title>
@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Literata:opsz,wght@7..72,300..700&family=Inconsolata:wght@400..700&display=swap" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=38087438" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=26c6bb32" />
     
     
 
@@ -204,6 +204,7 @@
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Guide</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="overlays.html">Overlays</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overlays.html#footnotes">Footnotes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
@@ -252,17 +253,16 @@ what says which release each of these landed in, and what is still waiting.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Arguments<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li id="typst-param-lamport-diagram-caption"><p><strong>caption</strong> – with one, the result is a <code class="docutils literal notranslate"><span class="pre">figure</span></code>; without one it is the bare drawing, to
-place inside a <code class="docutils literal notranslate"><span class="pre">figure</span></code> of your own.  Attach a <code class="docutils literal notranslate"><span class="pre">&lt;label&gt;</span></code> <em>after</em> the call and
-the reference resolves to the figure, numbering alongside the document’s others.</p></li>
-<li id="typst-param-lamport-diagram-replicas"><p><strong>replicas</strong> – the lane order: top to bottom on a horizontal diagram, left to right on a
-vertical one.  Each entry is an id string, a <a class="reference internal" href="#typst-function-replica" title="replica"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">replica</span></code></a> – which also
-carries that lane’s event defaults – or a bare dictionary of the same fields.</p></li>
+<li id="typst-param-lamport-diagram-orientation"><p><strong>orientation</strong> – The direction and sense of logical time. Defaults to <a class="reference internal" href="#typst-value-horizontal" title="horizontal"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">horizontal</span></code></a>.</p></li>
+<li id="typst-param-lamport-diagram-caption"><p><strong>caption</strong> – If provided, the result is a <code class="docutils literal notranslate"><span class="pre">figure</span></code>; without one it is the bare drawing, to
+place inside a <code class="docutils literal notranslate"><span class="pre">figure</span></code> of your own.  Attach a <code class="docutils literal notranslate"><span class="pre">&lt;label&gt;</span></code> after the call and the reference
+resolves to the figure, numbering alongside the document’s others.</p></li>
+<li id="typst-param-lamport-diagram-replicas"><p><strong>replicas</strong> – the lanes order: top to bottom on a horizontal diagram, left to right on a
+vertical one.  Each entry is an id string, a <a class="reference internal" href="#typst-function-replica" title="replica"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">replica</span></code></a> – which also carries that lane’s
+event defaults – or a bare dictionary of the same fields.</p></li>
 <li id="typst-param-lamport-diagram-events"><p><strong>events</strong> – each replica id mapped to that replica’s local history, in order.  An entry is
-bare content or a bare string for a local event, or one of <a class="reference internal" href="#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a>,
-<a class="reference internal" href="#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>, <a class="reference internal" href="#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a>, <a class="reference internal" href="#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a>, <a class="reference internal" href="#typst-function-idle" title="idle"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">idle</span></code></a> and <a class="reference internal" href="#typst-function-gap" title="gap"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">gap</span></code></a>.  Every
-replica must have an entry, and every entry must name a declared replica.</p></li>
-<li id="typst-param-lamport-diagram-orientation"><p><strong>orientation</strong> – which way logical time runs.  See <a class="reference internal" href="#typst-value-horizontal" title="horizontal"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">orientation</span></code></a>.</p></li>
+bare content or a bare string for a local event, or one of <a class="reference internal" href="#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a>, <a class="reference internal" href="#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>,
+<a class="reference internal" href="#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a>, <a class="reference internal" href="#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a>, <a class="reference internal" href="#typst-function-idle" title="idle"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">idle</span></code></a> and <a class="reference internal" href="#typst-function-gap" title="gap"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">gap</span></code></a>.</p></li>
 <li id="typst-param-lamport-diagram-overlays"><p><strong>overlays</strong> – your own CeTZ, drawn into the diagram at a layer of your choosing.  See
 <a class="reference internal" href="overlays.html"><span class="doc">Overlays</span></a>.</p></li>
 </ul>
@@ -331,12 +331,10 @@ much larger or much smaller than a page.</p></li>
 <dt class="sig sig-object typst" id="typst-argument-orientation">
 <span class="sig-name descname"><span class="pre">orientation</span></span><span class="property"> <span class="pre">(argument)</span></span><a class="headerlink" href="#typst-argument-orientation" title="Link to this definition">¶</a></dt>
 <dd><p>Which way logical time runs.  It takes one of the six values below.</p>
-</dd></dl>
-
 <dl class="typst value">
 <dt class="sig sig-object typst" id="typst-value-horizontal">
 <span class="sig-name descname"><span class="pre">horizontal</span></span><span class="property"> <span class="pre">(value)</span></span><a class="headerlink" href="#typst-value-horizontal" title="Link to this definition">¶</a></dt>
-<dd><p>Alias of <a class="reference internal" href="#typst-value-rightwards" title="rightwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">rightwards</span></code></a></p>
+<dd><p>Alias of <a class="reference internal" href="#typst-value-rightwards" title="rightwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">rightwards</span></code></a>, and the default of <a class="reference internal" href="#typst-function-lamport-diagram" title="lamport-diagram"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">lamport-diagram</span></code></a>.</p>
 </dd></dl>
 
 <dl class="typst value">
@@ -353,7 +351,8 @@ much larger or much smaller than a page.</p></li>
 <dl class="typst value">
 <dt class="sig sig-object typst" id="typst-value-leftwards">
 <span class="sig-name descname"><span class="pre">leftwards</span></span><span class="property"> <span class="pre">(value)</span></span><a class="headerlink" href="#typst-value-leftwards" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The timelines run horizontally to the right or left.</p>
+</dd></dl>
 
 <dl class="typst value">
 <dt class="sig sig-object typst" id="typst-value-downwards">
@@ -363,13 +362,14 @@ much larger or much smaller than a page.</p></li>
 <dl class="typst value">
 <dt class="sig sig-object typst" id="typst-value-upwards">
 <span class="sig-name descname"><span class="pre">upwards</span></span><span class="property"> <span class="pre">(value)</span></span><a class="headerlink" href="#typst-value-upwards" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The timelines run vertically.</p>
+</dd></dl>
 
-<p>Which way logical time runs.  <a class="reference internal" href="#typst-value-rightwards" title="rightwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">rightwards</span></code></a> and <a class="reference internal" href="#typst-value-leftwards" title="leftwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">leftwards</span></code></a> lay the timelines out as
-rows and stack the replicas downwards; <a class="reference internal" href="#typst-value-downwards" title="downwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">downwards</span></code></a> and <a class="reference internal" href="#typst-value-upwards" title="upwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">upwards</span></code></a> lay them out as
-columns and stack the replicas rightwards.  <a class="reference internal" href="#typst-value-horizontal" title="horizontal"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">horizontal</span></code></a> and <a class="reference internal" href="#typst-value-vertical" title="vertical"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">vertical</span></code></a> are the two
-that need no thinking about, and are <a class="reference internal" href="#typst-value-rightwards" title="rightwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">rightwards</span></code></a> and <a class="reference internal" href="#typst-value-downwards" title="downwards"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">downwards</span></code></a> under a shorter
-name.  These are plain strings, so <code class="docutils literal notranslate"><span class="pre">orientation:</span> <span class="pre">&quot;vertical&quot;</span></code> works without importing anything.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These are plain strings, so <code class="docutils literal notranslate"><span class="pre">orientation:</span> <span class="pre">&quot;vertical&quot;</span></code> works without importing
+anything.</p>
+</div>
 <p>The orientation decides which sides a label may sit on, and which one it sits on by default:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -391,38 +391,29 @@ name.  These are plain strings, so <code class="docutils literal notranslate"><s
 </tbody>
 </table>
 </div>
-<p>A side the orientation has no room for – <a class="reference internal" href="#typst-value-above" title="above"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">above</span></code></a> on a vertical diagram, <a class="reference internal" href="#typst-value-left" title="left"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">left</span></code></a> on a
-horizontal one – is <em>not</em> an error: it is dropped back to that default and otherwise ignored, so
-flipping a finished diagram from horizontal to vertical stays one edit rather than a compile error
-on every lane that named a side.  It passes in silence, which is not the ideal: the ideal is a
-compiler warning, and Typst gives user code no way to raise one.  Printing the complaint into the
-document instead would put it in front of the reader rather than the author, which is worse than
-saying nothing.</p>
-<img alt="The worked example from the front page, drawn vertically" src="_images/vertical.png" />
+</dd></dl>
+
 <dl class="typst function">
 <dt class="sig sig-object typst" id="typst-function-replica">
 <span class="sig-name descname"><span class="pre">replica</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em>, <em class="sig-param"><span class="pre">..defaults</span></em><span class="sig-paren">)</span><a class="headerlink" href="#typst-function-replica" title="Link to this definition">¶</a></dt>
-<dd><p>A replica lane, and the defaults the local events on it fall back on.  <code class="docutils literal notranslate"><span class="pre">name</span></code> is the id that
-the <code class="docutils literal notranslate"><span class="pre">events</span></code> dictionary keys on.</p>
+<dd><p>Define the defaults to be applied to events on the replica’s lane.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li id="typst-param-replica-label"><p><strong>label</strong> – what the diagram prints for the lane.  Defaults to <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p></li>
 <li id="typst-param-replica-color"><p><strong>color</strong> – the lane’s color.  Defaults to the next entry of <code class="docutils literal notranslate"><span class="pre">default-palette</span></code>, cycled over
 <a class="reference internal" href="#typst-function-replica" title="replica"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">replicas</span></code></a> in order.</p></li>
-<li id="typst-param-replica-position"><p><strong>position</strong> – <code class="docutils literal notranslate"><span class="pre">above</span></code> or <code class="docutils literal notranslate"><span class="pre">below</span></code>, the side of the timeline this lane’s event labels sit on
-– <code class="docutils literal notranslate"><span class="pre">left</span></code> or <code class="docutils literal notranslate"><span class="pre">right</span></code> on a vertical diagram; see <a class="reference internal" href="#typst-argument-orientation" title="orientation"><code class="xref typst typst-arg docutils literal notranslate"><span class="pre">orientation</span></code></a>.</p></li>
+<li id="typst-param-replica-position"><p><strong>position</strong> – <a class="reference internal" href="#typst-value-above" title="above"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">above</span></code></a> or <a class="reference internal" href="#typst-value-below" title="below"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">below</span></code></a>, the side of the timeline this lane’s event
+labels sit on – <a class="reference internal" href="#typst-value-left" title="left"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">left</span></code></a> or <cite>right</cite>: on a vertical diagram; see <a class="reference internal" href="#typst-argument-orientation" title="orientation"><code class="xref typst typst-arg docutils literal notranslate"><span class="pre">orientation</span></code></a>.</p></li>
 <li id="typst-param-replica-size"><p><strong>size</strong> – the text size of this lane’s event labels.</p></li>
 <li id="typst-param-replica-displacement"><p><strong>displacement</strong> – how far this lane’s event labels slide off their own dot.</p></li>
 <li id="typst-param-replica-first-displacement"><p><strong>first-displacement</strong> – the same, for the lane’s opening event, the one that would otherwise
-crowd the replica name.  Left alone it is the orientation’s own:
-<code class="docutils literal notranslate"><span class="pre">20%</span></code> on a horizontal diagram, where the name sits immediately left
-of that first label, and <code class="docutils literal notranslate"><span class="pre">0%</span></code> on a vertical one, where the name is
-before the lane in time and the labels are beside it, so there is
-nothing to move out of.  <code class="docutils literal notranslate"><span class="pre">label</span></code>, <code class="docutils literal notranslate"><span class="pre">color</span></code> and <code class="docutils literal notranslate"><span class="pre">position</span></code> may
-also be given positionally, in any order: they are told apart by type,
-so <code class="docutils literal notranslate"><span class="pre">replica(&quot;A&quot;,</span> <span class="pre">below,</span> <span class="pre">red)</span></code> and <code class="docutils literal notranslate"><span class="pre">replica(&quot;B&quot;,</span> <span class="pre">red,</span> <span class="pre">below)</span></code> are
-the same lane.  The rest must be named.</p></li>
+crowd the replica name.  Left alone it is the orientation’s own: <code class="docutils literal notranslate"><span class="pre">20%</span></code> on a horizontal
+diagram, where the name sits immediately left of that first label, and <code class="docutils literal notranslate"><span class="pre">0%</span></code> on a vertical
+one, where the name is before the lane in time and the labels are beside it, so there is
+nothing to move out of.  <code class="docutils literal notranslate"><span class="pre">label</span></code>, <code class="docutils literal notranslate"><span class="pre">color</span></code> and <code class="docutils literal notranslate"><span class="pre">position</span></code> may also be given positionally,
+in any order: they are told apart by type, so <code class="docutils literal notranslate"><span class="pre">replica(&quot;A&quot;,</span> <span class="pre">below,</span> <span class="pre">red)</span></code> and <code class="docutils literal notranslate"><span class="pre">replica(&quot;B&quot;,</span>
+<span class="pre">red,</span> <span class="pre">below)</span></code> are the same lane.  The rest must be named.</p></li>
 </ul>
 </dd>
 </dl>
@@ -433,40 +424,46 @@ their side is chosen to stay clear of the message arrow.</p>
 <dl class="typst function">
 <dt class="sig sig-object typst" id="typst-function-event">
 <span class="sig-name descname"><span class="pre">event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">..args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#typst-function-event" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<p>A local event on a replica’s timeline.  Its body is the label – content or a plain string.</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">position</span></code> – <a class="reference internal" href="#typst-value-above" title="above"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">above</span></code></a> or <a class="reference internal" href="#typst-value-below" title="below"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">below</span></code></a> the timeline, or <a class="reference internal" href="#typst-value-left" title="left"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">left</span></code></a> or <a class="reference internal" href="#typst-value-right" title="right"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">right</span></code></a>
-on a vertical diagram; see <a class="reference internal" href="#typst-argument-orientation" title="orientation"><code class="xref typst typst-arg docutils literal notranslate"><span class="pre">orientation</span></code></a>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">size</span></code> – the label’s text size.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">displacement</span></code> – slides the label along the timeline, out of being centred on its own dot.  A
-ratio is taken against the label’s own width, so <code class="docutils literal notranslate"><span class="pre">+50%</span></code> leaves the label’s left edge over the
-dot and <code class="docutils literal notranslate"><span class="pre">-50%</span></code> its right edge, while a length is an exact offset and <code class="docutils literal notranslate"><span class="pre">0</span></code> (or <code class="docutils literal notranslate"><span class="pre">0%</span></code>) centres
-it.  On a vertical diagram the ratio is taken against the label’s height instead, that being what
-runs along the timeline there.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">width</span></code> – wraps the label to a fixed width instead of letting it run along the timeline on one
-line, which is what keeps a long label from crowding its neighbors.  <strong>Named only</strong>: a bare
-length is read as a <code class="docutils literal notranslate"><span class="pre">displacement</span></code>, that being the far commoner one to reach for.  The box is
-centred on the mark like any other label, and its contents are left to you – wrap the body in
-<code class="docutils literal notranslate"><span class="pre">align(center, ..)</span></code> if centred lines read better than the ragged right edge.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">halo</span></code> – how far the label’s backdrop reaches past the label’s own box, which is what breaks an
-arrow crossing the lane so it does not crowd the glyphs.  <code class="docutils literal notranslate"><span class="pre">auto</span></code> (the default) matches the reach
-of the disc under a mark, so a label and a dot break an arrow by the same amount; a length sets an
-exact reach, and <code class="docutils literal notranslate"><span class="pre">none</span></code> drops the backdrop, letting whatever is behind show through.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">fill</span></code> – what that backdrop is painted with.  <code class="docutils literal notranslate"><span class="pre">auto</span></code> (the default) is white, which is what
-breaks whatever runs behind the label; a paint is used as given, so a label sitting in a wash an
-<a class="reference internal" href="overlays.html"><span class="doc">overlay</span></a> laid down can be given that same wash and read as part of it rather than
-as a hole punched in it; and <code class="docutils literal notranslate"><span class="pre">none</span></code> leaves the backdrop unpainted, which is <code class="docutils literal notranslate"><span class="pre">halo:</span> <span class="pre">none</span></code> with
-the label’s box kept.  A translucent paint hides no more than it says, so an arrow behind a washed
-label still shows through – and a translucent fill over a wash of its own color compounds with it
-into a slightly darker patch.</p></li>
+<dd><p>A local event on a replica’s timeline.  Its body is the label – content or a plain string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li id="typst-param-event-position"><p><strong>position</strong> – <a class="reference internal" href="#typst-value-above" title="above"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">above</span></code></a> or <a class="reference internal" href="#typst-value-below" title="below"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">below</span></code></a> the timeline, or <a class="reference internal" href="#typst-value-left" title="left"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">left</span></code></a> or
+<a class="reference internal" href="#typst-value-right" title="right"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">right</span></code></a> on a vertical diagram; see <a class="reference internal" href="#typst-argument-orientation" title="orientation"><code class="xref typst typst-arg docutils literal notranslate"><span class="pre">orientation</span></code></a>.</p></li>
+<li id="typst-param-event-size"><p><strong>size</strong> – the label’s text size.</p></li>
+<li id="typst-param-event-displacement"><p><strong>displacement</strong> – slides the label along the timeline, out of being centred on its own dot.  A
+ratio is taken against the label’s own width, so <code class="docutils literal notranslate"><span class="pre">+50%</span></code> leaves the label’s left edge over
+the dot and <code class="docutils literal notranslate"><span class="pre">-50%</span></code> its right edge, while a length is an exact offset and <code class="docutils literal notranslate"><span class="pre">0</span></code> (or <code class="docutils literal notranslate"><span class="pre">0%</span></code>)
+centres it.  On a vertical diagram the ratio is taken against the label’s height instead, that
+being what runs along the timeline there.</p></li>
+<li id="typst-param-event-width"><p><strong>width</strong> – wraps the label to a fixed width instead of letting it run along the timeline on
+one line, which is what keeps a long label from crowding its neighbors.  <strong>Named only</strong>: a
+bare length is read as a <code class="docutils literal notranslate"><span class="pre">displacement</span></code>, that being the far commoner one to reach for.  The
+box is centred on the mark like any other label, and its contents are left to you – wrap the
+body in <code class="docutils literal notranslate"><span class="pre">align(center, ..)</span></code> if centred lines read better than the ragged right edge.</p></li>
+<li id="typst-param-event-halo"><p><strong>halo</strong> – how far the label’s backdrop reaches past the label’s own box, which is what breaks
+an arrow crossing the lane so it does not crowd the glyphs.  <code class="docutils literal notranslate"><span class="pre">auto</span></code> (the default) matches
+the reach of the disc under a mark, so a label and a dot break an arrow by the same amount; a
+length sets an exact reach, and <code class="docutils literal notranslate"><span class="pre">none</span></code> drops the backdrop, letting whatever is behind show
+through.</p></li>
+<li id="typst-param-event-fill"><p><strong>fill</strong> – what that backdrop is painted with.  <code class="docutils literal notranslate"><span class="pre">auto</span></code> (the default) is white, which is what
+breaks whatever runs behind the label; a paint is used as given, so a label sitting in a wash
+an <a class="reference internal" href="overlays.html"><span class="doc">overlay</span></a> laid down can be given that same wash and read as part of it
+rather than as a hole punched in it; and <code class="docutils literal notranslate"><span class="pre">none</span></code> leaves the backdrop unpainted, which is
+<code class="docutils literal notranslate"><span class="pre">halo:</span> <span class="pre">none</span></code> with the label’s box kept.  A translucent paint hides no more than it says, so
+an arrow behind a washed label still shows through – and a translucent fill over a wash of
+its own color compounds with it into a slightly darker patch.</p></li>
 </ul>
+</dd>
+</dl>
 <p>The dot itself never moves: it is the event’s place in time, which the layout solves for.</p>
-<p>Arguments are told apart by type, so they may come in any order and every one of them is optional:
-<code class="docutils literal notranslate"><span class="pre">event(below,</span> <span class="pre">+50%)[AddFile1]</span></code> and <code class="docutils literal notranslate"><span class="pre">event(+50%,</span> <span class="pre">below,</span> <span class="pre">&quot;AddFile1&quot;)</span></code> are the same event.  For the
-common case of a label and nothing else, bare content or a bare string in an <code class="docutils literal notranslate"><span class="pre">events</span></code> array is
-shorthand, so <code class="docutils literal notranslate"><span class="pre">[AddFile1]</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;AddFile1&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">event[AddFile1]</span></code> are the same event too.</p>
+<p>Arguments are told apart by type, so they may come in any order and every one of them is
+optional: <code class="docutils literal notranslate"><span class="pre">event(below,</span> <span class="pre">+50%)[AddFile1]</span></code> and <code class="docutils literal notranslate"><span class="pre">event(+50%,</span> <span class="pre">below,</span> <span class="pre">&quot;AddFile1&quot;)</span></code> are the same
+event.  For the common case of a label and nothing else, bare content or a bare string in an
+<code class="docutils literal notranslate"><span class="pre">events</span></code> array is shorthand, so <code class="docutils literal notranslate"><span class="pre">[AddFile1]</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;AddFile1&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">event[AddFile1]</span></code> are the
+same event too.</p>
+</dd></dl>
+
 <dl class="typst function">
 <dt class="sig sig-object typst" id="typst-function-send">
 <span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em>, <em class="sig-param"><span class="pre">..args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#typst-function-send" title="Link to this definition">¶</a></dt>
@@ -619,7 +616,7 @@ does.  It has a page of its own: <a class="reference internal" href="overlays.ht
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title"><code class="docutils literal notranslate"><span class="pre">overlays</span></code></div>
+                <div class="title">Overlays</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -666,13 +663,15 @@ does.  It has a page of its own: <a class="reference internal" href="overlays.ht
             <ul>
 <li><a class="reference internal" href="#">Reference</a><ul>
 <li><a class="reference internal" href="#typst-function-lamport-diagram"><code class="docutils literal notranslate"><span class="pre">lamport-diagram()</span></code></a></li>
-<li><a class="reference internal" href="#typst-argument-orientation"><code class="docutils literal notranslate"><span class="pre">orientation</span></code></a></li>
+<li><a class="reference internal" href="#typst-argument-orientation"><code class="docutils literal notranslate"><span class="pre">orientation</span></code></a><ul>
 <li><a class="reference internal" href="#typst-value-horizontal"><code class="docutils literal notranslate"><span class="pre">horizontal</span></code></a></li>
 <li><a class="reference internal" href="#typst-value-vertical"><code class="docutils literal notranslate"><span class="pre">vertical</span></code></a></li>
 <li><a class="reference internal" href="#typst-value-rightwards"><code class="docutils literal notranslate"><span class="pre">rightwards</span></code></a></li>
 <li><a class="reference internal" href="#typst-value-leftwards"><code class="docutils literal notranslate"><span class="pre">leftwards</span></code></a></li>
 <li><a class="reference internal" href="#typst-value-downwards"><code class="docutils literal notranslate"><span class="pre">downwards</span></code></a></li>
 <li><a class="reference internal" href="#typst-value-upwards"><code class="docutils literal notranslate"><span class="pre">upwards</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#typst-function-replica"><code class="docutils literal notranslate"><span class="pre">replica()</span></code></a></li>
 <li><a class="reference internal" href="#typst-function-event"><code class="docutils literal notranslate"><span class="pre">event()</span></code></a></li>
 <li><a class="reference internal" href="#typst-function-send"><code class="docutils literal notranslate"><span class="pre">send()</span></code></a></li>

@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Literata:opsz,wght@7..72,300..700&family=Inconsolata:wght@400..700&display=swap" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=38087438" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=26c6bb32" />
     
     
 
@@ -204,6 +204,7 @@
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="overlays.html">Overlays</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overlays.html#footnotes">Footnotes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
@@ -241,12 +242,12 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="lamportian-dramatis">
-<h1>lamportian-dramatis<a class="headerlink" href="#lamportian-dramatis" title="Link to this heading">¶</a></h1>
-<p>Lamport diagrams for replicated systems, as a <a class="reference external" href="https://typst.app/">Typst</a> package: one horizontal
-timeline per replica, local events as dots on that timeline, and arrows for the messages that carry
-events from one replica to another.  The horizontal axis is logical time, in the sense of the clocks
-of <a class="reference external" href="https://lamport.azurewebsites.net/pubs/time-clocks.pdf">Time, Clocks, and the Ordering of Events in a Distributed System</a>.</p>
+          <section id="a-typst-package-for-lamport-diagrams">
+<h1>A Typst Package for Lamport Diagrams<a class="headerlink" href="#a-typst-package-for-lamport-diagrams" title="Link to this heading">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">lamportian-dramatis</span></code> is a <a class="reference external" href="https://typst.app/">Typst</a> package to draw Lamport diagrams.  You can easily draw lines for
+each replica, local events as dots on that timeline, and arrows for the messages that carry events
+from one replica to another.  The timeline axis is logical time, in the sense of the clocks of
+<a class="reference external" href="https://lamport.azurewebsites.net/pubs/time-clocks.pdf">Time, Clocks, and the Ordering of Events in a Distributed System</a>.</p>
 <blockquote>
 <div><p><strong>Pre-1.0.</strong>  This is young and still changing a lot.  Nothing here is a stable API until 1.0.0,
 so expect breaking changes between 0.x releases – argument names, defaults and the shape of what
@@ -254,7 +255,7 @@ the helpers return are all still open.  A Typst import names an exact version, s
 under you: upgrading is always a deliberate edit.</p>
 </div></blockquote>
 <img alt="A fictional scenario showing a convergence bug in a fictional system" src="_images/gorgeous.png" />
-<p>The whole document that draws it:</p>
+<p>The image above is drawing with a DSL-like giving the replicas and their events:</p>
 <div class="highlight"><pre><span></span><span class="kn">#import</span><span class="w"> </span><span class="s2">"@preview/lamportian-dramatis:0.2.0"</span><span class="p">:</span><span class="w"> </span><span class="nv">lamport-diagram</span><span class="p">,</span><span class="w"> </span><span class="nv">sync</span><span class="p">,</span><span class="w"> </span><span class="nv">below</span><span class="p">,</span><span class="w"> </span><span class="nv">above</span><span class="p">,</span><span class="w"> </span><span class="nv">send</span><span class="p">,</span><span class="w"> </span><span class="nv">recv</span><span class="p">,</span><span class="w"> </span><span class="nv">replica</span>
 
 <span class="kd">#set</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="nv">width</span><span class="p">:</span><span class="w"> </span><span class="m">13</span><span class="kr">cm</span><span class="p">,</span><span class="w"> </span><span class="nv">height</span><span class="p">:</span><span class="w"> </span><span class="kc">auto</span><span class="p">,</span><span class="w"> </span><span class="nv">margin</span><span class="p">:</span><span class="w"> </span><span class="m">0.4</span><span class="kr">cm</span><span class="p">)</span>
@@ -358,7 +359,7 @@ with its source.</p></li>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">lamportian-dramatis</a><ul>
+<li><a class="reference internal" href="#">A Typst Package for Lamport Diagrams</a><ul>
 <li><a class="reference internal" href="#read-on">Read on</a></li>
 <li><a class="reference internal" href="#elsewhere">Elsewhere</a></li>
 </ul>

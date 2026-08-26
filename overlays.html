@@ -6,12 +6,12 @@
 <link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Gallery" href="gallery.html"><link rel="prev" title="Reference" href="reference.html">
 
     <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>overlays - lamportian-dramatis</title>
+        <title>Overlays - lamportian-dramatis</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Literata:opsz,wght@7..72,300..700&family=Inconsolata:wght@400..700&display=swap" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=38087438" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=26c6bb32" />
     
     
 
@@ -204,6 +204,7 @@
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Overlays</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#footnotes">Footnotes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
@@ -242,32 +243,27 @@
         </div>
         <article role="main" id="furo-main-content">
           <section id="overlays">
-<h1><code class="docutils literal notranslate"><span class="pre">overlays</span></code><a class="headerlink" href="#overlays" title="Link to this heading">¶</a></h1>
-<p>This page describes the <code class="docutils literal notranslate"><span class="pre">overlays</span></code> argument of <a class="reference internal" href="reference.html#typst-function-lamport-diagram" title="lamport-diagram"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">lamport-diagram</span></code></a>: an escape hatch for
-drawing arbitrary <a class="reference external" href="https://typst.app/universe/package/cetz/">CeTZ</a> into a diagram, in the
-diagram’s own coordinates, addressing the diagram’s own points – and at a chosen depth, so a drawing
-can sit behind what the diagram draws as readily as in front of it.</p>
+<h1>Overlays<a class="headerlink" href="#overlays" title="Link to this heading">¶</a></h1>
+<p>This page describes the <code class="docutils literal notranslate"><span class="pre">overlays</span></code> argument of <a class="reference internal" href="reference.html#typst-function-lamport-diagram" title="lamport-diagram"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">lamport-diagram</span></code></a>.  Overlays allow to draw
+arbitrary <a class="reference external" href="https://typst.app/universe/package/cetz/">CeTZ</a> into a diagram; using the diagram’s
+own coordinates and at a chosen <a class="reference internal" href="#layers-section"><span class="std std-ref">depth</span></a>.</p>
 <section id="terminology-values-and-types">
 <h2>Terminology, values and types<a class="headerlink" href="#terminology-values-and-types" title="Link to this heading">¶</a></h2>
-<p>The entries of the <em>locator</em> – the dictionary a drawing is handed, described under <a class="reference internal" href="#shape">Shape</a> – take
-and answer in a handful of kinds of value, and the kinds are worth keeping apart:</p>
+<p>The entries of the <code class="docutils literal notranslate"><span class="pre">locator</span></code> – the dictionary a drawing is handed, described under <a class="reference internal" href="#shape">Shape</a> –
+take and answer in a handful of kinds of value, and the kinds are worth keeping apart:</p>
 <img alt="Two replicas crossed by dotted guides: one at column 1, which is time 1 as well; a pair at the message, one on the column the solver settled on and one on the time the receiving end was drawn at, with the displacement between the two measured; and one running along lane 0.5, between the replicas" src="_images/locators.png" />
 <dl class="simple glossary">
 <dt id="term-time">time<a class="headerlink" href="#term-time" title="Link to this term">¶</a></dt><dd><p>A position along logical time.  It is a real number placed along the axis the timelines run on.
-<code class="docutils literal notranslate"><span class="pre">0</span></code> is the first <a class="reference internal" href="#term-column"><span class="xref std std-term">column</span></a>: the solver starts every point there and only ever pushes
-one later, so nothing is solved before <code class="docutils literal notranslate"><span class="pre">0</span></code> – though a lane whose opening point waits on a
-message does start further along than that.  Times are what let a drawing be placed at, before
-or after any moment the diagram holds – <code class="docutils literal notranslate"><span class="pre">-0.5</span></code> falls before the first column, and <code class="docutils literal notranslate"><span class="pre">1.5</span></code>
-midway between the second column and the third (if any).</p>
+<code class="docutils literal notranslate"><span class="pre">0</span></code> is the first <a class="reference internal" href="#term-column"><span class="xref std std-term">column</span></a>.  The <a class="reference internal" href="guide.html#columns-solver"><span class="std std-ref">solver</span></a> starts every point there
+and only increases <code class="docutils literal notranslate"><span class="pre">0</span></code>.  Times are what let a drawing be placed at, before or after any
+moment the diagram holds – <code class="docutils literal notranslate"><span class="pre">-0.5</span></code> falls before the first column, and <code class="docutils literal notranslate"><span class="pre">1.5</span></code> midway between
+the second column and the third (if any).</p>
 </dd>
 <dt id="term-column">column<a class="headerlink" href="#term-column" title="Link to this term">¶</a></dt><dd><p>One of the whole times the solver hands out, <code class="docutils literal notranslate"><span class="pre">0</span></code> up to <code class="docutils literal notranslate"><span class="pre">ncols</span> <span class="pre">-</span> <span class="pre">1</span></code>.  Every column is a
-<a class="reference internal" href="#term-time"><span class="xref std std-term">time</span></a>; most times are not columns.  This is the discrete thing the layout reasons about,
-and the only kind that can answer “did these two land at the same moment”.  Columns count from
-<code class="docutils literal notranslate"><span class="pre">0</span></code>, so a lane’s opening point sits in column <code class="docutils literal notranslate"><span class="pre">0</span></code> unless a message it receives pushes it
-later.  That is not the numbering an index uses – see <a class="reference internal" href="#addressing-a-point">Addressing a point</a> – and <code class="docutils literal notranslate"><span class="pre">column(&quot;A&quot;,</span>
-<span class="pre">1)</span></code> says “the first item written on A”, by an index counting from <code class="docutils literal notranslate"><span class="pre">1</span></code>, and answers <code class="docutils literal notranslate"><span class="pre">0</span></code>,
-the column the solver put it in.  An index says where in the lane’s array a point stands; a
-column says when it happens.</p>
+<a class="reference internal" href="#term-time"><span class="xref std std-term">time</span></a>.  This is the discrete points in the timeline the layout solver reasons about, and
+the only kind that can answer “did these two land at the same moment” <a class="footnote-reference brackets" href="#semantics-of-column" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.
+Columns count from <code class="docutils literal notranslate"><span class="pre">0</span></code>, so a lane’s opening point sits in column <code class="docutils literal notranslate"><span class="pre">0</span></code> unless it is
+displaced.  See <a class="reference internal" href="#addressing-a-point">Addressing a point</a>.</p>
 </dd>
 <dt id="term-lane">lane<a class="headerlink" href="#term-lane" title="Link to this term">¶</a></dt><dd><p>A position on the replica axis, a real number: <code class="docutils literal notranslate"><span class="pre">0</span></code> is the first replica, <code class="docutils literal notranslate"><span class="pre">1</span></code> the second,
 <code class="docutils literal notranslate"><span class="pre">0.5</span></code> between them, and <code class="docutils literal notranslate"><span class="pre">-0.4</span></code> a little to the outside of the first.  It is a position and
@@ -333,7 +329,7 @@ nothing at all – <code class="docutils literal notranslate"><span class="pre">
 <p>The locator is a dictionary; unpack the entries a layer needs and call them.</p>
 </section>
 <section id="layers">
-<h2>Layers<a class="headerlink" href="#layers" title="Link to this heading">¶</a></h2>
+<span id="layers-section"></span><h2>Layers<a class="headerlink" href="#layers" title="Link to this heading">¶</a></h2>
 <p>A diagram is drawn in a fixed sequence of passes: the arrows first, then the backdrops that erase
 them wherever a lane crosses, then the timelines, then the marks, then the labels.  Each pass is a
 <strong>layer</strong>, and each key of <code class="docutils literal notranslate"><span class="pre">overlays</span></code> names one.</p>
@@ -395,19 +391,18 @@ them is not what lies between but what they mean – <code class="docutils liter
 <h3>The layers are part of the API<a class="headerlink" href="#the-layers-are-part-of-the-api" title="Link to this heading">¶</a></h3>
 <p>Their names and their order are not an internal detail to be read off this page.  <code class="docutils literal notranslate"><span class="pre">layers</span></code> is the
 ordered array of them, bottom to top, and the package exports it:</p>
-<div class="highlight"><pre><span></span><span class="kn">#import</span><span class="w"> </span><span class="s2">"@preview/lamportian-dramatis:0.2.0"</span><span class="p">:</span><span class="w"> </span><span class="nv">layers</span>
-
-<span class="nv">#layers</span>
-<span class="c1">// ("background", "arrows", "backdrops", "timelines", "marks", "labels", "foreground")</span>
+<dl class="typst value">
+<dt class="sig sig-object typst" id="typst-value-layers">
+<span class="sig-name descname"><span class="pre">layers</span></span><span class="property"> <span class="pre">(value)</span></span><a class="headerlink" href="#typst-value-layers" title="Link to this definition">¶</a></dt>
+<dd><p>An array with known layers.  It is just the array:</p>
+<div class="highlight-typst notranslate"><div class="highlight"><pre><span></span>("background",<span class="w"> </span>"arrows",<span class="w"> </span>"backdrops",<span class="w"> </span>"timelines",<span class="w"> </span>"marks",<span class="w"> </span>"labels",<span class="w"> </span>"foreground")
 </pre></div>
-<p>They are plain strings, as orientations are, so <code class="docutils literal notranslate"><span class="pre">overlays:</span> <span class="pre">(marks:</span> <span class="pre">...)</span></code> needs no import.
-<code class="docutils literal notranslate"><span class="pre">layers</span></code> is for when you want to check a name, walk the stack, or build an <code class="docutils literal notranslate"><span class="pre">overlays</span></code> dictionary
-out of something that is not a literal.</p>
-<p>Exposing them settles what would otherwise be a matter of taste: which layers to offer.  The answer
-is all of them, because the array claims to be how the diagram is drawn.  <code class="docutils literal notranslate"><span class="pre">timelines</span></code> earns its
-place not by being useful – a dashed line along a lane is the only use I can name for it – but by
-being a pass; leaving it out would make <code class="docutils literal notranslate"><span class="pre">layers</span></code> a curated list of good ideas rather than a
-description, and the reader could no longer trust the order.</p>
+</div>
+</dd></dl>
+
+<p>They are plain strings, so <code class="docutils literal notranslate"><span class="pre">overlays:</span> <span class="pre">(marks:</span> <span class="pre">...)</span></code> needs no import.  <a class="reference internal" href="#typst-value-layers" title="layers"><code class="xref typst typst-value docutils literal notranslate"><span class="pre">layers</span></code></a> is for when
+you want to check a name, walk the stack, or build an <code class="docutils literal notranslate"><span class="pre">overlays</span></code> dictionary out of something that
+is not a literal.</p>
 </section>
 <section id="arrows-and-backdrops-are-not-the-same-place">
 <h3><code class="docutils literal notranslate"><span class="pre">arrows</span></code> and <code class="docutils literal notranslate"><span class="pre">backdrops</span></code> are not the same place<a class="headerlink" href="#arrows-and-backdrops-are-not-the-same-place" title="Link to this heading">¶</a></h3>
@@ -439,31 +434,22 @@ it was drawn on.)</p>
 </section>
 <section id="addressing-a-point">
 <h2>Addressing a point<a class="headerlink" href="#addressing-a-point" title="Link to this heading">¶</a></h2>
-<p>Every point on a lane is <code class="docutils literal notranslate"><span class="pre">(replica,</span> <span class="pre">id)</span></code>.  An id need only be unique <em>within its own lane</em>, which
-is what lets a <code class="docutils literal notranslate"><span class="pre">sync</span></code>’s two ends and a message’s two ends keep the name that pairs them:</p>
-<div class="highlight"><pre><span class="nf">mark</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="s2">"bad"</span><span class="p">)</span><span class="w">        </span><span class="c1">// an event, by the id it was given</span>
-<span class="nf">mark</span><span class="p">(</span><span class="s2">"S"</span><span class="p">,</span><span class="w"> </span><span class="s2">"a-pushes"</span><span class="p">)</span><span class="w">   </span><span class="c1">// this end of the sync;  mark("A", "a-pushes") is the other</span>
-<span class="nf">mark</span><span class="p">(</span><span class="s2">"C"</span><span class="p">,</span><span class="w"> </span><span class="s2">"c-pushes"</span><span class="p">)</span><span class="w">   </span><span class="c1">// the send;  mark("S", "c-pushes") is its recv</span>
+<p>Every point on a lane is <code class="docutils literal notranslate"><span class="pre">(replica,</span> <span class="pre">id)</span></code>.  The <code class="docutils literal notranslate"><span class="pre">id</span></code> is either the index of the event in the
+lane, the argument <code class="docutils literal notranslate"><span class="pre">id</span></code> to <a class="reference internal" href="reference.html#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a>, or the name given to <code class="docutils literal notranslate"><span class="pre">send</span></code>, <code class="docutils literal notranslate"><span class="pre">recv</span></code> and <code class="docutils literal notranslate"><span class="pre">sync</span></code>.</p>
+<div class="highlight"><pre><span class="w"></span><span class="nf">mark</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="s2">"bad"</span><span class="p">)</span><span class="w">        </span><span class="c1">// an event, by the id it was given</span>
+<span class="w"></span><span class="nf">mark</span><span class="p">(</span><span class="s2">"S"</span><span class="p">,</span><span class="w"> </span><span class="s2">"a-pushes"</span><span class="p">)</span><span class="w">   </span><span class="c1">// this end of the sync;  mark("A", "a-pushes") is the other</span>
+<span class="w"></span><span class="nf">mark</span><span class="p">(</span><span class="s2">"C"</span><span class="p">,</span><span class="w"> </span><span class="s2">"c-pushes"</span><span class="p">)</span><span class="w">   </span><span class="c1">// the send;  mark("S", "c-pushes") is its recv</span>
 </pre></div>
-<p><code class="docutils literal notranslate"><span class="pre">send</span></code>, <code class="docutils literal notranslate"><span class="pre">recv</span></code> and <code class="docutils literal notranslate"><span class="pre">sync</span></code> already carry a name, and that name is their id.  A local <code class="docutils literal notranslate"><span class="pre">event</span></code>
-has none, so it takes one:</p>
-<div class="highlight"><pre><span class="w"></span><span class="s2">"A"</span><span class="p">:</span><span class="w"> </span><span class="p">([</span><span class="sb">`A.1`</span><span class="p">],</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span><span class="w"> </span><span class="s2">"bad"</span><span class="p">)[</span><span class="sb">`A.2`</span><span class="p">],</span><span class="w"> </span><span class="nf">sync</span><span class="p">(</span><span class="s2">"a-pushes"</span><span class="p">)),</span>
-</pre></div>
-<p>Ids are opt-in on purpose.  The alternative – addressing an event by where it sits, <code class="docutils literal notranslate"><span class="pre">A.0</span></code>,
-<code class="docutils literal notranslate"><span class="pre">A.1</span></code>, … – would put back exactly the fragility that solving the columns removed: insert one event
-and every drawing below it points silently at the wrong dot.  An id you wrote survives the insert.</p>
-<p>Two points on one lane may not share an id, and that is an error rather than a silent win for
-whichever came first.</p>
 <section id="by-index">
 <h3>By index<a class="headerlink" href="#by-index" title="Link to this heading">¶</a></h3>
 <p>Anywhere an id is taken an integer is taken too, addressing the lane positionally, <strong>1-based</strong>,
 counting <em>every</em> item in the lane’s array including <code class="docutils literal notranslate"><span class="pre">gap</span></code> and <code class="docutils literal notranslate"><span class="pre">idle</span></code>.  It numbers the array and
 nothing else – the columns the solver hands out count from <code class="docutils literal notranslate"><span class="pre">0</span></code>, so the first item on a lane is
 index <code class="docutils literal notranslate"><span class="pre">1</span></code> and column <code class="docutils literal notranslate"><span class="pre">0</span></code>:</p>
-<div class="highlight"><pre><span class="nf">mark</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">      </span><span class="c1">// the lane's opening item</span>
-<span class="nf">mark</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
-<span class="nf">mark</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w">     </span><span class="c1">// the last item -- the one index that survives an insert</span>
-<span class="nf">column</span><span class="p">(</span><span class="s2">"B"</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">    </span><span class="c1">// and the same wherever else a point is asked for</span>
+<div class="highlight"><pre><span class="w"></span><span class="nf">mark</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">      </span><span class="c1">// the lane's opening item</span>
+<span class="w"></span><span class="nf">mark</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+<span class="w"></span><span class="nf">mark</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w">     </span><span class="c1">// the last item -- the one index that survives an insert</span>
+<span class="w"></span><span class="nf">column</span><span class="p">(</span><span class="s2">"B"</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">    </span><span class="c1">// and the same wherever else a point is asked for</span>
 </pre></div>
 <p>Ids are strings and indices are integers, so the two never need telling apart by hand.  An index is
 what to reach for when naming a one-off is not worth it – bearing in mind that it moves when you
@@ -578,9 +564,9 @@ is what keeps a padded box the same box when the diagram is turned on its side:<
 <span class="w"></span><span class="nf">gap-rect</span><span class="p">(</span><span class="s2">"R1"</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nv">pad</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.14</span><span class="p">))</span><span class="w">  </span><span class="c1">// tight in time, standing clear of the lane</span>
 </pre></div>
 <p>Unpadded, a rectangle is exactly the part it names, and that is what makes it worth asking for: the
-diagram sets its names into the very box <code class="docutils literal notranslate"><span class="pre">names-rect</span></code> hands out, interrupts a lane over the very
-stretch <code class="docutils literal notranslate"><span class="pre">gap-rect</span></code> answers with, and runs its arrows between the very points <code class="docutils literal notranslate"><span class="pre">arrow-mid</span></code> takes
-the middle of.  None of it is re-derived, so none of it can drift.</p>
+diagram sets its names and its labels into the very boxes <code class="docutils literal notranslate"><span class="pre">names-rect</span></code> hands out, interrupts a
+lane over the very stretch <code class="docutils literal notranslate"><span class="pre">gap-rect</span></code> answers with, and runs its arrows between the very points
+<code class="docutils literal notranslate"><span class="pre">arrow-mid</span></code> takes the middle of.  None of it is re-derived, so none of it can drift.</p>
 <dl class="typst locator">
 <dt class="sig sig-object typst" id="typst-locator-lane-rect">
 <span class="sig-name descname"><span class="pre">lane-rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lane</span></em>, <em class="sig-param"><span class="pre">pad:</span> <span class="pre">0</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-lane-rect" title="Link to this definition">¶</a></dt>
@@ -602,9 +588,30 @@ there.</p>
 <dl class="typst locator">
 <dt class="sig sig-object typst" id="typst-locator-names-rect">
 <span class="sig-name descname"><span class="pre">names-rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">pad:</span> <span class="pre">0</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-names-rect" title="Link to this definition">¶</a></dt>
-<dd><p>Return the rectangle round the strip the replica names are set in: the column the diagram keeps
-clear before the lanes begin.  Given a replica – <code class="docutils literal notranslate"><span class="pre">names-rect(&quot;A&quot;)</span></code> – it is that one name’s
-own box instead.</p>
+<dd><p>Return the rectangle that surrounds a written part of the diagram.  It takes up to two
+positional arguments, and each one narrows what it answers for:</p>
+<div class="highlight"><pre><span class="w"></span><span class="nf">names-rect</span><span class="p">()</span><span class="w">               </span><span class="c1">// the strip that holds all replica names</span>
+<span class="w"></span><span class="nf">names-rect</span><span class="p">(</span><span class="s2">"A"</span><span class="p">)</span><span class="w">            </span><span class="c1">// that one replica's name</span>
+<span class="w"></span><span class="nf">names-rect</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="s2">"a2"</span><span class="p">)</span><span class="w">      </span><span class="c1">// the label of that one point on it</span>
+</pre></div>
+<p>With no argument it is the strip the replica names are set in: the column the diagram keeps clear
+before the lanes begin.</p>
+<p>With a replica name, it is that one name’s own box.</p>
+<p>With a replica name and a point on it – by id or by index, the way every other point is named –
+it is the box the label of that point went in.  The side the label sits on and the displacement
+it carries have already moved it, and the box follows the label there.  It is the box the label’s
+<code class="docutils literal notranslate"><span class="pre">halo</span></code> fills, or the label’s own box where <code class="docutils literal notranslate"><span class="pre">halo:</span> <span class="pre">none</span></code> drops that backdrop, so a rectangle
+asked for here lands round the label and not round the mark the label belongs to:</p>
+<div class="highlight"><pre><span class="w">  </span><span class="c1">// A rounded box round one label, in the lane's own color.</span>
+<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="nv">names-rect</span><span class="p">,</span><span class="w"> </span><span class="nv">color-of</span><span class="p">,</span><span class="w"> </span><span class="nv">draw</span><span class="p">,</span><span class="w"> </span><span class="p">..)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">locators</span>
+<span class="w">  </span><span class="nv">draw</span><span class="p">.</span><span class="nf">rect</span><span class="p">(..</span><span class="nf">names-rect</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="s2">"a2"</span><span class="p">,</span><span class="w"> </span><span class="nv">pad</span><span class="p">:</span><span class="w"> </span><span class="mf">0.05</span><span class="p">),</span><span class="w"> </span><span class="nv">stroke</span><span class="p">:</span><span class="w"> </span><span class="nf">color-of</span><span class="p">(</span><span class="s2">"A"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">0.5</span><span class="kr">pt</span><span class="p">,</span><span class="w"> </span><span class="nv">radius</span><span class="p">:</span><span class="w"> </span><span class="mf">0.05</span><span class="p">)</span>
+<span class="w"></span><span class="p">},</span>
+</pre></div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Naming a <a class="reference internal" href="reference.html#typst-function-gap" title="gap"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">gap</span></code></a>, <a class="reference internal" href="reference.html#typst-function-idle" title="idle"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">idle</span></code></a>, or any <a class="reference internal" href="reference.html#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">events</span></code></a> (including
+<a class="reference internal" href="reference.html#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>, <a class="reference internal" href="reference.html#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a>, or <a class="reference internal" href="reference.html#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a>) without a content fail compilation.</p>
+</div>
 </dd></dl>
 
 <dl class="typst locator">
@@ -636,9 +643,7 @@ nothing else.</p>
 <span class="sig-name descname"><span class="pre">span</span></span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-span" title="Link to this definition">¶</a></dt>
 <dd><p>Two times: the one each lane’s line starts at, and the one it ends at.  The first is slightly
 negative, because a lane leads in a little before column <code class="docutils literal notranslate"><span class="pre">0</span></code>; the second is past <code class="docutils literal notranslate"><span class="pre">ncols</span> <span class="pre">-</span> <span class="pre">1</span></code>,
-because the line runs on beyond the last mark to carry its arrowhead.  Neither is a column, which
-is what the distinction above is for.  Every lane is drawn over the same stretch, so there is one
-pair for the whole diagram and no replica to ask about.</p>
+because the line runs on beyond the last mark to carry its arrowhead.</p>
 </dd></dl>
 
 <dl class="typst locator">
@@ -728,6 +733,8 @@ naming what was asked for and what that lane actually holds.</p></li>
 <li><p>Two points on one lane sharing an id fails compilation.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">gap-rect</span></code> given a point that is not a <code class="docutils literal notranslate"><span class="pre">gap</span></code> fails compilation, naming the kind it found
 there.  An arrow name that is neither a message nor a <code class="docutils literal notranslate"><span class="pre">sync</span></code> fails the same way.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">names-rect</span></code> given a point that carries no label fails compilation, and so does a third
+positional argument.</p></li>
 <li><p>A <code class="docutils literal notranslate"><span class="pre">pad</span></code> that is neither a number nor a pair of them fails compilation.</p></li>
 <li><p>A layer name that is not in <code class="docutils literal notranslate"><span class="pre">layers</span></code> fails compilation, and says which names are.</p></li>
 <li><p>An <code class="docutils literal notranslate"><span class="pre">overlays</span></code> that is none of <code class="docutils literal notranslate"><span class="pre">none</span></code>, a dictionary, a function of one argument, or a CeTZ body
@@ -787,6 +794,16 @@ through it, and a ring at <code class="docutils literal notranslate"><span class
 </pre></div>
 </section>
 </section>
+<section id="footnotes">
+<h1>Footnotes<a class="headerlink" href="#footnotes" title="Link to this heading">¶</a></h1>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="semantics-of-column" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>The actual semantics (simultaneity) are not really defined here.  Every
+author can provide the correct interpretation.</p>
+</aside>
+</aside>
+</section>
 
         </article>
       </div>
@@ -843,11 +860,14 @@ through it, and a ring at <code class="docutils literal notranslate"><span class
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">overlays</span></code></a><ul>
+<li><a class="reference internal" href="#">Overlays</a><ul>
 <li><a class="reference internal" href="#terminology-values-and-types">Terminology, values and types</a></li>
 <li><a class="reference internal" href="#shape">Shape</a></li>
 <li><a class="reference internal" href="#layers">Layers</a><ul>
-<li><a class="reference internal" href="#the-layers-are-part-of-the-api">The layers are part of the API</a></li>
+<li><a class="reference internal" href="#the-layers-are-part-of-the-api">The layers are part of the API</a><ul>
+<li><a class="reference internal" href="#typst-value-layers"><code class="docutils literal notranslate"><span class="pre">layers</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#arrows-and-backdrops-are-not-the-same-place"><code class="docutils literal notranslate"><span class="pre">arrows</span></code> and <code class="docutils literal notranslate"><span class="pre">backdrops</span></code> are not the same place</a></li>
 </ul>
 </li>
@@ -886,6 +906,7 @@ through it, and a ring at <code class="docutils literal notranslate"><span class
 <li><a class="reference internal" href="#worked-example">Worked example</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#footnotes">Footnotes</a></li>
 </ul>
 
           </div>
