@@ -405,7 +405,8 @@ anything.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li id="typst-param-replica-label"><p><strong>label</strong> – what the diagram prints for the lane.  Defaults to <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p></li>
+<li id="typst-param-replica-label"><p><strong>label</strong> – what the diagram prints for the lane – content or a plain string, so the name of a
+lane can carry an icon or any other markup.  Defaults to <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p></li>
 <li id="typst-param-replica-color"><p><strong>color</strong> – the lane’s color.  Defaults to the next entry of <code class="docutils literal notranslate"><span class="pre">default-palette</span></code>, cycled over
 <a class="reference internal" href="#typst-function-replica" title="replica"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">replicas</span></code></a> in order.</p></li>
 <li id="typst-param-replica-defaults"><p><strong>defaults</strong> – <p>a dictionary of defaults for the points on this lane, each still overridable
@@ -430,9 +431,10 @@ The other three defaults reach all four kinds of point.</p>
 </ul>
 </dd>
 </dl>
-<p><code class="docutils literal notranslate"><span class="pre">color</span></code> and the <code class="docutils literal notranslate"><span class="pre">label-position</span></code> default may also be given positionally, in either order:
-they are told apart by type, so <code class="docutils literal notranslate"><span class="pre">replica(&quot;A&quot;,</span> <span class="pre">below,</span> <span class="pre">red)</span></code> and <code class="docutils literal notranslate"><span class="pre">replica(&quot;B&quot;,</span> <span class="pre">red,</span> <span class="pre">below)</span></code> are
-the same lane.  The rest must be named.</p>
+<p><code class="docutils literal notranslate"><span class="pre">label</span></code>, <code class="docutils literal notranslate"><span class="pre">color</span></code> and the <code class="docutils literal notranslate"><span class="pre">label-position</span></code> default may also be given positionally, in any
+order: they are told apart by type, so <code class="docutils literal notranslate"><span class="pre">replica(&quot;A&quot;,</span> <span class="pre">below,</span> <span class="pre">red)</span></code> and <code class="docutils literal notranslate"><span class="pre">replica(&quot;B&quot;,</span> <span class="pre">red,</span>
+<span class="pre">below)</span></code> are the same lane.  Content in a trailing block is the label, which is what lets a lane
+carry markup. <code class="docutils literal notranslate"><span class="pre">defaults</span></code> must be named.</p>
 </dd></dl>
 
 <dl class="typst function">

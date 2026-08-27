@@ -733,16 +733,25 @@ would rather unpack it than import it: <code class="docutils literal notranslate
 <dl class="typst locator">
 <dt class="sig sig-object typst" id="typst-locator-row-gap">
 <span class="sig-name descname"><span class="pre">row-gap</span></span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-row-gap" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The step from one column of logical time to the next, and the step from one lane to the next,
+both in canvas centimeters.  They are the scale the diagram is drawn at: a time becomes a
+distance on the page when you multiply it by <code class="docutils literal notranslate"><span class="pre">col-gap</span></code>, and a lane when you multiply it by
+<code class="docutils literal notranslate"><span class="pre">row-gap</span></code>.</p>
+<p>Use them to state a distance in the diagram’s own terms.  A brace set half a column clear of the
+last mark stays half a column clear after you retune <code class="docutils literal notranslate"><span class="pre">col-gap</span></code>.  A brace set at <code class="docutils literal notranslate"><span class="pre">+1.0</span></code> does
+not.</p>
+</dd></dl>
 
 <dl class="typst locator">
 <dt class="sig sig-object typst" id="typst-locator-dot">
 <span class="sig-name descname"><span class="pre">dot</span></span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-dot" title="Link to this definition">¶</a></dt>
-<dd><p>The diagram’s own measurements, in canvas centimeters: one column of time, one lane, and the
-radius of an event’s dot.</p>
-<p>They are here so a drawing can speak the diagram’s own language.  A brace half a column clear of
-the last mark stays half a column clear when you retune <code class="docutils literal notranslate"><span class="pre">col-gap</span></code>; one written as <code class="docutils literal notranslate"><span class="pre">+1.0</span></code> does
-not.</p>
+<dd><p>The radius of the mark on a local event, in canvas centimeters.  A <a class="reference internal" href="reference.html#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a> and a
+<a class="reference internal" href="reference.html#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a> are drawn at this radius, and a <a class="reference internal" href="reference.html#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a> at seven tenths of it.</p>
+<p>Reach for it to size a mark of your own against the marks the diagram draws.  A mark that
+restates one the diagram already drew takes <a class="reference internal" href="#typst-locator-mark-args" title="mark-args"><code class="xref typst typst-locator docutils literal notranslate"><span class="pre">mark-args</span></code></a> instead, which carries the
+radius with it.</p>
+<p><code class="docutils literal notranslate"><span class="pre">dot</span></code> is a radius, not a step between columns or lanes.  It does not change when you retune
+<code class="docutils literal notranslate"><span class="pre">col-gap</span></code> or <code class="docutils literal notranslate"><span class="pre">row-gap</span></code>.</p>
 </dd></dl>
 
 </section>
