@@ -441,7 +441,7 @@ the same lane.  The rest must be named.</p>
 <dd><p>A local event on a replica’s timeline.  Its body is the label – content or a plain string.</p>
 <p>All four kinds of point – <code class="docutils literal notranslate"><span class="pre">event</span></code>, <a class="reference internal" href="#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>, <a class="reference internal" href="#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a> and <a class="reference internal" href="#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a> – take the
 arguments below and read them the same way.  What tells them apart is the arrow: an event carries
-none, so it is the one that takes no message name and no <code class="docutils literal notranslate"><span class="pre">label</span></code>.</p>
+none, so it is the one that takes no message name and no <code class="docutils literal notranslate"><span class="pre">message-label</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -507,24 +507,27 @@ string in an <code class="docutils literal notranslate"><span class="pre">events
 <p>Both take every argument an <a class="reference internal" href="#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a> takes, and one more:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>label</strong> – labels the arrow itself rather than the point, and keeps its own styling.  Either
-end may carry it, and the first one given wins.</p>
-</dd>
-</dl>
-<p>Their label sits on the side of the timeline that their own arrow does not occupy, so an arrow
-running straight across the lanes never runs through its own endpoint labels.  A
-<code class="docutils literal notranslate"><span class="pre">label-position</span></code> given on the point replaces that side; a lane’s default does not reach it.</p>
-<p><code class="docutils literal notranslate"><span class="pre">mark-displacement</span></code> is the one argument whose default differs between the two:</p>
-<ul class="simple">
+<dd class="field-odd"><ul class="simple">
+<li id="typst-param-recv-message-label"><p><strong>message-label</strong> – the text drawn on the message arrow itself, which keeps its own styling.
+Either end of the message may carry it, and the first (following the <code class="docutils literal notranslate"><span class="pre">replicas</span></code> list) one
+given wins.  The point’s own label is its body, as it is on every other kind of point.</p></li>
+<li id="typst-param-recv-label-position"><p><strong>label-position</strong> – Overrides the position of the label.  By default, the label is placed in
+the opposite side of the arrow.</p></li>
+<li id="typst-param-recv-mark-displacement"><p><strong>mark-displacement</strong> – <p>Just like <a class="reference internal" href="#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event's</span></code></a> with different defaults:</p>
+<ul>
 <li><p>on a <code class="docutils literal notranslate"><span class="pre">recv</span></code> it is <code class="docutils literal notranslate"><span class="pre">1cm</span></code> – how far past its <code class="docutils literal notranslate"><span class="pre">send</span></code> in time the point lands whenever
 nothing on its own replica pushes it further, and enough to lean the arrow forward.
 <code class="docutils literal notranslate"><span class="pre">recv(..,</span> <span class="pre">mark-displacement:</span> <span class="pre">0)</span></code> leaves it on its column, drawing an arrow straight across
 the lanes when the receiving replica has nothing else competing for that column.</p></li>
-<li><p>on a <code class="docutils literal notranslate"><span class="pre">send</span></code> it is <code class="docutils literal notranslate"><span class="pre">0</span></code> – a send sits on its own column unless you say otherwise, since it
-is the receive that leans a message forward.  Reach for it to tilt an arrow away from whatever
-a straight run across the lanes would otherwise cross, or to separate two sends the solver put
-in one column.</p></li>
+<li><p>on a <code class="docutils literal notranslate"><span class="pre">send</span></code> it is <code class="docutils literal notranslate"><span class="pre">0</span></code> – a send sits on its own column unless you say otherwise, since
+it is the receive that leans a message forward.  Reach for it to tilt an arrow away from
+whatever a straight run across the lanes would otherwise cross, or to separate two sends the
+solver put in one column.</p></li>
 </ul>
+</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="typst function">
@@ -541,15 +544,16 @@ is the sender, so neither is drawn smaller the way a <code class="docutils liter
 a sync’s end from a <code class="docutils literal notranslate"><span class="pre">recv</span></code>.  The two ends share a column: neither side can finish the exchange
 before the other one starts it.  A name cannot be both a <code class="docutils literal notranslate"><span class="pre">sync</span></code> and a <code class="docutils literal notranslate"><span class="pre">send</span></code>/<code class="docutils literal notranslate"><span class="pre">recv</span></code>
 message.</p>
-<p>It takes every argument an <a class="reference internal" href="#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a> takes, and <code class="docutils literal notranslate"><span class="pre">label</span></code> for the arrow itself, exactly as a
-<a class="reference internal" href="#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a> does – either end may carry it, and the first one given wins.
+<p>It takes every argument an <a class="reference internal" href="#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a> takes, and <code class="docutils literal notranslate"><span class="pre">message-label</span></code> for the arrow itself,
+exactly as a <a class="reference internal" href="#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a> does – either end may carry it, and the first (following the
+<code class="docutils literal notranslate"><span class="pre">replicas</span></code> list) one given wins.
 <code class="docutils literal notranslate"><span class="pre">mark-displacement</span></code> nudges this end off the shared column, which tilts the arrow away from
 whatever a straight run across the lanes would otherwise cross; it is a drawing offset and says
 nothing about the order.</p>
 <div class="highlight"><pre><span></span><span class="nf">#lamport-diagram</span><span class="p">(</span>
 <span class="w">  </span><span class="nv">replicas</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="s2">"Client A"</span><span class="p">,</span><span class="w"> </span><span class="nf">replica</span><span class="p">(</span><span class="s2">"Server"</span><span class="p">,</span><span class="w"> </span><span class="nv">below</span><span class="p">),</span><span class="w"> </span><span class="nf">replica</span><span class="p">(</span><span class="s2">"Client B"</span><span class="p">,</span><span class="w"> </span><span class="nv">below</span><span class="p">)),</span>
 <span class="w">  </span><span class="nv">events</span><span class="p">:</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="s2">"Client A"</span><span class="p">:</span><span class="w"> </span><span class="p">([</span>Edit<span class="p">],</span><span class="w"> </span><span class="nf">sync</span><span class="p">(</span><span class="s2">"first"</span><span class="p">,</span><span class="w"> </span><span class="nv">label</span><span class="p">:</span><span class="w"> </span><span class="s2">"round trip"</span><span class="p">),</span><span class="w"> </span><span class="nf">idle</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="nf">sync</span><span class="p">(</span><span class="s2">"third"</span><span class="p">)[</span>has<span class="w"> </span>both<span class="w"> </span>edits<span class="p">]),</span>
+<span class="w">    </span><span class="s2">"Client A"</span><span class="p">:</span><span class="w"> </span><span class="p">([</span>Edit<span class="p">],</span><span class="w"> </span><span class="nf">sync</span><span class="p">(</span><span class="s2">"first"</span><span class="p">,</span><span class="w"> </span><span class="nv">message-label</span><span class="p">:</span><span class="w"> </span><span class="s2">"round trip"</span><span class="p">),</span><span class="w"> </span><span class="nf">idle</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="nf">sync</span><span class="p">(</span><span class="s2">"third"</span><span class="p">)[</span>has<span class="w"> </span>both<span class="w"> </span>edits<span class="p">]),</span>
 <span class="w">    </span><span class="s2">"Server"</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="nf">sync</span><span class="p">(</span><span class="s2">"first"</span><span class="p">),</span><span class="w"> </span><span class="nf">sync</span><span class="p">(</span><span class="s2">"second"</span><span class="p">),</span><span class="w"> </span><span class="nf">idle</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="nf">sync</span><span class="p">(</span><span class="s2">"third"</span><span class="p">)),</span>
 <span class="w">    </span><span class="s2">"Client B"</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="nf">idle</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="p">[</span>Edit<span class="p">],</span><span class="w"> </span><span class="nf">sync</span><span class="p">(</span><span class="s2">"second"</span><span class="p">)[</span>has<span class="w"> </span>both<span class="w"> </span>edits<span class="p">]),</span>
 <span class="w">  </span><span class="p">),</span>

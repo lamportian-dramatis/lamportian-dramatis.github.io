@@ -255,8 +255,8 @@ is always a deliberate edit.</p>
 <li><p>One API for all four kinds of point.  <a class="reference internal" href="reference.html#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a>, <a class="reference internal" href="reference.html#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>, <a class="reference internal" href="reference.html#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a> and <a class="reference internal" href="reference.html#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a>
 now take the same nine arguments – <code class="docutils literal notranslate"><span class="pre">body</span></code>, <code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">label-position</span></code>, <code class="docutils literal notranslate"><span class="pre">label-displacement</span></code>,
 <code class="docutils literal notranslate"><span class="pre">mark-displacement</span></code>, <code class="docutils literal notranslate"><span class="pre">label-size</span></code>, <code class="docutils literal notranslate"><span class="pre">label-width</span></code>, <code class="docutils literal notranslate"><span class="pre">label-padding</span></code> and <code class="docutils literal notranslate"><span class="pre">label-backdrop</span></code> –
-and read them the same way.  The three that carry an arrow take <code class="docutils literal notranslate"><span class="pre">label</span></code> on top of those.  The
-renames this cost are in the table under Changed, below.</p></li>
+and read them the same way.  The three that carry an arrow take <code class="docutils literal notranslate"><span class="pre">message-label</span></code> on top of
+those.  The renames this cost are in the table under Changed, below.</p></li>
 <li><p>Positional arguments are told apart by type on all four, so they may come in any order:
 <code class="docutils literal notranslate"><span class="pre">send(&quot;push&quot;,</span> <span class="pre">below,</span> <span class="pre">+50%)[pushed]</span></code> is as good as naming each one.  Previously only an
 <a class="reference internal" href="reference.html#typst-function-event" title="event"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">event</span></code></a> read its arguments this way.</p></li>
@@ -264,8 +264,9 @@ renames this cost are in the table under Changed, below.</p></li>
 solved it into.  An event’s dot could not be moved at all before.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">label-width</span></code> and <code class="docutils literal notranslate"><span class="pre">id</span></code> on <a class="reference internal" href="reference.html#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>, <a class="reference internal" href="reference.html#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a> and <a class="reference internal" href="reference.html#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a>.  An <code class="docutils literal notranslate"><span class="pre">id</span></code> given there
 replaces the message name an <a class="reference internal" href="overlays.html"><span class="doc">overlay</span></a> would otherwise address the point by.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">label</span></code> on <a class="reference internal" href="reference.html#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a>, which labels the message arrow.  Either end of a message may carry it
-now, and the first one given wins – the rule a <a class="reference internal" href="reference.html#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a> already used.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">message-label</span></code> on <a class="reference internal" href="reference.html#typst-function-recv" title="recv"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">recv</span></code></a>.  Either end of a message may carry the text on its arrow now,
+and the first (following the <code class="docutils literal notranslate"><span class="pre">replicas</span></code> list) one given wins – the rule a <a class="reference internal" href="reference.html#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a> already
+used.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">label-padding</span></code> and <code class="docutils literal notranslate"><span class="pre">label-backdrop</span></code> on all four, which set how far a label’s backdrop reaches
 past the label’s own box and what it is painted with.</p></li>
 <li><p>New locators:</p>
@@ -327,9 +328,16 @@ three.</p>
 <td><p><code class="docutils literal notranslate"><span class="pre">label-backdrop</span></code></p></td>
 <td><p>all four</p></td>
 </tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">label</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">message-label</span></code></p></td>
+<td><p><a class="reference internal" href="reference.html#typst-function-send" title="send"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">send</span></code></a>, <a class="reference internal" href="reference.html#typst-function-sync" title="sync"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">sync</span></code></a></p></td>
+</tr>
 </tbody>
 </table>
 </div>
+<p><code class="docutils literal notranslate"><span class="pre">label</span></code> named the text on a message arrow, while the same word named a point’s own body
+throughout the prose.  <code class="docutils literal notranslate"><span class="pre">message-label</span></code> says which of the two it draws, and leaves a point’s label
+to be its body.</p>
 </li>
 <li><p>A <a class="reference internal" href="reference.html#typst-function-replica" title="replica"><code class="xref typst typst-func docutils literal notranslate"><span class="pre">replica's</span></code></a> point defaults move under <code class="docutils literal notranslate"><span class="pre">defaults</span></code>, and take the name of the
 point argument each one stands for: <code class="docutils literal notranslate"><span class="pre">defaults:</span> <span class="pre">(label-position:</span> <span class="pre">..,</span> <span class="pre">label-size:</span> <span class="pre">..,</span>
