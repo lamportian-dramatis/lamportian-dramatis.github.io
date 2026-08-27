@@ -462,9 +462,9 @@ insert an event above it, which is exactly what an id does not do.</p>
 <dt class="sig sig-object typst" id="typst-locator-mark">
 <span class="sig-name descname"><span class="pre">mark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">replica</span></em>, <em class="sig-param"><span class="pre">id-or-index</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-mark" title="Link to this definition">¶</a></dt>
 <dd><p>Return the CeTZ coordinate of the mark the diagram drew for that point – a local <code class="docutils literal notranslate"><span class="pre">event</span></code>, or
-either end of a <code class="docutils literal notranslate"><span class="pre">send</span></code>, <code class="docutils literal notranslate"><span class="pre">recv</span></code> or <code class="docutils literal notranslate"><span class="pre">sync</span></code>.  It includes the sub-column <code class="docutils literal notranslate"><span class="pre">displacement</span></code> that
-leans an arrow off a straight run across the lanes, so it is where the dot really landed rather than
-where its column nominally is.</p>
+either end of a <code class="docutils literal notranslate"><span class="pre">send</span></code>, <code class="docutils literal notranslate"><span class="pre">recv</span></code> or <code class="docutils literal notranslate"><span class="pre">sync</span></code>.  It includes the sub-column <code class="docutils literal notranslate"><span class="pre">mark-displacement</span></code>
+that leans an arrow off a straight run across the lanes, so it is where the dot really landed
+rather than where its column nominally is.</p>
 <p>A coordinate has a lane baked into it: the lane of the replica you named.  That is the whole
 difference from <code class="docutils literal notranslate"><span class="pre">column</span></code>, and it is what makes <code class="docutils literal notranslate"><span class="pre">column</span></code> the one to reach for when a drawing
 crosses lanes.</p>
@@ -564,7 +564,7 @@ question to ask of a Lamport diagram.</p>
 <dt class="sig sig-object typst" id="typst-locator-time">
 <span class="sig-name descname"><span class="pre">time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">replica</span></em>, <em class="sig-param"><span class="pre">id-or-index</span></em><span class="sig-paren">)</span><span class="property"> <span class="pre">(locator)</span></span><a class="headerlink" href="#typst-locator-time" title="Link to this definition">¶</a></dt>
 <dd><p>Return the <a class="reference internal" href="#term-time"><span class="xref std std-term">time</span></a> that point’s mark was drawn at – i.e. the <a class="reference internal" href="#term-column"><span class="xref std std-term">column</span></a> it was solved
-into, plus whatever <code class="docutils literal notranslate"><span class="pre">displacement</span></code> off that column.</p>
+into, plus whatever <code class="docutils literal notranslate"><span class="pre">mark-displacement</span></code> off that column.</p>
 <p>It is a time, so it composes with a lane: <code class="docutils literal notranslate"><span class="pre">point(time(&quot;C&quot;,</span> <span class="pre">&quot;c-reads&quot;),</span> <span class="pre">&quot;C&quot;)</span></code> is exactly
 <code class="docutils literal notranslate"><span class="pre">mark(&quot;C&quot;,</span> <span class="pre">&quot;c-reads&quot;)</span></code> – the same place, said in the diagram’s own axes rather than on the
 page.  That is what makes it the one to reach for when a drawing has to line something up with a
@@ -645,10 +645,11 @@ positional arguments, and each one narrows what it answers for:</p>
 before the lanes begin.</p>
 <p>With a replica name, it is that one name’s own box.</p>
 <p>With a replica name and a point on it – by id or by index, the way every other point is named –
-it is the box the label of that point went in.  The side the label sits on and the displacement
-it carries have already moved it, and the box follows the label there.  It is the box the label’s
-<code class="docutils literal notranslate"><span class="pre">halo</span></code> fills, or the label’s own box where <code class="docutils literal notranslate"><span class="pre">halo:</span> <span class="pre">none</span></code> drops that backdrop, so a rectangle
-asked for here lands round the label and not round the mark the label belongs to:</p>
+it is the box the label of that point went in.  The side the label sits on and the
+<code class="docutils literal notranslate"><span class="pre">label-displacement</span></code> it carries have already moved it, and the box follows the label there.  It
+is the box the label’s <code class="docutils literal notranslate"><span class="pre">label-padding</span></code> fills, or the label’s own box where <code class="docutils literal notranslate"><span class="pre">label-padding:</span>
+<span class="pre">none</span></code> drops that backdrop, so a rectangle asked for here lands round the label and not round the
+mark the label belongs to:</p>
 <div class="highlight"><pre><span class="w">  </span><span class="c1">// A rounded box round one label, in the lane's own color.</span>
 <span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="nv">names-rect</span><span class="p">,</span><span class="w"> </span><span class="nv">color-of</span><span class="p">,</span><span class="w"> </span><span class="nv">draw</span><span class="p">,</span><span class="w"> </span><span class="p">..)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">locators</span>
 <span class="w">  </span><span class="nv">draw</span><span class="p">.</span><span class="nf">rect</span><span class="p">(..</span><span class="nf">names-rect</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="s2">"a2"</span><span class="p">,</span><span class="w"> </span><span class="nv">pad</span><span class="p">:</span><span class="w"> </span><span class="mf">0.05</span><span class="p">),</span><span class="w"> </span><span class="nv">stroke</span><span class="p">:</span><span class="w"> </span><span class="nf">color-of</span><span class="p">(</span><span class="s2">"A"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">0.5</span><span class="kr">pt</span><span class="p">,</span><span class="w"> </span><span class="nv">radius</span><span class="p">:</span><span class="w"> </span><span class="mf">0.05</span><span class="p">)</span>
